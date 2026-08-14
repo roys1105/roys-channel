@@ -246,6 +246,10 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
   background:var(--red);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.02em;
   padding:6px 15px;border-radius:999px;box-shadow:0 4px 0 #8f2a1f;
 }
+.kz-count{
+  margin:13px 0 0;text-align:center;font-size:12.5px;color:var(--ink-soft);letter-spacing:.01em;
+}
+.kz-count b{font-size:15px;font-weight:800;color:var(--navy);margin:0 1px;}
 .kz-lead{margin:0 0 22px;font-size:16px;color:#3C525C;}
 .kz-lead strong{color:var(--navy);}
 .kz-sub{
@@ -594,6 +598,7 @@ footer .cp .en{font-size:14px;}
       <div class="kz-cover">
         <img src="image/cover-inaka.jpg" alt="講座「田舎暮らしのまま、独りで稼ぐ教科書」の表紙">
         <span class="kz-badge">全7回・無料</span>
+        <p class="kz-count" id="kz-count">この講座が見られた回数　今日 <b>—</b>回／のべ <b>—</b>回</p>
       </div>
 
       <div class="kz-body">
@@ -862,6 +867,37 @@ footer .cp .en{font-size:14px;}
   }
   var sub = document.getElementById('agesub');
   if (sub) { sub.textContent = age() + '歳／香川県三豊市在住'; }
+
+  /* --- 講座ページが見られた回数を表示する ---
+     数えているのはシニアサイト側の仕組み（講座ページを開いたときに記録される）。
+     ここはその集計を読んで表示するだけなので、この欄を見ても数字は増えない。
+     ・今日ぶん … results（日付つきの生データ）から
+     ・のべ　　 … totals（サーバーが全期間を合計したもの）から。
+       totals をまだ返さない古いWorkerのときは、results を足して代用する。 */
+  var countEl = document.getElementById('kz-count');
+  if (countEl) {
+    var KOUZA_PAGE = '/materials/inaka-hitori-kasegu.html';
+    fetch('https://roy-senior-site-api.roy-s1105.workers.dev/page-stats')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (!data || !data.ok) { return; }
+        var today = jstToday();
+        var todayCount = 0, totalCount = 0;
+        (data.results || []).forEach(function (row) {
+          if (row.type === 'material' && row.page === KOUZA_PAGE && row.date === today) {
+            todayCount += row.count;
+          }
+        });
+        (data.totals || data.results || []).forEach(function (row) {
+          if (row.type === 'material' && row.page === KOUZA_PAGE) {
+            totalCount += row.count;
+          }
+        });
+        countEl.innerHTML = 'この講座が見られた回数　今日 <b>' + todayCount +
+          '</b>回／のべ <b>' + totalCount + '</b>回';
+      })
+      .catch(function () {});
+  }
 
   /* --- シニア相談室へのリンクは、同じタブを使い回す ---
      すでにそのページを開いてあるタブがあれば、新しく開かずにそちらへ切り替える。
