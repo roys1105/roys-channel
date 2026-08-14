@@ -71,7 +71,19 @@
   ポップアップを止められている環境では、いつもどおり普通に別タブで開く（`window.open` が
   `null` を返したときは何もせず、リンク本来の動きに任せている）。
 
-### 追記：GitHubへの公開の準備をした（公開そのものは未完了）
+### 追記：公開した（GitHub Pages）
+- **ライブURL：https://roys1105.github.io/roys-channel/**
+- リポジトリ：`git@github.com:roys1105/roys-channel.git`（Public、`origin` として設定ずみ）
+- 公開方式：GitHub Pages「Deploy from a branch」＝ `main` / `/ (root)`。
+  **これ以降は `git push origin main` するだけでライブに反映される**（ビルドに30秒ほど）。
+- `gh` コマンドをこのPCに入れた（winget、v2.97.0。場所は `C:\Program Files\GitHub CLI\gh.exe`）。
+  PATHが通っていないシェルからは**フルパスで呼ぶ**こと。
+- 認証は「デバイスフロー」で通した。gh の `auth login --web` は、この環境（キー入力ができない）
+  では固まって進まない。代わりに `https://github.com/login/device` のコードを出して
+  ロイさんに承認してもらい、得たトークンを `gh auth login --with-token` に渡した。
+  トークンを書いた一時ファイルは、その場で削除ずみ。
+
+### 追記：GitHubへの公開の準備をした（公開そのものは未完了 → 上記のとおり完了）
 - シニアサイトから戻ってくるボタンを作るために、**このサイトを公開することにした**。
 - `git init`（ブランチ `main`）して初回コミットまで済ませた。41ファイル。
 - `.gitignore` を新規作成し、`_backup/`（18MBの旧・下書きHTML）を除外した。
@@ -79,13 +91,11 @@
   リポジトリの新規作成とPagesの有効化はブラウザ側の操作が必要なため。
 
 ### 次にやること
-- **公開の残り（ロイさんの操作が必要）**
-  1. GitHubで空のリポジトリ `roys-channel` を作る（Public。README等は入れない）
-  2. こちらで `git remote add origin git@github.com:roys1105/roys-channel.git` して push する
-  3. GitHubの Settings → Pages で「Deploy from a branch」→ `main` / `/ (root)` を選ぶ
-  4. `https://roys1105.github.io/roys-channel/` が開けるか確認する
-- 公開できたら、シニアサイト側に置いたボタン（「もう一つの顔」の欄）がつながる。
-  シニアサイトの公開には別の懸案があるので `dev/site/senior-site/DEVLOG.md` も見ること。
+- **シニアサイト側のボタンはまだ公開されていない。** 「もう一つの顔」に置いた
+  「Roy's Channel（メインサイト）へ →」は手元にあるだけ。シニアサイトの公開には
+  別の懸案（講座カードが消えている件）があるので `dev/site/senior-site/DEVLOG.md` を見ること。
+- Instagram・X をやっているなら「発信」の枠に追加する（今はURLが分からないので入れていない）
+- キャンプの写真が見つかっていない。あれば「好きなこと」に1枠足す
 
 ### 動作確認
 - 幅1280px：2カラム（表紙320px＋本文654px）、目次は2列、はみ出しなし。
