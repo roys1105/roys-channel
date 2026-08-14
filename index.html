@@ -573,7 +573,7 @@ footer .cp .en{font-size:14px;}
     </div>
 
     <div class="senior-cta">
-      <a class="btn btn-red" href="https://roys1105.github.io/roys-senior-it/" target="_blank" rel="noopener">
+      <a class="btn btn-red" href="https://roys1105.github.io/roys-senior-it/">
         ITシニアなんでも相談室へ行く →
       </a>
       <p class="note">スマホ・タブレット・パソコンのどれでもご覧いただけます</p>
@@ -620,10 +620,8 @@ footer .cp .en{font-size:14px;}
         </ul>
 
         <div class="kz-cta">
-          <!-- この講座だけは、別のタブではなく同じタブで開く（講座ページの「トップに戻る」で
-               ここへ戻ってこられるようにするため）。data-same-tab が付いているリンクは、
-               下のスクリプトの「タブを使い回す」処理の対象から外している。 -->
-          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html" data-same-tab="1">
+          <!-- 同じタブで開く（講座ページの「トップに戻る」でここへ戻ってこられるように）。 -->
+          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html">
             講座のページを見る →
           </a>
           <p class="note">いまは無料で公開中です</p>
@@ -828,11 +826,11 @@ footer .cp .en{font-size:14px;}
 <footer>
   <div class="wrap">
     <div class="flinks">
-      <a href="https://roys1105.github.io/roys-senior-it/" target="_blank" rel="noopener">ITシニアなんでも相談室</a>
+      <a href="https://roys1105.github.io/roys-senior-it/">ITシニアなんでも相談室</a>
       <a href="https://www.youtube.com/@royschannel9208" target="_blank" rel="noopener">YouTube</a>
       <a href="https://note.com/roy_s1105" target="_blank" rel="noopener">note</a>
       <a href="#contact">お問い合わせ</a>
-      <a href="https://roys1105.github.io/roys-senior-it/tokushoho.html" target="_blank" rel="noopener">特定商取引法に基づく表記</a>
+      <a href="https://roys1105.github.io/roys-senior-it/tokushoho.html">特定商取引法に基づく表記</a>
     </div>
     <div class="cp">© 2026 <span class="en">Roy's Channel</span> ／ 香川県三豊市</div>
   </div>
@@ -902,32 +900,11 @@ footer .cp .en{font-size:14px;}
       .catch(function () {});
   }
 
-  /* --- シニア相談室へのリンクは、同じタブを使い回す ---
-     すでにそのページを開いてあるタブがあれば、新しく開かずにそちらへ切り替える。
-     ページごとにタブの名前を分けているので、トップと講座ページは別のタブになる。
-     ※ブラウザは「このページから開いたタブ」しか見つけられない決まりなので、
-       ロイさんが手でURLを打って開いたタブまでは見つけられない。 */
-  function seniorTabName(url) {
-    var path = url.split('roys-senior-it')[1] || '/';
-    return 'roys-senior' + path.replace(/[^a-zA-Z0-9]+/g, '-');
-  }
-  var seniorLinks = document.querySelectorAll('a[href*="roys1105.github.io/roys-senior-it"]:not([data-same-tab])');
-  Array.prototype.forEach.call(seniorLinks, function (a) {
-    a.addEventListener('click', function (e) {
-      var url = a.href;
-      var win = window.open('', seniorTabName(url));
-      if (!win) { return; }  /* ポップアップが止められたときは、いつもどおり別タブで開く */
-      e.preventDefault();
-      var isNew = true;
-      try {
-        isNew = (win.location.href === 'about:blank' || win.location.href === '');
-      } catch (err) {
-        isNew = false;  /* 中を読めない＝すでに別サイトが表示されているタブ */
-      }
-      if (isNew) { win.location.href = url; }
-      win.focus();
-    });
-  });
+  /* シニア相談室へのリンクは、すべて「同じタブ」で開く（2026-08-15）。
+     以前はタブに名前を付けて使い回していたが、ブラウザは「このページから開いたタブ」しか
+     見つけられないため、手で開いたタブがあると結局タブが増えてしまう。
+     同じタブで移動すれば、タブは絶対に増えない。戻るときはブラウザの戻るボタンか、
+     行き先のページに置いてある「トップに戻る」を使う。 */
 
   /* --- お問い合わせフォーム --- */
   var API = 'https://roy-senior-site-api.roy-s1105.workers.dev';
