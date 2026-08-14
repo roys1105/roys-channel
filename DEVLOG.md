@@ -71,6 +71,17 @@
   ポップアップを止められている環境では、いつもどおり普通に別タブで開く（`window.open` が
   `null` を返したときは何もせず、リンク本来の動きに任せている）。
 
+### 追記：講座の表紙の下に「見られた回数」を出した
+- 表紙の下に `<p class="kz-count" id="kz-count">` を置き、
+  シニアサイトと同じ集計API（`roy-senior-site-api.roy-s1105.workers.dev/page-stats`）から
+  **講座ページ（`/materials/inaka-hitori-kasegu.html`）の閲覧回数**を読んで表示する。
+  表示は「この講座が見られた回数　今日 ◯回／のべ ◯回」。
+- **数えているのはシニアサイト側の仕組み**（講座ページを開いたときに記録される）。
+  こちらは読むだけなので、**この欄を見ても数字は増えない**。
+- 今日ぶんは `results` から、のべは `totals` から取る。`data.totals || data.results` と
+  書いてあるので、Cloudflareの Worker がまだ古くても壊れない。
+- 読み込み前は「今日 —回／のべ —回」と出しておき、位置がずれないようにした。
+
 ### 追記：公開した（GitHub Pages）
 - **ライブURL：https://roys1105.github.io/roys-channel/**
 - リポジトリ：`git@github.com:roys1105/roys-channel.git`（Public、`origin` として設定ずみ）
