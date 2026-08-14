@@ -573,7 +573,7 @@ footer .cp .en{font-size:14px;}
     </div>
 
     <div class="senior-cta">
-      <a class="btn btn-red" href="https://roys1105.github.io/roys-senior-it/">
+      <a class="btn btn-red" href="https://roys1105.github.io/roys-senior-it/" target="roy-senior">
         ITシニアなんでも相談室へ行く →
       </a>
       <p class="note">スマホ・タブレット・パソコンのどれでもご覧いただけます</p>
@@ -621,7 +621,7 @@ footer .cp .en{font-size:14px;}
 
         <div class="kz-cta">
           <!-- 同じタブで開く（講座ページの「トップに戻る」でここへ戻ってこられるように）。 -->
-          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html">
+          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html" target="roy-senior">
             講座のページを見る →
           </a>
           <p class="note">いまは無料で公開中です</p>
@@ -826,11 +826,11 @@ footer .cp .en{font-size:14px;}
 <footer>
   <div class="wrap">
     <div class="flinks">
-      <a href="https://roys1105.github.io/roys-senior-it/">ITシニアなんでも相談室</a>
+      <a href="https://roys1105.github.io/roys-senior-it/" target="roy-senior">ITシニアなんでも相談室</a>
       <a href="https://www.youtube.com/@royschannel9208" target="_blank" rel="noopener">YouTube</a>
       <a href="https://note.com/roy_s1105" target="_blank" rel="noopener">note</a>
       <a href="#contact">お問い合わせ</a>
-      <a href="https://roys1105.github.io/roys-senior-it/tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="https://roys1105.github.io/roys-senior-it/tokushoho.html" target="roy-senior">特定商取引法に基づく表記</a>
     </div>
     <div class="cp">© 2026 <span class="en">Roy's Channel</span> ／ 香川県三豊市</div>
   </div>
@@ -838,6 +838,12 @@ footer .cp .en{font-size:14px;}
 
 <script>
 (function () {
+  /* --- このタブに「名札」を付ける ---
+     こう名前を付けておくと、シニアサイト側のリンク（target="roy-main"）が
+     このタブを見つけて、新しいタブを作らずにここへ切り替えてくれる。
+     2つのサイトは同じ roys1105.github.io なので、行き来しても名札は消えない。 */
+  window.name = 'roy-main';
+
   /* --- ハンバーガーメニュー --- */
   var burger = document.getElementById('burger');
   var spnav = document.getElementById('spnav');
