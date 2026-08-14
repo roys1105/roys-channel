@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roy's Channel｜好きなことを、好きなだけ。うどん県から。</title>
+<meta name="description" content="香川県三豊市のロイです。バイクと黒猫とバウンドテニス、そしてシニアのITサポート。好きなことを好きなだけ、うどん県からお届けします。">
+<meta property="og:title" content="Roy's Channel｜好きなことを、好きなだけ。うどん県から。">
+<meta property="og:description" content="香川県三豊市のロイです。バイクと黒猫とバウンドテニス、そしてシニアのITサポート。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="image/roy-chara-side.jpg">
+<link rel="icon" href="image/roy-avatar.png">
+<link rel="apple-touch-icon" href="image/roy-avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<style>
+/* ============ base ============ */
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Zen Maru Gothic','Hiragino Maru Gothic ProN','Noto Sans JP',sans-serif;
+  color:#23323C;
+  background:#FAF5EC;
+  line-height:1.95;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+::selection{background:#F3D9C6;}
+
+:root{
+  --cream:#FAF5EC;
+  --cream-deep:#F2E9D9;
+  --ink:#23323C;
+  --ink-soft:#5E7079;
+  --navy:#1F5A72;
+  --sky:#2E7DA6;
+  --red:#C0392B;
+  --red-soft:#E8B7AF;
+  --green:#6E8F5A;
+  --line:#E3D8C4;
+  --shadow:0 10px 30px rgba(53,43,30,.10);
+}
+
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px;}
+.narrow{max-width:760px;margin:0 auto;padding:0 22px;}
+.en{font-family:'Baloo 2',cursive;font-weight:700;letter-spacing:.02em;}
+
+/* section heading */
+.sec-head{text-align:center;margin-bottom:38px;}
+.sec-head .kicker{
+  display:inline-block;font-size:12px;letter-spacing:.22em;font-weight:700;
+  color:var(--red);background:#FBEAE4;padding:5px 16px;border-radius:999px;
+}
+.sec-head h2{
+  margin:14px 0 6px;font-size:clamp(23px,4.2vw,32px);font-weight:900;color:var(--navy);
+  line-height:1.5;letter-spacing:.01em;
+}
+.sec-head p{margin:0;font-size:15px;color:var(--ink-soft);}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:15px 30px;border-radius:999px;text-decoration:none;font-weight:700;font-size:16px;
+  transition:transform .18s ease, box-shadow .18s ease;border:none;cursor:pointer;
+  font-family:inherit;line-height:1.4;
+}
+.btn:hover{transform:translateY(-3px);}
+.btn-primary{background:var(--navy);color:#fff;box-shadow:0 6px 0 #14404f;}
+.btn-primary:hover{box-shadow:0 9px 0 #14404f,0 12px 22px rgba(31,90,114,.28);}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 6px 0 #8f2a1f;}
+.btn-red:hover{box-shadow:0 9px 0 #8f2a1f,0 12px 22px rgba(192,57,43,.28);}
+.btn-ghost{background:#fff;color:var(--navy);border:2px solid var(--navy);}
+.btn-ghost:hover{box-shadow:0 10px 20px rgba(31,90,114,.18);}
+
+/* ============ header ============ */
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(250,245,236,.93);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.hbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 22px;max-width:1060px;margin:0 auto;}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.brand img{width:46px;height:46px;border-radius:50%;background:#F2E9D9;border:2px solid #fff;box-shadow:0 2px 8px rgba(53,43,30,.14);}
+.brand b{display:block;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--navy);line-height:1.1;letter-spacing:.01em;}
+.brand small{display:block;font-size:10.5px;color:var(--ink-soft);letter-spacing:.16em;line-height:1.4;}
+nav.pc{display:flex;gap:24px;font-size:14.5px;font-weight:500;}
+nav.pc a{text-decoration:none;color:var(--ink);padding:4px 0;border-bottom:2px solid transparent;transition:.15s;}
+nav.pc a:hover{color:var(--navy);border-bottom-color:var(--red);}
+.burger{display:none;background:none;border:none;font-size:25px;color:var(--navy);cursor:pointer;padding:4px 6px;line-height:1;}
+nav.sp{display:none;flex-direction:column;gap:2px;padding:6px 22px 18px;}
+nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;padding:11px 4px;border-bottom:1px dashed var(--line);}
+
+/* ============ hero ============ */
+.hero{position:relative;overflow:hidden;padding:34px 0 0;}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(1000px 420px at 78% 8%, #FDF1DE 0%, rgba(253,241,222,0) 70%),
+    linear-gradient(180deg,#FAF5EC 0%,#F6EEE0 100%);
+}
+.hero-grid{
+  position:relative;z-index:2;max-width:1060px;margin:0 auto;padding:0 22px;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center;
+}
+.hero-copy{padding-bottom:34px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--navy);
+  background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 15px;box-shadow:var(--shadow);
+}
+.hero h1{
+  margin:18px 0 0;font-size:clamp(30px,5.6vw,50px);font-weight:900;line-height:1.42;letter-spacing:.005em;color:var(--ink);
+}
+.hero h1 .mk{
+  background:linear-gradient(transparent 62%, #F7D9B4 62%);padding:0 2px;
+}
+.hero h1 .red{color:var(--red);}
+.hero-lead{margin:20px 0 0;font-size:16.5px;color:#3F535D;max-width:30em;}
+.hero-cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:28px;}
+.hero-figure{position:relative;text-align:center;align-self:end;z-index:3;}
+.hero-figure img{width:100%;max-width:440px;height:auto;aspect-ratio:760/990;margin:0 auto -28px;filter:drop-shadow(0 16px 20px rgba(53,43,30,.14));}
+.hero-bubble{
+  position:absolute;top:4%;left:-3%;z-index:4;
+  display:inline-block;padding:12px 22px 13px;
+  background:#fff;border:2.5px solid var(--ink);
+  /* 手描きっぽく、四隅の丸みをわざと不ぞろいにする */
+  border-radius:30px 26px 32px 24px / 26px 32px 24px 30px;
+  box-shadow:5px 6px 0 rgba(35,50,60,.16),0 14px 24px rgba(53,43,30,.10);
+  transform:rotate(-4deg);
+  animation:bubble-bob 4.2s ease-in-out infinite;
+}
+/* しっぽ：外側（線の色）と内側（白）の三角を重ねて“フチ付き”にする */
+.hero-bubble::before,
+.hero-bubble::after{content:"";position:absolute;width:0;height:0;border-style:solid;}
+.hero-bubble::before{
+  bottom:-17px;left:25px;
+  border-width:17px 14px 0 5px;border-color:var(--ink) transparent transparent transparent;
+}
+.hero-bubble::after{
+  bottom:-12px;left:28px;
+  border-width:12px 10px 0 4px;border-color:#fff transparent transparent transparent;
+}
+@keyframes bubble-bob{
+  0%,100%{transform:rotate(-4deg) translateY(0);}
+  50%    {transform:rotate(-2.5deg) translateY(-5px);}
+}
+/* 吹き出しの中の文字 */
+.bb-text{
+  display:inline-block;white-space:nowrap;
+  font-size:15.5px;font-weight:900;line-height:1;letter-spacing:.06em;color:var(--ink);
+}
+.bb-text::before{
+  content:"✦";margin-right:.4em;font-size:.72em;color:var(--red);opacity:.5;vertical-align:.18em;
+}
+.bb-text em{font-style:normal;position:relative;color:var(--red);}
+.bb-text em::after{
+  content:"";position:absolute;left:1%;right:1%;bottom:-5px;height:3px;border-radius:3px;
+  background:var(--red-soft);
+}
+.bb-text b{
+  display:inline-block;color:var(--red);font-size:1.2em;
+  transform:rotate(9deg) translateY(-1px);
+}
+.hero-strip{
+  position:relative;z-index:2;margin-top:0;
+  height:260px;background:url('image/photo-setouchi.jpg') center center/cover no-repeat;
+  border-top:4px solid #fff;
+}
+.hero-strip::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(250,245,236,.62) 0%,rgba(250,245,236,0) 30%,rgba(31,60,80,.22) 100%);
+}
+.strip-cap{
+  position:absolute;right:20px;bottom:12px;z-index:2;color:#fff;font-size:12.5px;font-weight:700;
+  text-shadow:0 1px 6px rgba(0,0,0,.55);
+}
+
+/* ============ 3つの顔 ============ */
+.faces{padding:56px 0 10px;}
+.face-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.face{
+  background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .2s ease;
+}
+.face:hover{transform:translateY(-5px);}
+.face .ph{height:168px;overflow:hidden;background:#F2E9D9;}
+.face .ph img{width:100%;height:100%;object-fit:cover;object-position:center 32%;}
+.face .ph.duo{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.face .tx{padding:18px 20px 22px;}
+.face h3{margin:0 0 6px;font-size:17.5px;font-weight:900;color:var(--navy);}
+.face p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.85;}
+.face .no{
+  display:inline-block;font-family:'Baloo 2',cursive;font-size:12px;font-weight:700;
+  color:var(--red);letter-spacing:.16em;
+}
+
+/* ============ senior site（メイン導線） ============ */
+.senior{
+  margin:70px 0 0;padding:64px 0 68px;position:relative;
+  background:linear-gradient(180deg,#EAF3F6 0%,#E2EFF3 100%);
+  border-top:1px solid #D2E4EA;border-bottom:1px solid #D2E4EA;
+}
+.senior::before{
+  content:"";position:absolute;top:-1px;left:0;right:0;height:14px;
+  background:repeating-linear-gradient(90deg,#fff 0 18px,transparent 18px 36px);
+  opacity:.55;
+}
+.senior-logo{width:100%;max-width:520px;height:auto;margin:0 auto 22px;}
+.senior-lead{text-align:center;font-size:16.5px;color:#2C4B57;margin:0 auto 34px;max-width:34em;}
+.senior-lead strong{color:var(--navy);}
+.s-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:880px;margin:0 auto 38px;}
+.s-card{
+  background:#fff;border:1px solid #D7E6EA;border-radius:22px;padding:20px 20px 26px;text-align:center;
+  box-shadow:0 4px 14px rgba(31,90,114,.07);
+}
+.s-card .thumb{
+  height:170px;border-radius:16px;overflow:hidden;background:#EAF3F6;margin-bottom:15px;
+  display:flex;align-items:center;justify-content:center;
+}
+.s-card .thumb img{width:100%;height:100%;object-fit:cover;}
+.s-card .thumb.app{background:linear-gradient(180deg,#EAF3F6,#DCEBF0);padding:8px 0;}
+.s-card .thumb.app img{width:auto;height:100%;object-fit:contain;border-radius:7px;box-shadow:0 3px 10px rgba(31,90,114,.22);}
+.s-card h4{margin:0 0 6px;font-size:17.5px;font-weight:900;color:var(--navy);}
+.s-card p{margin:0;font-size:14px;color:#55747C;line-height:1.85;}
+.s-tag{
+  display:inline-block;font-size:12px;font-weight:700;padding:4px 13px;border-radius:999px;
+  background:#E1F0F3;color:var(--navy);margin-bottom:10px;
+}
+.s-tag.free{background:#E4EFE2;color:#3E5744;}
+.senior-cta{text-align:center;}
+.senior-cta .note{margin:14px 0 0;font-size:13px;color:#55747C;}
+
+/* ============ 講座「田舎暮らしのまま、独りで稼ぐ教科書」 ============ */
+.kouza{padding:74px 0 78px;}
+.kz-grid{display:grid;grid-template-columns:320px 1fr;gap:42px;align-items:start;margin-top:34px;}
+.kz-cover{position:relative;}
+.kz-cover img{
+  width:100%;border-radius:18px;border:1px solid var(--line);
+  box-shadow:0 10px 28px rgba(53,43,30,.16);
+}
+.kz-badge{
+  position:absolute;left:-10px;top:-13px;transform:rotate(-4deg);
+  background:var(--red);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.02em;
+  padding:6px 15px;border-radius:999px;box-shadow:0 4px 0 #8f2a1f;
+}
+.kz-lead{margin:0 0 22px;font-size:16px;color:#3C525C;}
+.kz-lead strong{color:var(--navy);}
+.kz-sub{
+  margin:0 0 11px;font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--navy);
+}
+.kz-list{
+  list-style:none;margin:0 0 28px;padding:0;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:9px 16px;
+}
+.kz-list li{
+  display:flex;align-items:baseline;gap:9px;
+  font-size:14.5px;line-height:1.7;color:#3C525C;
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 13px;
+}
+.kz-list b{
+  flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy);
+  background:#E1F0F3;border-radius:999px;padding:2px 9px;
+}
+.kz-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
+
+/* ============ profile ============ */
+.profile{padding:74px 0;}
+.pf-grid{display:grid;grid-template-columns:300px 1fr;gap:44px;align-items:start;}
+.pf-photo{position:relative;}
+.pf-photo img{
+  width:100%;aspect-ratio:3/4;object-fit:cover;object-position:50% 28%;
+  border-radius:20px;box-shadow:var(--shadow);
+}
+.pf-photo .tape{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(-2deg);
+  width:120px;height:28px;background:rgba(240,220,180,.85);border-radius:3px;
+  box-shadow:0 2px 6px rgba(53,43,30,.14);
+}
+.pf-body h2{margin:0 0 4px;font-size:clamp(24px,4vw,32px);font-weight:900;color:var(--navy);}
+.pf-body .sub{margin:0 0 20px;font-size:14px;color:var(--ink-soft);letter-spacing:.06em;}
+.pf-body p{margin:0 0 16px;font-size:15.5px;color:#3F535D;}
+.pf-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:26px 0 0;}
+.fact{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 17px;}
+.fact dt{font-size:11.5px;color:var(--ink-soft);letter-spacing:.1em;font-weight:700;margin:0 0 2px;}
+.fact dd{margin:0;font-size:15px;font-weight:700;color:var(--ink);}
+.motto{
+  margin-top:26px;background:#FFF8EC;border:1px dashed #E0C89C;border-radius:18px;padding:18px 22px;
+  font-size:15.5px;color:#6B5230;font-weight:500;
+}
+.motto b{color:var(--red);}
+
+/* ============ 好きなこと ============ */
+.likes{padding:64px 0 74px;background:var(--cream-deep);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.like-list{display:flex;flex-direction:column;gap:34px;}
+.like{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:34px;align-items:center;
+  background:#fff;border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:var(--shadow);
+}
+.like:nth-child(even) .like-art{order:2;}
+.like-art{position:relative;background:#F6EFE2;min-height:320px;}
+.like-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 32%;}
+.like-art.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;background:#fff;}
+.like-art.quad figure{position:relative;margin:0;overflow:hidden;background:#F6EFE2;}
+.like-art.quad figcaption{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;padding:16px 10px 7px;
+  color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.55));
+}
+.like-art.contain img{
+  inset:16px;width:auto;height:auto;margin:auto;object-fit:contain;
+  max-width:calc(100% - 32px);max-height:calc(100% - 32px);
+}
+.like-tx{padding:30px 34px 34px;}
+.like-tx .kicker{
+  display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.18em;color:#fff;
+  background:var(--green);padding:4px 13px;border-radius:999px;margin-bottom:11px;
+}
+.like-tx .kicker.b{background:var(--sky);}
+.like-tx .kicker.r{background:var(--red);}
+.like-tx .kicker.k{background:#4A4038;}
+.like-tx h3{margin:0 0 10px;font-size:21px;font-weight:900;color:var(--navy);line-height:1.55;}
+.like-tx p{margin:0 0 12px;font-size:15px;color:#3F535D;}
+.like-tx p:last-child{margin-bottom:0;}
+.like-tx .small{font-size:13.5px;color:var(--ink-soft);}
+.kuro-panel{background:radial-gradient(circle at 50% 42%, #FFFDF7 0%, #F3EADB 72%);}
+.kuro-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;}
+.kuro-strip figure{margin:0;text-align:center;background:#FBF6EC;border:1px solid var(--line);border-radius:14px;padding:8px 4px 7px;}
+.kuro-strip img{width:100%;max-width:78px;margin:0 auto;}
+.kuro-strip figcaption{font-size:10.5px;color:var(--ink-soft);margin-top:3px;font-weight:700;letter-spacing:.02em;}
+/* クロのひとこと（セクションの合いの手） */
+.kuro-say{display:flex;align-items:center;justify-content:center;gap:12px;margin:26px auto 0;max-width:460px;}
+.kuro-say img{width:76px;flex:0 0 76px;}
+.kuro-say span{
+  position:relative;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:9px 15px;
+  font-size:13.5px;font-weight:700;color:var(--ink);box-shadow:3px 4px 0 rgba(35,50,60,.13);
+}
+.kuro-say span::before{
+  content:"";position:absolute;left:-9px;top:50%;margin-top:-8px;width:0;height:0;
+  border:8px solid transparent;border-right-color:var(--ink);border-left:0;
+}
+
+/* ============ 発信 ============ */
+.channels{padding:70px 0;}
+.ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+.ch{
+  display:flex;gap:18px;align-items:center;text-decoration:none;
+  background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 26px;
+  box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease;
+}
+.ch:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(53,43,30,.14);}
+.ch .ic{
+  flex:0 0 58px;width:58px;height:58px;border-radius:17px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+}
+.ch.yt .ic{background:#FDEAE7;}
+.ch.nt .ic{background:#E1F0F3;}
+.ch h3{margin:0 0 3px;font-size:17px;font-weight:900;color:var(--navy);}
+.ch p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.75;}
+.ch .go{margin-left:auto;font-size:20px;color:var(--red);flex:0 0 auto;}
+
+/* ============ contact ============ */
+.contact{padding:66px 0 76px;background:linear-gradient(180deg,#F6EEE0 0%,#F1E6D3 100%);border-top:1px solid var(--line);}
+.form{
+  background:#fff;border:1px solid var(--line);border-radius:24px;padding:32px 30px;
+  display:flex;flex-direction:column;gap:17px;box-shadow:var(--shadow);
+}
+.form label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700;color:#3F535D;}
+.form input,.form textarea{
+  padding:13px 15px;border-radius:13px;border:1.5px solid #DDD0B8;background:#FFFDF8;
+  font-size:15.5px;font-family:inherit;color:var(--ink);
+}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,90,114,.13);}
+.form textarea{resize:vertical;min-height:130px;}
+.form .err{color:#B23B3B;font-size:13.5px;margin:0;}
+.done{background:#E4EFE2;border-radius:20px;padding:38px 26px;text-align:center;}
+.done .em{font-size:38px;}
+.done h3{margin:8px 0 6px;color:#3E5744;font-size:19px;}
+.done p{margin:0;font-size:14.5px;color:#4B6152;}
+.contact-alt{text-align:center;margin-top:20px;font-size:13.5px;color:var(--ink-soft);}
+
+/* ============ footer ============ */
+footer{background:#23323C;color:#C8D4DA;padding:44px 0 34px;text-align:center;font-size:13px;}
+footer .flinks{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-bottom:18px;font-size:14px;}
+footer a{color:#EFE4D2;text-decoration:none;}
+footer a:hover{text-decoration:underline;text-underline-offset:3px;}
+footer .cp{opacity:.72;}
+footer .cp .en{font-size:14px;}
+
+/* ============ responsive ============ */
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr;gap:0;}
+  .hero-copy{padding-bottom:8px;}
+  .hero-figure{max-width:380px;margin:14px auto 0;}
+  .hero-bubble{left:2%;}
+  .face-grid{grid-template-columns:1fr;}
+  .face .ph{height:200px;}
+  .s-cards{grid-template-columns:1fr;max-width:520px;}
+  .kz-grid{grid-template-columns:1fr;gap:30px;}
+  .kz-cover{max-width:320px;margin:0 auto;}
+  .pf-grid{grid-template-columns:1fr;gap:34px;}
+  .pf-photo{max-width:320px;margin:0 auto;}
+  .like{grid-template-columns:1fr;gap:0;}
+  .like:nth-child(even) .like-art{order:0;}
+  .like-art{min-height:250px;}
+  .like-art.quad{min-height:320px;}
+  .ch-grid{grid-template-columns:1fr;}
+}
+@media (max-width:640px){
+  nav.pc{display:none;}
+  .burger{display:block;}
+  nav.sp.open{display:flex;}
+  body{line-height:1.9;}
+  .hero{padding-top:34px;}
+  .hero-lead{font-size:15.5px;}
+  .btn{padding:14px 24px;font-size:15px;width:100%;}
+  .hero-cta{flex-direction:column;}
+  .senior-cta .btn{max-width:420px;margin:0 auto;}
+  .kz-list{grid-template-columns:1fr;}
+  .kz-cta .btn{max-width:420px;margin:0 auto;}
+  .pf-facts{grid-template-columns:1fr;}
+  .like-tx{padding:24px 22px 28px;}
+  .form{padding:24px 20px;}
+  .hero-strip{height:170px;}
+  .bb-text{font-size:14.5px;}
+}
+/* 動きを減らす設定の人には、吹き出しを揺らさない */
+@media (prefers-reduced-motion:reduce){
+  .hero-bubble{animation:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="hbar">
+    <a class="brand" href="#top">
+      <img src="image/roy-avatar.png" alt="">
+      <span>
+        <b>Roy's Channel</b>
+        <small>ロイズ チャンネル</small>
+      </span>
+    </a>
+    <nav class="pc">
+      <a href="#faces">3つの顔</a>
+      <a href="#senior">シニア相談室</a>
+      <a href="#kouza">講座</a>
+      <a href="#profile">ロイについて</a>
+      <a href="#likes">好きなこと</a>
+      <a href="#channels">発信</a>
+      <a href="#contact">お問い合わせ</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="メニュー" aria-expanded="false">☰</button>
+  </div>
+  <nav class="sp" id="spnav">
+    <a href="#faces">3つの顔</a>
+    <a href="#senior">シニア相談室</a>
+    <a href="#kouza">講座</a>
+    <a href="#profile">ロイについて</a>
+    <a href="#likes">好きなこと</a>
+    <a href="#channels">発信</a>
+    <a href="#contact">お問い合わせ</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <span class="hero-badge">🍜 香川県三豊市から発信中</span>
+      <h1>好きなことを、<br><span class="mk">好きなだけ。</span><br><span class="red">うどん県</span>から。</h1>
+      <p class="hero-lead">
+        バイクにまたがって瀬戸内をぐるり。コートでバウンドテニス。<br>
+        そして、シニアのみなさんのスマホとパソコンのお手伝い。<br>
+        <b>ロイ</b>のぜんぶが、ここに集まっています。
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#senior">シニア向けサイトを見る →</a>
+        <a class="btn btn-ghost" href="#profile">ロイってどんな人？</a>
+      </div>
+    </div>
+    <div class="hero-figure">
+      <span class="hero-bubble"><span class="bb-text">やあ、<em>ようこそ</em><b>！</b></span></span>
+      <img src="image/roy-chara.png" alt="愛車のバイクの横に立つロイのキャラクター" width="760" height="990">
+    </div>
+  </div>
+  <div class="hero-strip">
+    <span class="strip-cap">📍 瀬戸内海の夕日（香川県三豊市）</span>
+  </div>
+</section>
+
+<!-- ============ 3つの顔 ============ -->
+<section class="faces" id="faces">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">THREE FACES</span>
+      <h2>ロイには、3つの顔があります</h2>
+      <p>肩書きはひとつに決めていません。どれも本気で、どれも楽しんでいます。</p>
+    </div>
+    <div class="face-grid">
+
+      <a class="face" href="#senior" style="text-decoration:none;">
+        <div class="ph"><img src="image/cover-sumaho.jpg" alt="教材「はじめてのスマホ教室」の表紙"></div>
+        <div class="tx">
+          <span class="no">No.01</span>
+          <h3>ITシニアなんでも相談室</h3>
+          <p>スマホもパソコンも、むずかしい言葉を使わずに。教材・講座動画・無料の脳トレアプリまで、ぜんぶそろえました。</p>
+        </div>
+      </a>
+
+      <a class="face" href="#bike" style="text-decoration:none;">
+        <div class="ph duo">
+          <img src="image/photo-bike.jpg" alt="海沿いに停めた愛車のバイク" style="object-position:center 55%;">
+          <img src="image/photo-camp.jpg" alt="タープと焚き火台を広げたキャンプ" style="object-position:center 55%;">
+        </div>
+        <div class="tx">
+          <span class="no">No.02</span>
+          <h3>バイクとキャンプの人</h3>
+          <p>休みの日は愛車で瀬戸内をぐるり。焚き火を眺めながら、次のネタをぼんやり考えています。</p>
+        </div>
+      </a>
+
+      <a class="face" href="#bt" style="text-decoration:none;">
+        <div class="ph"><img src="image/photo-bt-taikai.jpg" alt="体育館に整列したバウンドテニス大会の参加者たち" style="object-position:center 45%;"></div>
+        <div class="tx">
+          <span class="no">No.03</span>
+          <h3>バウンドテニスの世話役</h3>
+          <p>香川県バウンドテニス協会で、大会の運営や対戦表づくりのお手伝いをしています。</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ シニア向けサイトへの導線（メイン） ============ -->
+<section class="senior" id="senior">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">MAIN WORK</span>
+      <h2>いちばん力を入れているのが、こちらです</h2>
+      <p>「シニアのみなさんの毎日を、もっとラクに、もっと楽しく」がテーマの姉妹サイトです。</p>
+    </div>
+
+    <img class="senior-logo" src="image/senior-logo.png" alt="うどん県発！ITシニアなんでも相談室 by Roy's Channel">
+
+    <p class="senior-lead">
+      電源の入れ方から、写真の送り方、LINE の使い方まで。<br>
+      「今さら聞けない」を、<strong>やさしい言葉と大きな文字</strong>でまるごと解説しています。
+      無料で使える脳トレアプリもご用意しました。
+    </p>
+
+    <div class="s-cards">
+      <div class="s-card">
+        <div class="thumb"><img src="image/cover-sumaho.jpg" alt="はじめてのスマホ教室の表紙"></div>
+        <span class="s-tag">教材</span>
+        <h4>はじめてのスマホ教室</h4>
+        <p>電源の入れ方から順番に。動画とテキストで、迷わず進められます。</p>
+      </div>
+      <div class="s-card">
+        <div class="thumb app"><img src="image/app-nouikiiki.png" alt="脳いきいき手帳の画面"></div>
+        <span class="s-tag free">無料アプリ</span>
+        <h4>脳いきいき手帳</h4>
+        <p>毎日5分の脳トレと記録がひとつに。登録もインストールも不要です。</p>
+      </div>
+    </div>
+
+    <div class="senior-cta">
+      <a class="btn btn-red" href="https://roys1105.github.io/roys-senior-it/" target="_blank" rel="noopener">
+        ITシニアなんでも相談室へ行く →
+      </a>
+      <p class="note">別のタブで開きます／スマホ・タブレット・パソコンのどれでもご覧いただけます</p>
+      <div class="kuro-say">
+        <img src="image/kuro-welcome.png" alt="クロ">
+        <span>こっちにも遊びに来てね！</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 講座「田舎暮らしのまま、独りで稼ぐ教科書」 ============ -->
+<section class="kouza" id="kouza">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">FREE COURSE</span>
+      <h2>田舎暮らしのまま、独りで稼ぐ教科書</h2>
+      <p>いまあるものを使って、小さく始めて、長く続ける。全7回の動画講座です。</p>
+    </div>
+
+    <div class="kz-grid">
+      <div class="kz-cover">
+        <img src="image/cover-inaka.jpg" alt="講座「田舎暮らしのまま、独りで稼ぐ教科書」の表紙">
+        <span class="kz-badge">全7回・無料</span>
+      </div>
+
+      <div class="kz-body">
+        <p class="kz-lead">
+          田舎にいながら、<strong>自分の得意を売り物に変える</strong>までの道のりを解説します。
+          特別な機材やスキルはいりません。フルテロップの字幕つきなので、
+          音を出せない場所でもご覧いただけます。
+        </p>
+
+        <p class="kz-sub">目次（全7回）</p>
+        <ul class="kz-list">
+          <li><b>第0回</b>予告編</li>
+          <li><b>第1回</b>田舎は不利じゃない</li>
+          <li><b>第2回</b>稼ぐ仕組みは3段階</li>
+          <li><b>第3回</b>売り物の見つけ方</li>
+          <li><b>第4回</b>収入の柱を3本立てる</li>
+          <li><b>第5回</b>売るときの基本ルール5つ</li>
+          <li><b>第6回</b>最初の90日でやること</li>
+        </ul>
+
+        <div class="kz-cta">
+          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html" target="_blank" rel="noopener">
+            講座のページを見る →
+          </a>
+          <p class="note">別のタブで開きます／いまは無料で公開中です</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ プロフィール ============ -->
+<section class="profile" id="profile">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">PROFILE</span>
+      <h2>はじめまして、ロイです</h2>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-photo">
+        <span class="tape"></span>
+        <img src="image/photo-profile.jpg" alt="ロイの写真">
+      </div>
+      <div class="pf-body">
+        <h2>ロイ<span style="font-size:16px;color:var(--ink-soft);font-weight:500;">（Roy）</span></h2>
+        <p class="sub" id="agesub">香川県三豊市在住</p>
+        <p>
+          瀬戸内海と、うどんと、田んぼに囲まれた町で暮らしています。
+          もともと機械いじりが好きで、気がつけばパソコンもスマホも「まず自分で試してみる」のがくせになりました。
+        </p>
+        <p>
+          そのうちに、同じ世代の友人から「これどうやるん？」と聞かれることが増えました。
+          そこで始めたのが <b>YouTube</b> と <b>note</b>、そして <b>ITシニアなんでも相談室</b> です。
+          むずかしい言葉は使いません。<b>実際に使ってわかったことだけ</b>をお伝えしています。
+        </p>
+        <dl class="pf-facts">
+          <div class="fact"><dt>すんでいるところ</dt><dd>香川県三豊市</dd></div>
+          <div class="fact"><dt>あいぼう</dt><dd>YAMAHA のバイクと黒猫</dd></div>
+          <div class="fact"><dt>やっていること</dt><dd>YouTube・note・教材づくり</dd></div>
+          <div class="fact"><dt>まちのおしごと</dt><dd>香川県バウンドテニス協会</dd></div>
+        </dl>
+        <p class="motto">
+          <b>むずかしいことを、むずかしいまま伝えない。</b><br>
+          これがロイの、たったひとつのルールです。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 好きなこと ============ -->
+<section class="likes" id="likes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">MY FAVORITES</span>
+      <h2>好きなもの、好きなだけ</h2>
+      <p>仕事じゃないほうの話も、少しだけ。</p>
+    </div>
+
+    <div class="like-list">
+
+      <article class="like" id="bike">
+        <div class="like-art"><img src="image/photo-bike-helmet.jpg" alt="並木道に停めた黒い大型バイクと、赤黒のヘルメットを提げて歩くロイ" style="object-position:center center;"></div>
+        <div class="like-tx">
+          <span class="kicker b">TOURING</span>
+          <h3>愛車とふたりで、瀬戸内をぐるり</h3>
+          <p>
+            天気のいい日は、ヘルメットを片手に外へ。海沿いの道を走って、気に入った場所でエンジンを止めて、
+            ぼんやり海を眺める。それだけで一日が満ちてしまいます。
+          </p>
+          <p class="small">赤黒のヘルメットに黒い大型バイク。走っているのを見かけたら、たぶんロイです。</p>
+        </div>
+      </article>
+
+      <article class="like" id="bt">
+        <div class="like-art"><img src="image/photo-bt2.jpg" alt="体育館に張られたバウンドテニスのコート" style="object-position:center 62%;"></div>
+        <div class="like-tx">
+          <span class="kicker r">BOUND TENNIS</span>
+          <h3>バウンドテニスという、いいスポーツ</h3>
+          <p>
+            体育館の中で、小さなコートとやわらかいボールで楽しむ競技です。
+            激しく走り回らなくていいので、シニアの方でも無理なく続けられます。
+          </p>
+          <p class="small">
+            香川県バウンドテニス協会・三豊市スポーツ協会で、大会の運営や対戦表づくりを担当しています。
+            「さぬきうどん杯」もそのひとつです。
+          </p>
+        </div>
+      </article>
+
+      <article class="like" id="kuro">
+        <div class="like-art contain kuro-panel"><img src="image/kuro.png" alt="黒猫クロのイラスト"></div>
+        <div class="like-tx">
+          <span class="kicker k">KURO</span>
+          <h3>相棒の黒猫「クロ」</h3>
+          <p>
+            ロイのサイト・アプリ・教材のあちこちに出てくる、まんまるな目の黒猫です。
+            脳トレアプリ「脳いきいき手帳」では、案内役をつとめてくれています。
+          </p>
+          <p class="small">場面に合わせて、あいさつしたり、見送ったり、ひと休みしたり。</p>
+          <div class="kuro-strip">
+            <figure><img src="image/kuro-hello.png" alt="手をふるクロ"><figcaption>ようこそ</figcaption></figure>
+            <figure><img src="image/kuro-go.png" alt="出かけるクロ"><figcaption>いってきます</figcaption></figure>
+            <figure><img src="image/kuro-night.png" alt="月の上のクロ"><figcaption>おつかれさま</figcaption></figure>
+            <figure><img src="image/kuro-bye.png" alt="またねと手をふるクロ"><figcaption>またね</figcaption></figure>
+          </div>
+        </div>
+      </article>
+
+      <article class="like" id="kagawa">
+        <div class="like-art quad">
+          <figure><img src="image/season-spring.jpg" alt="提灯がならぶ春の桜並木" style="object-position:center 45%;"><figcaption>春・桜並木</figcaption></figure>
+          <figure><img src="image/season-summer.jpg" alt="松林ごしに見える夏の瀬戸内海" style="object-position:center 50%;"><figcaption>夏・瀬戸内の海</figcaption></figure>
+          <figure><img src="image/season-autumn.jpg" alt="うろこ雲の秋の夕焼け" style="object-position:center 38%;"><figcaption>秋・うろこ雲</figcaption></figure>
+          <figure><img src="image/season-winter.jpg" alt="波の荒い冬の海岸" style="object-position:center 55%;"><figcaption>冬・荒れた海</figcaption></figure>
+        </div>
+        <div class="like-tx">
+          <span class="kicker">KAGAWA</span>
+          <h3>うどん県は、いいところです</h3>
+          <p>
+            春は提灯のならぶ桜並木、夏は松林ごしの瀬戸内海。
+            秋はうろこ雲の夕焼け、冬は波の荒い海岸。
+            派手さはないけれど、季節がていねいに巡っていく町です。
+          </p>
+          <p class="small">「田舎にいながら発信する」——それができる時代になったことを、いちばん実感しています。</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 発信チャンネル ============ -->
+<section class="channels" id="channels">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">CHANNELS</span>
+      <h2>こちらでも発信しています</h2>
+      <p>気になるほうから、のぞいてみてください。</p>
+    </div>
+    <div class="ch-grid">
+      <a class="ch yt" href="https://www.youtube.com/@royschannel9208" target="_blank" rel="noopener">
+        <span class="ic">▶️</span>
+        <span>
+          <h3>YouTube ／ Roy's Channel</h3>
+          <p>ガジェットや日用品を実際に使ってみたレビュー、香川の日常をゆるく配信中。</p>
+        </span>
+        <span class="go">→</span>
+      </a>
+      <a class="ch nt" href="https://note.com/roy_s1105" target="_blank" rel="noopener">
+        <span class="ic">📖</span>
+        <span>
+          <h3>note ／ 読みもの</h3>
+          <p>スマホ・パソコンの困りごと解決から、田舎で発信して暮らす話まで。</p>
+        </span>
+        <span class="go">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ お問い合わせ ============ -->
+<section class="contact" id="contact">
+  <div class="narrow">
+    <div class="sec-head">
+      <span class="kicker">CONTACT</span>
+      <h2>お問い合わせ</h2>
+      <p>ご相談・お仕事のご依頼・「ここが分からない」まで、なんでもどうぞ。</p>
+    </div>
+
+    <form class="form" id="cform" novalidate>
+      <label>お名前
+        <input type="text" id="fname" placeholder="山田 花子" autocomplete="name">
+      </label>
+      <label>メールアドレス
+        <input type="email" id="femail" placeholder="example@mail.com" autocomplete="email">
+      </label>
+      <label>お問い合わせ内容
+        <textarea id="fmsg" placeholder="ご相談の内容をお書きください"></textarea>
+      </label>
+      <p class="err" id="ferr" style="display:none;"></p>
+      <button type="submit" class="btn btn-primary" id="fbtn">送信する</button>
+    </form>
+
+    <div class="done" id="fdone" style="display:none;">
+      <div class="em">🌊</div>
+      <h3>送信ありがとうございます</h3>
+      <p>内容を確認して、ロイより折り返しご連絡いたします。</p>
+    </div>
+
+    <div class="kuro-say">
+      <img src="image/kuro-bye.png" alt="クロ">
+      <span>お返事、待ってるにゃ</span>
+    </div>
+
+    <p class="contact-alt">
+      うまく送れないときは <a href="https://note.com/roy_s1105" target="_blank" rel="noopener" style="color:var(--navy);font-weight:700;">note</a> や
+      <a href="https://www.youtube.com/@royschannel9208" target="_blank" rel="noopener" style="color:var(--navy);font-weight:700;">YouTube</a> のコメントからでもどうぞ。
+    </p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="flinks">
+      <a href="https://roys1105.github.io/roys-senior-it/" target="_blank" rel="noopener">ITシニアなんでも相談室</a>
+      <a href="https://www.youtube.com/@royschannel9208" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://note.com/roy_s1105" target="_blank" rel="noopener">note</a>
+      <a href="#contact">お問い合わせ</a>
+      <a href="https://roys1105.github.io/roys-senior-it/tokushoho.html" target="_blank" rel="noopener">特定商取引法に基づく表記</a>
+    </div>
+    <div class="cp">© 2026 <span class="en">Roy's Channel</span> ／ 香川県三豊市</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  /* --- ハンバーガーメニュー --- */
+  var burger = document.getElementById('burger');
+  var spnav = document.getElementById('spnav');
+  burger.addEventListener('click', function () {
+    var open = spnav.classList.toggle('open');
+    burger.textContent = open ? '✕' : '☰';
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  Array.prototype.forEach.call(spnav.querySelectorAll('a'), function (a) {
+    a.addEventListener('click', function () {
+      spnav.classList.remove('open');
+      burger.textContent = '☰';
+      burger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- 年齢の自動計算（1964年11月5日生まれ） --- */
+  function jstToday() {
+    var jst = new Date(Date.now() + 9 * 3600 * 1000);
+    return jst.toISOString().slice(0, 10);
+  }
+  function age() {
+    var now = new Date(jstToday() + 'T00:00:00+09:00');
+    var a = now.getFullYear() - 1964;
+    var m = now.getMonth() + 1, d = now.getDate();
+    if (m < 11 || (m === 11 && d < 5)) { a -= 1; }
+    return a;
+  }
+  var sub = document.getElementById('agesub');
+  if (sub) { sub.textContent = age() + '歳／香川県三豊市在住'; }
+
+  /* --- シニア相談室へのリンクは、同じタブを使い回す ---
+     すでにそのページを開いてあるタブがあれば、新しく開かずにそちらへ切り替える。
+     ページごとにタブの名前を分けているので、トップと講座ページは別のタブになる。
+     ※ブラウザは「このページから開いたタブ」しか見つけられない決まりなので、
+       ロイさんが手でURLを打って開いたタブまでは見つけられない。 */
+  function seniorTabName(url) {
+    var path = url.split('roys-senior-it')[1] || '/';
+    return 'roys-senior' + path.replace(/[^a-zA-Z0-9]+/g, '-');
+  }
+  var seniorLinks = document.querySelectorAll('a[href*="roys1105.github.io/roys-senior-it"]');
+  Array.prototype.forEach.call(seniorLinks, function (a) {
+    a.addEventListener('click', function (e) {
+      var url = a.href;
+      var win = window.open('', seniorTabName(url));
+      if (!win) { return; }  /* ポップアップが止められたときは、いつもどおり別タブで開く */
+      e.preventDefault();
+      var isNew = true;
+      try {
+        isNew = (win.location.href === 'about:blank' || win.location.href === '');
+      } catch (err) {
+        isNew = false;  /* 中を読めない＝すでに別サイトが表示されているタブ */
+      }
+      if (isNew) { win.location.href = url; }
+      win.focus();
+    });
+  });
+
+  /* --- お問い合わせフォーム --- */
+  var API = 'https://roy-senior-site-api.roy-s1105.workers.dev';
+  var form = document.getElementById('cform');
+  var btn = document.getElementById('fbtn');
+  var err = document.getElementById('ferr');
+  function showErr(msg) { err.textContent = msg; err.style.display = 'block'; }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('fname').value.trim();
+    var email = document.getElementById('femail').value.trim();
+    var msg = document.getElementById('fmsg').value.trim();
+    if (!name || !email || !msg) { showErr('すべての項目をご記入ください。'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('メールアドレスをご確認ください。'); return; }
+    err.style.display = 'none';
+    btn.textContent = '送信中…';
+    btn.disabled = true;
+    fetch(API + '/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email, message: msg })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) {
+          form.style.display = 'none';
+          document.getElementById('fdone').style.display = 'block';
+        } else {
+          btn.textContent = '送信する'; btn.disabled = false;
+          showErr('送信に失敗しました。しばらくしてからもう一度お試しください。');
+        }
+      })
+      .catch(function () {
+        btn.textContent = '送信する'; btn.disabled = false;
+        showErr('送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。');
+      });
+  });
+})();
+</script>
+</body>
+</html>
