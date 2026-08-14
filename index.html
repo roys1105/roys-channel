@@ -620,10 +620,13 @@ footer .cp .en{font-size:14px;}
         </ul>
 
         <div class="kz-cta">
-          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html" target="_blank" rel="noopener">
+          <!-- この講座だけは、別のタブではなく同じタブで開く（講座ページの「トップに戻る」で
+               ここへ戻ってこられるようにするため）。data-same-tab が付いているリンクは、
+               下のスクリプトの「タブを使い回す」処理の対象から外している。 -->
+          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html" data-same-tab="1">
             講座のページを見る →
           </a>
-          <p class="note">別のタブで開きます／いまは無料で公開中です</p>
+          <p class="note">いまは無料で公開中です</p>
         </div>
       </div>
     </div>
@@ -908,7 +911,7 @@ footer .cp .en{font-size:14px;}
     var path = url.split('roys-senior-it')[1] || '/';
     return 'roys-senior' + path.replace(/[^a-zA-Z0-9]+/g, '-');
   }
-  var seniorLinks = document.querySelectorAll('a[href*="roys1105.github.io/roys-senior-it"]');
+  var seniorLinks = document.querySelectorAll('a[href*="roys1105.github.io/roys-senior-it"]:not([data-same-tab])');
   Array.prototype.forEach.call(seniorLinks, function (a) {
     a.addEventListener('click', function (e) {
       var url = a.href;
