@@ -636,10 +636,10 @@ footer .cp .en{font-size:14px;}
         </ul>
 
         <div class="kz-cta">
-          <!-- 講座は「Roy's Channel から見てもらうもの」なので、このタブ（roy-main）で開く。
-               URLはシニアサイトの下にあるが、シニア相談室のタブは触らない。
-               講座ページ側も、この行き先に合わせて名札を roy-main にしてある。 -->
-          <a class="btn btn-primary" href="https://roys-senior-it.pages.dev/material/inaka-hitori-kasegu.html">
+          <!-- 講座ページはURLこそシニアサイトの下にあるが、中身は Roy's Channel の講座。
+               名札方式は廃止したので、このタブのまま移動する（target は付けない）。
+               リンクは .html を付けない形。Cloudflare Pages がその形で配るため。 -->
+          <a class="btn btn-primary" href="https://roys-senior-it.pages.dev/material/inaka-hitori-kasegu">
             講座のページを見る →
           </a>
           <p class="note">いまは無料で公開中です</p>
@@ -850,7 +850,7 @@ footer .cp .en{font-size:14px;}
       <a href="#contact">お問い合わせ</a>
       <!-- 特商法のページは両方のサイトから開くので、こちらから行くときはメインのタブで。
            （シニア相談室を見ているタブを置き換えないため。戻り先もページ側で切り替わる） -->
-      <a href="https://roys-senior-it.pages.dev/tokushoho.html?src=main">特定商取引法に基づく表記</a>
+      <a href="https://roys-senior-it.pages.dev/tokushoho?src=main">特定商取引法に基づく表記</a>
     </div>
     <div class="cp">© 2026 <span class="en">Roy's Channel</span> ／ 香川県三豊市</div>
   </div>
