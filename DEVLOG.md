@@ -5,6 +5,50 @@
 
 ---
 
+## 2026-08-15（土）その2 — 公開先を Cloudflare Pages に移す準備（**まだ push していない**）
+
+### やったこと
+- **方針**（ロイさんの裁定）：2つのサイトは**別々のサイト**として公開し、相互リンクで繋ぐ。
+  公開は **Cloudflare Pages**、**GitHub は履歴の保管用**（昔に戻したいときの手段）。
+  - Roy's Channel … `https://roys-channel.pages.dev`（作成ずみ・GitHub連携あり）
+  - シニア相談室 … `https://roys-senior-it.pages.dev`（作成ずみ・GitHub連携あり）
+- **【追記】シニア側のURLが `roys-senior-it-git` → `roys-senior-it` に変わった**（プロジェクトを作り直したため。
+  **Cloudflare Pages は名前をあとから変えられない**）。`index.html` のリンクも全部それに合わせた。
+- **`index.html` を直した（4か所＋2つ）。**
+  - シニアサイトへのリンク**4か所すべて**を `roys1105.github.io/roys-senior-it/…` →
+    `roys-senior-it.pages.dev/…` に変更。あわせて **`target="roy-senior"` / `target="roy-main"` を全部外した**。
+  - **タブの「名札」（`window.name = 'roy-main'`）を廃止**。別ドメインをまたぐとブラウザが名札を消すため、
+    この方式はもう使えない。行き来は**同じタブで移動**に統一（`target` を付けない）。
+  - `<head>` の先頭に**旧住所からの転送**を追加。`location.hostname === 'roys1105.github.io'` のときだけ
+    `roys-channel.pages.dev` の同じ場所へ飛ばす（`location.search` と `#` も引き継ぐ）。
+    **同じファイルが GitHub Pages にも出てしまうので、host を見て分岐している。**
+  - `<link rel="canonical" href="https://roys-channel.pages.dev/">` を追加（検索での重複よけ）。
+
+### わかったこと・つまずいたこと
+- **2つのサイトが別ドメインになると、これまでの仕掛けが2つとも効かなくなる。**
+  1. タブの名札（`window.name`）… ドメインをまたぐと消える決まり → **廃止した**
+  2. 特商法ページの「来た方向」判定 … 別ドメインだと **referrer はホスト名までしか読めない**（パスは消える）
+     → シニア側で `?src=` の印を主、**ホスト名（`roys-channel`）を予備**に切り替えた
+- **1つのリポジトリが2か所（GitHub Pages と Cloudflare Pages）に出る。**
+  だから転送も LIVE_HOSTS も「**今どっちのホストで開かれているか**」を見て書く必要がある。
+  ベタ書きの `if (…) location.replace(…)` は片方でしか動かないように必ず host で囲むこと。
+- ローカル（`localhost:8765`）で確認したかぎり、転送も名札廃止も**手元では発火しない**（host が違うため）。
+  ここは意図どおり。
+
+### 次にやること
+1. ~~Cloudflare で Pages プロジェクト `roys-channel` を作る~~ → **ロイさんが作成ずみ**（GitHub連携あり）。
+2. **両リポジトリを push する**（ロイさんの合図待ち）。push した時点で新しい住所に切り替わる。
+3. 公開後、実物で確認：旧URL → 新URLの転送、相互リンク往復、特商法の「戻る」先。
+4. note の記事など**外に出したリンクは旧URLのまま**。転送で繋がるが、新しく書くものは新URLで。
+
+### 動作確認
+- ローカル静的サーバ（`python -m http.server 8765`）で `roys-channel/` を開いて確認：
+  - シニアへのリンク4本すべて `https://roys-senior-it.pages.dev/…`、**target は全部なし**
+  - `window.name` は空（名札廃止を確認）
+  - canonical は `https://roys-channel.pages.dev/`
+  - 画像は全部 200。404 はシニア側の `.image-slots.state.json` 1件だけ（元からある内部ファイル・無害）
+- **ライブでの確認は未実施**（Cloudflare のプロジェクトがまだ無いため）。
+
 ## 2026-08-15（土） — 講座「田舎暮らしのまま、独りで稼ぐ教科書」の紹介欄を追加
 
 ### やったこと

@@ -2,8 +2,24 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<script>
+/* --- 旧住所（GitHub Pages）で開かれたら、新しい住所へ送る ---
+   公開先は Cloudflare Pages（roys-channel.pages.dev）。
+   GitHub は履歴の保管用で、同じファイルが GitHub Pages にも出てしまうため、
+   古いリンクから来た人をここで新しい住所へ渡す。
+   ※ロイさんのメモ：転送をやめたいときは、この <script> ブロックごと消す。 */
+(function () {
+  try {
+    if (location.hostname === 'roys1105.github.io') {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '');
+      location.replace('https://roys-channel.pages.dev/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roy's Channel｜好きなことを、好きなだけ。うどん県から。</title>
+<link rel="canonical" href="https://roys-channel.pages.dev/">
 <meta name="description" content="香川県三豊市のロイです。バイクと黒猫とバウンドテニス、そしてシニアのITサポート。好きなことを好きなだけ、うどん県からお届けします。">
 <meta property="og:title" content="Roy's Channel｜好きなことを、好きなだけ。うどん県から。">
 <meta property="og:description" content="香川県三豊市のロイです。バイクと黒猫とバウンドテニス、そしてシニアのITサポート。">
@@ -573,7 +589,7 @@ footer .cp .en{font-size:14px;}
     </div>
 
     <div class="senior-cta">
-      <a class="btn btn-red" href="https://roys1105.github.io/roys-senior-it/" target="roy-senior">
+      <a class="btn btn-red" href="https://roys-senior-it.pages.dev/">
         ITシニアなんでも相談室へ行く →
       </a>
       <p class="note">スマホ・タブレット・パソコンのどれでもご覧いただけます</p>
@@ -623,7 +639,7 @@ footer .cp .en{font-size:14px;}
           <!-- 講座は「Roy's Channel から見てもらうもの」なので、このタブ（roy-main）で開く。
                URLはシニアサイトの下にあるが、シニア相談室のタブは触らない。
                講座ページ側も、この行き先に合わせて名札を roy-main にしてある。 -->
-          <a class="btn btn-primary" href="https://roys1105.github.io/roys-senior-it/material/inaka-hitori-kasegu.html" target="roy-main">
+          <a class="btn btn-primary" href="https://roys-senior-it.pages.dev/material/inaka-hitori-kasegu.html">
             講座のページを見る →
           </a>
           <p class="note">いまは無料で公開中です</p>
@@ -828,13 +844,13 @@ footer .cp .en{font-size:14px;}
 <footer>
   <div class="wrap">
     <div class="flinks">
-      <a href="https://roys1105.github.io/roys-senior-it/" target="roy-senior">ITシニアなんでも相談室</a>
+      <a href="https://roys-senior-it.pages.dev/">ITシニアなんでも相談室</a>
       <a href="https://www.youtube.com/@royschannel9208" target="_blank" rel="noopener">YouTube</a>
       <a href="https://note.com/roy_s1105" target="_blank" rel="noopener">note</a>
       <a href="#contact">お問い合わせ</a>
       <!-- 特商法のページは両方のサイトから開くので、こちらから行くときはメインのタブで。
            （シニア相談室を見ているタブを置き換えないため。戻り先もページ側で切り替わる） -->
-      <a href="https://roys1105.github.io/roys-senior-it/tokushoho.html?src=main" target="roy-main">特定商取引法に基づく表記</a>
+      <a href="https://roys-senior-it.pages.dev/tokushoho.html?src=main">特定商取引法に基づく表記</a>
     </div>
     <div class="cp">© 2026 <span class="en">Roy's Channel</span> ／ 香川県三豊市</div>
   </div>
@@ -842,11 +858,10 @@ footer .cp .en{font-size:14px;}
 
 <script>
 (function () {
-  /* --- このタブに「名札」を付ける ---
-     こう名前を付けておくと、シニアサイト側のリンク（target="roy-main"）が
-     このタブを見つけて、新しいタブを作らずにここへ切り替えてくれる。
-     2つのサイトは同じ roys1105.github.io なので、行き来しても名札は消えない。 */
-  window.name = 'roy-main';
+  /* --- タブの「名札」は廃止した（2026-08-15） ---
+     2つのサイトが別ドメインになったため（roys-channel.pages.dev と
+     roys-senior-it.pages.dev）、window.name の名札はドメインをまたぐと
+     ブラウザに消される。行き来は「同じタブで移動」に統一した（target を付けない）。 */
 
   /* --- ハンバーガーメニュー --- */
   var burger = document.getElementById('burger');
