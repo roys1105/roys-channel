@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>バウンドテニス教室 参加申込み｜Roy's Channel</title>
+<meta name="description" content="バウンドテニス教室の参加申込みフォームです。ボールを打ったことがない方でも大歓迎。道具の持ち方から丁寧にお教えします。">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="バウンドテニス教室 参加申込み">
+<meta property="og:description" content="はじめての方こそ大歓迎。道具の持ち方から丁寧にお教えします。">
+<meta property="og:type" content="website">
+<link rel="icon" href="image/roy-avatar.png">
+<link rel="apple-touch-icon" href="image/roy-avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<style>
+/* ============ base（メインサイトと同じ色・書体） ============ */
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Zen Maru Gothic','Hiragino Maru Gothic ProN','Noto Sans JP',sans-serif;
+  color:#23323C;
+  background:#FAF5EC;
+  line-height:1.95;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;height:auto;display:block;}
+a{color:inherit;}
+::selection{background:#F3D9C6;}
+
+:root{
+  --cream:#FAF5EC;
+  --cream-deep:#F2E9D9;
+  --ink:#23323C;
+  --ink-soft:#5E7079;
+  --navy:#1F5A72;
+  --sky:#2E7DA6;
+  --red:#C0392B;
+  --green:#6E8F5A;
+  --line:#E3D8C4;
+  --shadow:0 10px 30px rgba(53,43,30,.10);
+}
+
+.narrow{max-width:720px;margin:0 auto;padding:0 20px;}
+.en{font-family:'Baloo 2',cursive;font-weight:700;letter-spacing:.02em;}
+
+/* ============ header ============ */
+header{
+  background:rgba(250,245,236,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.hbar{max-width:720px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:11px;}
+.hbar img{width:38px;height:38px;border-radius:50%;flex:0 0 auto;}
+.hbar .nm{font-size:15px;font-weight:900;color:var(--navy);line-height:1.3;}
+.hbar .to{margin-left:auto;font-size:13.5px;text-decoration:none;color:var(--navy);font-weight:700;white-space:nowrap;}
+.hbar .to:hover{text-decoration:underline;text-underline-offset:3px;}
+
+/* ============ hero ============ */
+.hero{padding:44px 0 34px;text-align:center;}
+.hero .kicker{
+  display:inline-block;font-size:12px;letter-spacing:.22em;font-weight:700;
+  color:var(--red);background:#FBEAE4;padding:5px 16px;border-radius:999px;
+}
+.hero h1{
+  margin:15px 0 4px;font-size:clamp(24px,5.4vw,34px);font-weight:900;color:var(--navy);
+  line-height:1.5;letter-spacing:.01em;
+}
+.hero .sub{margin:0;font-size:15px;color:var(--ink-soft);}
+
+.welcome{
+  margin:26px auto 0;background:#fff;border:1px solid var(--line);border-radius:22px;
+  padding:24px 24px 22px;box-shadow:var(--shadow);text-align:left;
+}
+.welcome h2{margin:0 0 10px;font-size:19px;font-weight:900;color:var(--navy);text-align:center;}
+.welcome p{margin:0 0 10px;font-size:15.5px;}
+.welcome p:last-child{margin-bottom:0;}
+.welcome .push{color:var(--red);font-weight:700;}
+
+/* 開催日の案内 */
+.days{
+  margin:22px auto 0;background:#EAF2F5;border:1px solid #CBDEE6;border-radius:20px;padding:20px 22px;
+}
+.days h3{margin:0 0 10px;font-size:16px;font-weight:900;color:var(--navy);}
+.days ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px 10px;}
+.days li{
+  background:#fff;border:1px solid #CBDEE6;border-radius:999px;
+  padding:6px 15px;font-size:15px;font-weight:700;color:var(--navy);
+}
+.days .note{margin:11px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.8;}
+
+/* ============ form ============ */
+.formsec{padding:34px 0 70px;}
+.form{
+  background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px 26px;
+  display:flex;flex-direction:column;gap:22px;box-shadow:var(--shadow);
+}
+.field{display:flex;flex-direction:column;gap:9px;}
+.field > .q{display:flex;align-items:center;gap:9px;font-size:15.5px;font-weight:900;color:#3F535D;}
+.badge{
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;border-radius:999px;
+  padding:3px 9px;line-height:1.6;flex:0 0 auto;
+}
+.badge.req{background:#FBEAE4;color:var(--red);}
+.badge.opt{background:#EDE7DA;color:#7A6C55;}
+.hint{margin:-3px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.75;}
+
+.form input[type=text],
+.form input[type=tel],
+.form input[type=email],
+.form select,
+.form textarea{
+  width:100%;padding:14px 15px;border-radius:13px;border:1.5px solid #DDD0B8;background:#FFFDF8;
+  font-size:16.5px;font-family:inherit;color:var(--ink);line-height:1.6;
+}
+.form select{appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%231F5A72' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;padding-right:42px;}
+.form input:focus,.form select:focus,.form textarea:focus{
+  outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,90,114,.13);
+}
+.form textarea{resize:vertical;min-height:120px;}
+
+/* 選択肢（ラジオ・チェックボックス）はカードごと押せる */
+.choices{display:flex;flex-direction:column;gap:9px;}
+.choices.row{flex-direction:row;flex-wrap:wrap;}
+.choices.row .choice{flex:1 1 180px;}
+.choice{
+  display:flex;align-items:center;gap:12px;
+  border:1.5px solid #DDD0B8;background:#FFFDF8;border-radius:14px;
+  padding:13px 16px;cursor:pointer;font-size:16.5px;font-weight:500;
+  transition:border-color .15s ease, background .15s ease;
+}
+.choice:hover{border-color:var(--sky);}
+.choice input{width:22px;height:22px;accent-color:var(--navy);margin:0;flex:0 0 auto;cursor:pointer;}
+.choice:has(input:checked){border-color:var(--navy);background:#EAF2F5;font-weight:700;color:var(--navy);}
+.choice:has(input:focus-visible){box-shadow:0 0 0 3px rgba(31,90,114,.13);}
+
+.err{color:#B23B3B;font-size:14px;margin:0;font-weight:700;}
+.err.small{font-weight:500;font-size:13.5px;}
+
+/* 送信ボタン */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:16px 30px;border-radius:999px;text-decoration:none;font-weight:700;font-size:17px;
+  transition:transform .18s ease, box-shadow .18s ease;border:none;cursor:pointer;
+  font-family:inherit;line-height:1.4;
+}
+.btn-primary{background:var(--navy);color:#fff;box-shadow:0 6px 0 #14404f;}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 9px 0 #14404f,0 12px 22px rgba(31,90,114,.28);}
+.btn-primary:disabled{background:#8FA7B1;box-shadow:0 6px 0 #74868E;cursor:default;transform:none;}
+.btn-ghost{background:#fff;color:var(--navy);border:2px solid var(--navy);}
+.btn-ghost:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(31,90,114,.18);}
+
+/* 送信できたとき */
+.done{
+  background:#E4EFE2;border:1px solid #C7DCC2;border-radius:24px;padding:44px 26px;text-align:center;
+  box-shadow:var(--shadow);
+}
+.done .em{font-size:42px;line-height:1.2;}
+.done h2{margin:10px 0 8px;color:#3E5744;font-size:21px;font-weight:900;}
+.done p{margin:0 0 6px;font-size:15px;color:#4B6152;}
+.done .back{margin-top:22px;}
+
+.alt{text-align:center;margin-top:20px;font-size:13.5px;color:var(--ink-soft);line-height:1.85;}
+
+/* ============ footer ============ */
+footer{background:#23323C;color:#C8D4DA;padding:34px 0 30px;text-align:center;font-size:13px;}
+footer a{color:#EFE4D2;text-decoration:none;}
+footer a:hover{text-decoration:underline;text-underline-offset:3px;}
+footer .cp{opacity:.72;margin-top:12px;}
+
+/* スマホ */
+@media (max-width:640px){
+  .form{padding:24px 18px;border-radius:20px;}
+  .welcome{padding:20px 18px;border-radius:18px;}
+  .days{padding:17px 18px;border-radius:18px;}
+  .btn{width:100%;}
+  .choices.row .choice{flex:1 1 100%;}
+}
+@media (prefers-reduced-motion:reduce){
+  .btn{transition:none;}
+  .btn:hover{transform:none;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <img src="image/roy-avatar.png" alt="">
+    <div class="nm">Roy's Channel</div>
+    <a class="to" href="./">トップへ</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="narrow">
+    <span class="kicker">BOUND TENNIS</span>
+    <h1>バウンドテニス教室<br>参加申込みフォーム</h1>
+    <p class="sub">はじめての方こそ、大歓迎です。</p>
+
+    <div class="welcome">
+      <h2>バウンドテニス教室へようこそ！</h2>
+      <p>「やってみたいけど自信がない…」そんな方こそ大歓迎です。ボールを打ったことがない方でも、道具の持ち方から丁寧にお教えしますので、安心してお申込みください。</p>
+      <p class="push">「ちょっとやってみようかな」その気持ちだけで大丈夫です。皆さんのお申込み、お待ちしています！</p>
+    </div>
+
+    <div class="days">
+      <h3>開催日</h3>
+      <ul>
+        <li>10月10日(土)</li>
+        <li>10月17日(土)</li>
+        <li>10月24日(土)</li>
+        <li>11月7日(土)</li>
+      </ul>
+      <p class="note">ご都合のよい日を、いくつでもお選びいただけます。</p>
+    </div>
+  </div>
+</section>
+
+<section class="formsec">
+  <div class="narrow">
+
+    <form class="form" id="btform" novalidate>
+
+      <div class="field">
+        <div class="q"><span>お名前</span><span class="badge req">必 須</span></div>
+        <input type="text" id="f-name" name="name" placeholder="山田 花子" autocomplete="name">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
+        <p class="hint">ひらがなでも大丈夫です。</p>
+        <input type="text" id="f-kana" name="kana" placeholder="ヤマダ ハナコ">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>年齢（年代）</span><span class="badge req">必 須</span></div>
+        <p class="hint">「60代」のように大まかで結構です。</p>
+        <select id="f-age" name="age">
+          <option value="">選んでください</option>
+          <option>10代以下</option>
+          <option>20代</option>
+          <option>30代</option>
+          <option>40代</option>
+          <option>50代</option>
+          <option>60代</option>
+          <option>70代</option>
+          <option>80代以上</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <div class="q"><span>電話番号</span><span class="badge req">必 須</span></div>
+        <p class="hint">当日ご連絡がつく番号をお書きください。</p>
+        <input type="tel" id="f-tel" name="tel" placeholder="090-1234-5678" autocomplete="tel" inputmode="tel">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>メールアドレス</span><span class="badge req">必 須</span></div>
+        <p class="hint">こちらへ返信いたします。</p>
+        <input type="email" id="f-email" name="email" placeholder="example@mail.com" autocomplete="email" inputmode="email">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>確認メールを追加で送る宛先（CC）</span><span class="badge opt">任 意</span></div>
+        <p class="hint">ご家族の方などにも申込み内容を共有したいときは、メールアドレスをお書きください。複数ある場合はカンマ（,）で区切ってください。</p>
+        <input type="text" id="f-cc" name="cc" placeholder="example2@mail.com, example3@mail.com" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>バウンドテニスの経験</span><span class="badge req">必 須</span></div>
+        <div class="choices row" id="f-exp">
+          <label class="choice"><input type="radio" name="experience" value="初めて"><span>初めて</span></label>
+          <label class="choice"><input type="radio" name="experience" value="少し経験あり"><span>少し経験あり</span></label>
+          <label class="choice"><input type="radio" name="experience" value="経験者"><span>経験者</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="q"><span>参加希望日</span><span class="badge req">必 須</span></div>
+        <p class="hint">いくつでもお選びいただけます。</p>
+        <div class="choices" id="f-days">
+          <label class="choice"><input type="checkbox" name="dates" value="10月10日(土)"><span>10月10日(土)</span></label>
+          <label class="choice"><input type="checkbox" name="dates" value="10月17日(土)"><span>10月17日(土)</span></label>
+          <label class="choice"><input type="checkbox" name="dates" value="10月24日(土)"><span>10月24日(土)</span></label>
+          <label class="choice"><input type="checkbox" name="dates" value="11月7日(土)"><span>11月7日(土)</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="q"><span>質問・ご要望</span><span class="badge opt">任 意</span></div>
+        <p class="hint">気になることがあれば、なんでもお書きください。</p>
+        <textarea id="f-msg" name="message" placeholder="例）ラケットは借りられますか？"></textarea>
+      </div>
+
+      <!-- 迷惑メール対策。人には見えない欄で、埋まっていたら送らない -->
+      <div style="position:absolute;left:-9999px;" aria-hidden="true">
+        <label>ここは入力しないでください
+          <input type="text" id="f-hp" name="website" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
+
+      <p class="err" id="f-err" style="display:none;"></p>
+      <button type="submit" class="btn btn-primary" id="f-btn">この内容で申し込む</button>
+    </form>
+
+    <div class="done" id="f-done" style="display:none;">
+      <div class="em">🎾</div>
+      <h2>お申込みありがとうございます</h2>
+      <p>内容を確認して、折り返しご連絡いたします。</p>
+      <p>ご入力いただいたメールアドレスに、受付完了メールをお送りしました。</p>
+      <p>当日、お会いできるのを楽しみにしています！</p>
+      <div class="back"><a class="btn btn-ghost" href="./">Roy's Channel のトップへ</a></div>
+    </div>
+
+    <p class="alt" id="f-alt">
+      うまく送れないときは、お手数ですが
+      <a href="./#contact" style="color:var(--navy);font-weight:700;">お問い合わせ</a>
+      からご連絡ください。
+    </p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="narrow">
+    <a href="./">Roy's Channel トップ</a>
+    <p class="cp"><span class="en">© Roy's Channel</span></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var API = 'https://roy-senior-site-api.roy-s1105.workers.dev';
+
+  var form = document.getElementById('btform');
+  var btn  = document.getElementById('f-btn');
+  var err  = document.getElementById('f-err');
+
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function showErr(msg, focusId) {
+    err.textContent = msg;
+    err.style.display = 'block';
+    err.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (focusId) { var el = document.getElementById(focusId); if (el) el.focus({ preventScroll: true }); }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // 迷惑メール対策の欄が埋まっていたら、何もせず成功したように見せる
+    if (val('f-hp')) { form.style.display = 'none'; document.getElementById('f-done').style.display = 'block'; return; }
+
+    var name  = val('f-name');
+    var kana  = val('f-kana');
+    var age   = val('f-age');
+    var tel   = val('f-tel');
+    var email = val('f-email');
+    var cc    = val('f-cc');
+    var msg   = val('f-msg');
+
+    var expEl = form.querySelector('input[name="experience"]:checked');
+    var exp   = expEl ? expEl.value : '';
+
+    var dates = Array.prototype.map.call(
+      form.querySelectorAll('input[name="dates"]:checked'),
+      function (el) { return el.value; }
+    );
+
+    if (!name)  { return showErr('お名前をご記入ください。', 'f-name'); }
+    if (!kana)  { return showErr('フリガナをご記入ください。', 'f-kana'); }
+    if (!age)   { return showErr('年齢（年代）をお選びください。', 'f-age'); }
+    if (!tel)   { return showErr('電話番号をご記入ください。', 'f-tel'); }
+    if (!/[0-9]{9,}/.test(tel.replace(/[^0-9]/g, ''))) {
+      return showErr('電話番号をご確認ください。（市外局番からお願いします）', 'f-tel');
+    }
+    if (!email) { return showErr('メールアドレスをご記入ください。', 'f-email'); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return showErr('メールアドレスをご確認ください。', 'f-email');
+    }
+    if (!exp)   { return showErr('バウンドテニスの経験をお選びください。'); }
+    if (!dates.length) { return showErr('参加希望日を1つ以上お選びください。'); }
+    if (cc) {
+      var ccList = cc.split(/[,\n、]/).map(function (v) { return v.trim(); }).filter(Boolean);
+      var badCc = ccList.filter(function (v) { return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); });
+      if (badCc.length) { return showErr('CCのメールアドレスをご確認ください。（カンマ区切りで複数入力できます）', 'f-cc'); }
+    }
+
+    err.style.display = 'none';
+    btn.textContent = '送信中…';
+    btn.disabled = true;
+
+    fetch(API + '/bt-apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name, kana: kana, age: age, tel: tel, email: email, cc: cc,
+        experience: exp, dates: dates, message: msg
+      })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) {
+          form.style.display = 'none';
+          document.getElementById('f-alt').style.display = 'none';
+          document.getElementById('f-done').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          btn.textContent = 'この内容で申し込む'; btn.disabled = false;
+          showErr('送信に失敗しました。しばらくしてから、もう一度お試しください。');
+        }
+      })
+      .catch(function () {
+        btn.textContent = 'この内容で申し込む'; btn.disabled = false;
+        showErr('送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。');
+      });
+  });
+})();
+</script>
+</body>
+</html>

@@ -5,7 +5,129 @@
 
 ---
 
-## 2026-08-15（土）その2 — 公開先を Cloudflare Pages に移す準備（**まだ push していない**）
+## 2026-08-16（日）その2 — CC・受付完了メール・D1保存・管理ページを追加してデプロイ
+
+外出中のロイさんに代わり、自動で進めた分。
+
+### やったこと
+- **CC機能を追加。** フォームに「確認メールを追加で送る宛先（CC）」欄（任意・カンマ区切りで複数可）を追加。
+  `bt-kyoushitsu.html` と `worker.js` の両方を対応させた（メール形式でないもの・本人と同じもの・
+  6件目以降は自動で除外。上限は `BT_CC_MAX = 5`）。
+- **受付完了メールを追加。** 申込み時にメールアドレスが入っていれば、申込者ご本人へ
+  「お申込みを受け付けました」メールを自動送信するようにした（`worker.js` の `handleBtApply` 末尾）。
+  前回の日誌にあった「自動返信は送れない」という制約は、**送信元を変えずに"申込者宛の新規メール"として送る形なら問題なかった**
+  （送れないのは「返信」だけで、新規の送信は元から可能だった）。
+- **D1に申込み内容を保存。** `senior-site-analytics`（既存のD1）に `bt_applications` テーブルを新規作成し、
+  申込みのたびに1行保存するようにした。メール送信が本体で、D1保存は失敗しても申込み自体は失敗にしない設計。
+- **確認用の管理ページを新規作成**（`bt-apply-admin.html`）。管理キーを入力すると、保存済みの申込み一覧を
+  新しい順に表で見られる。`noindex,nofollow` 付きでどこからもリンクしていない、住所を直接開く形。
+  - 認証は `ADMIN_KEY`（`wrangler secret put` で設定ずみ・このファイルには書かない）。
+    一致しなければ `/bt-applications` は404を返す（存在を悟らせない）。
+  - キーは初回入力後、そのブラウザの localStorage に覚えさせる（毎回入力しなくていい）。
+- **Workerをデプロイした**（`dev/tool/senior-site-api` で `wrangler.cmd deploy`）。
+  `/bt-apply`・新規の `/bt-applications` とも本番で動作確認ずみ。
+- **本番で実際にテスト送信して確認**（`roy.s1105@gmail.com` 宛、テスト後にD1から削除ずみ）。
+  - `/bt-apply` → `{"ok":true}` を確認。
+  - `/bt-applications?key=…` → 正しいキーで一覧が返る／間違ったキーで404、両方確認。
+- **`roys-channel` を GitHub に push**（Cloudflare Pages が自動ビルドする方式のため）。
+
+### わかったこと・つまずいたこと
+- **PowerShellのcurlはJSONの日本語を含む引数でエスケープが崩れる。** `curl -d '{"name":"テスト"...}'`
+  を直接打つと `missing_fields` になった。ファイルに書いてから `--data-binary @file` で渡すと問題なかった。
+  次に同じテストをするときはこの方法を使う。
+- **ADMIN_KEYはこのファイル・DEVLOGのどちらにも書いていない。** ロイさんが忘れた場合は
+  `dev/tool/senior-site-api` で `wrangler.cmd secret put ADMIN_KEY` から作り直せる（新しい値になる）。
+  完了メールに書いて送っている。
+
+### 次にやること
+- **Cloudflare Pages が今回の push を実際にビルドしたか確認**（前回8/15にビルドが始まらない不具合があったため）。
+  `https://roys-channel.pages.dev/bt-kyoushitsu` と `.../bt-apply-admin` を開いて実物を見るのが確実。
+- トップページ（`index.html`）から、このフォーム／管理ページへのリンクを張るかどうか、まだ決めていない。
+- 会場・時間・参加費・持ち物は仕様書に無いので未掲載のまま。
+
+### 動作確認
+- Worker本番（`roy-senior-site-api.roy-s1105.workers.dev`）… `/bt-apply` 送信・D1保存・
+  `/bt-applications` 認証つき一覧表示、すべて実測ずみ。
+- `roys-channel.pages.dev` 側の実際の反映（Cloudflare Pagesのビルド）は **push直後のため未確認**。
+
+---
+
+## 2026-08-16（日）— バウンドテニス教室 申込みフォームを新設
+
+### やったこと
+- **`bt-kyoushitsu.html` を新規作成**（Roy's Channel 直下の専用ページ。公開後の住所は
+  `https://roys-channel.pages.dev/bt-kyoushitsu` ）。
+  もとの仕様書は `Desktop\RoyWorkingFolder\バウンドテニス\三豊市スポーツ協会\バウンドテニス教室申込みフォーム_仕様まとめ.md`。
+  - 色・書体・ボタンの形は `index.html` と同じもの（`--navy` `--red` `--line`、Zen Maru Gothic）を写して合わせた。
+    ただし**1枚で完結する独立ページ**なので、CSSはこのファイルの中に持たせている（index.html には手を入れていない）。
+  - 入力欄8つ：お名前／フリガナ／年齢（年代・選択式）／電話番号／メール／経験（3択）／
+    参加希望日（4日程・複数選択）／質問・ご要望（任意）。
+  - **検索よけに `<meta name="robots" content="noindex">` を入れている**（申込み専用ページのため）。
+    検索に出したくなったら、この1行を消す。
+- **バックエンドに `/bt-apply` を追加**（`dev/site/senior-site/material/worker.js`）。
+  お問い合わせの `/contact` と同じ Worker・同じ Resend を使い回している。**まだデプロイしていない。**
+  - **メールの届け先は `BT_MAIL_TO` の1行だけ直せば変えられる**（worker.js 内、`handleBtApply` の上）。
+  - 開催日は `BT_DATES` に持たせ、**その中の日付しか受け付けない**。日付を変えるときは
+    worker.js と `bt-kyoushitsu.html` のチェックボックス、**両方**を直すこと。
+- 高齢の方が使う前提で、押しやすさを優先した。
+  - 選択肢は**枠ごと押せるカード**（高さ60px）。文字は入力欄16.5px。
+  - スマホでは選択肢もボタンも幅いっぱい（297px）。
+
+### わかったこと・つまずいたこと
+- **仕様書の「曜日は仮」は、そのままで正しかった。** 2026年の
+  10/10・10/17・10/24・11/7 は**4日とも土曜日**（`Get-Date -Format ddd` で確認）。直す必要なし。
+- **申込者ご本人への自動返信は、いまの仕組みでは送れない。**
+  Resend の送信元が `onboarding@resend.dev`（Resend のお試し用アドレス）なので、
+  **アカウントの持ち主宛にしか届かない**決まり。自動返信を付けるには、
+  Resend に**自分のドメインを登録して認証する**必要がある。
+  → 今回は「受け取ったメールにそのまま返信すれば申込者に届く」形（`reply_to`）にした。
+- **入力欄の文字は16px以上にしないと、iPhoneで勝手に拡大される。** 16.5pxにしてある。
+- **仕様書に無かったので、会場・時間・参加費・持ち物は書いていない。** 必要なら足す。
+
+### 次にやること
+1. **メールの届け先を決めて `BT_MAIL_TO` を直す**（ロイさんの指示待ち。いまは仮に `roy.s1105@gmail.com`）。
+2. `dev/tool/senior-site-api` で `wrangler.cmd deploy` → `/bt-apply` を公開する。
+3. `roys-channel` を push（Cloudflare Pages がビルド）→ 実物で1件送信して、メールが届くか確認する。
+4. トップページ（`index.html`）から、このフォームへのリンクを張るかどうか決める。
+   いまは**どこからもリンクしていない**（住所を直接お伝えして使う形）。
+5. 会場・時間・参加費・持ち物を載せるかどうか決める。
+
+### 動作確認
+- ローカル（`http://localhost:8765/roys-channel/bt-kyoushitsu.html`）で確認。
+  - **必須チェック9通りすべて**、狙ったメッセージが出ることを確認
+    （未入力→順に指摘／短すぎる電話→注意／`abc` のようなメール→注意）。
+  - `fetch` を偽物に差し替えて**送信の中身を実測**。宛先は `…workers.dev/bt-apply`、
+    中身は8項目＋選んだ日付2件が正しく入っていた。成功後にフォームが隠れ、お礼の画面に切り替わることも確認。
+  - 幅1265px／幅375px（スマホ）とも**横のはみ出しゼロ**（`scrollWidth = clientWidth`）。
+  - 見た目はヘッドレスEdgeで撮って目視（ブラウザ枠はスクリーンショットが撮れないため）。
+- **本番の送信テストはしていない**（Worker が未デプロイ、届け先も未確定のため）。
+
+---
+
+## 2026-08-15（土）その3 — push したが、**Cloudflare がビルドを始めない**（未解決）
+
+### やったこと
+- `main` に push（`0fe86dc` → `7fce33c`）。**GitHub には入っている**（push 成功を確認）。
+- リンクを `.html` 無しの形に変更（Cloudflare Pages はその形で配るため）。
+
+### つまずいていること（**未解決・ロイさんの操作が要る**）
+- **`roys-channel.pages.dev` は古い版（`88c7756`）のまま。** 新しいコミットが公開されない。
+  - Cloudflare のデプロイ履歴は**1時間前の1件だけ**。**失敗した記録すら無い**
+    → ビルドが**始まってすらいない**（失敗ではなく、通知が届いていない）。
+  - 同じタイミングで push したシニアサイトは**数秒でデプロイされた**。→ Cloudflare 全体の不調ではない。
+- **いちばん疑わしいのは、GitHub側のアプリのリポジトリ許可。**
+  「Cloudflare Workers and Pages」アプリが `roys-channel` を見られていない可能性。
+  - GitHub → Settings → Applications → **Cloudflare Workers and Pages** → Configure
+    → Repository access に **`roys-channel` を追加**（または All repositories）
+  - そのあと Cloudflare → roys-channel → Deployments → **Retry / Create deployment**
+- **今の状態でも表示は壊れていない。** 古い版のリンクは `roys1105.github.io/roys-senior-it/…` を
+  指しているが、そこは新住所へ転送されるので、行き先には着く。
+
+### 動作確認
+- `roys-channel.pages.dev` … **古い版**（canonical 無し・リンクが github.io のまま）を実物で確認
+- GitHub 側 … `7fce33c` まで反映ずみ
+
+## 2026-08-15（土）その2 — 公開先を Cloudflare Pages に移す準備
 
 ### やったこと
 - **方針**（ロイさんの裁定）：2つのサイトは**別々のサイト**として公開し、相互リンクで繋ぐ。

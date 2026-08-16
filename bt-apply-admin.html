@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>バウンドテニス教室 申込み一覧（管理用）｜Roy's Channel</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;
+  color:#23323C;
+  background:#FAF5EC;
+  line-height:1.7;
+  padding:24px 16px 60px;
+}
+.wrap{max-width:1100px;margin:0 auto;}
+h1{font-size:20px;font-weight:900;color:#1F5A72;margin:0 0 18px;}
+.keybox{
+  background:#fff;border:1px solid #E3D8C4;border-radius:14px;padding:18px 20px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px;
+}
+.keybox input{
+  flex:1 1 260px;padding:10px 12px;border-radius:10px;border:1.5px solid #DDD0B8;
+  font-size:15px;font-family:inherit;
+}
+.keybox button{
+  padding:10px 20px;border-radius:999px;border:none;background:#1F5A72;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.keybox button:hover{background:#164152;}
+.msg{font-size:13.5px;color:#B23B3B;margin:0 0 16px;font-weight:700;}
+.msg.ok{color:#4B6152;}
+.count{font-size:13.5px;color:#5E7079;margin:0 0 10px;}
+.tablewrap{overflow-x:auto;background:#fff;border:1px solid #E3D8C4;border-radius:14px;}
+table{border-collapse:collapse;width:100%;min-width:960px;font-size:13.5px;}
+th,td{padding:10px 12px;border-bottom:1px solid #EFE7D6;text-align:left;white-space:nowrap;vertical-align:top;}
+td.wrap-cell{white-space:pre-wrap;max-width:260px;}
+th{background:#EAF2F5;color:#1F5A72;font-weight:900;position:sticky;top:0;}
+tr:hover td{background:#FBF8F0;}
+.empty{padding:30px;text-align:center;color:#5E7079;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>バウンドテニス教室 申込み一覧（管理用）</h1>
+
+  <div class="keybox">
+    <input type="password" id="key" placeholder="管理キーを入力してください">
+    <button id="load">表示する</button>
+  </div>
+  <p class="msg" id="msg" style="display:none;"></p>
+  <p class="count" id="count" style="display:none;"></p>
+
+  <div class="tablewrap" id="tablewrap" style="display:none;">
+    <table>
+      <thead>
+        <tr>
+          <th>受付日時</th>
+          <th>お名前</th>
+          <th>フリガナ</th>
+          <th>年齢</th>
+          <th>電話番号</th>
+          <th>メール</th>
+          <th>CC</th>
+          <th>経験</th>
+          <th>参加希望日</th>
+          <th>質問・要望</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+(function () {
+  var API = 'https://roy-senior-site-api.roy-s1105.workers.dev';
+  var keyInput = document.getElementById('key');
+  var loadBtn  = document.getElementById('load');
+  var msg      = document.getElementById('msg');
+  var countEl  = document.getElementById('count');
+  var tablewrap = document.getElementById('tablewrap');
+  var tbody    = document.getElementById('tbody');
+
+  // 一度入れたキーは、このブラウザだけに覚えさせておく（毎回入力しなくていいように）
+  var savedKey = localStorage.getItem('bt_admin_key');
+  if (savedKey) keyInput.value = savedKey;
+
+  function showMsg(text, ok) {
+    msg.textContent = text;
+    msg.className = 'msg' + (ok ? ' ok' : '');
+    msg.style.display = 'block';
+  }
+
+  function fmtDate(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    } catch (e) { return iso; }
+  }
+
+  function esc(s) {
+    return (s || '').toString()
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function load() {
+    var key = keyInput.value.trim();
+    if (!key) { showMsg('管理キーを入力してください。', false); return; }
+
+    msg.style.display = 'none';
+    tablewrap.style.display = 'none';
+    countEl.style.display = 'none';
+    loadBtn.disabled = true;
+    loadBtn.textContent = '読み込み中…';
+
+    fetch(API + '/bt-applications?key=' + encodeURIComponent(key))
+      .then(function (r) {
+        if (!r.ok) throw new Error('http_' + r.status);
+        return r.json();
+      })
+      .then(function (d) {
+        loadBtn.disabled = false;
+        loadBtn.textContent = '表示する';
+        if (!d || !d.ok) { showMsg('キーが正しくないか、取得に失敗しました。', false); return; }
+
+        localStorage.setItem('bt_admin_key', key);
+
+        var rows = d.results || [];
+        if (!rows.length) {
+          showMsg('まだ申込みはありません。', true);
+          return;
+        }
+
+        countEl.textContent = '全 ' + rows.length + ' 件（新しい順）';
+        countEl.style.display = 'block';
+
+        tbody.innerHTML = rows.map(function (row) {
+          return '<tr>' +
+            '<td>' + esc(fmtDate(row.created_at)) + '</td>' +
+            '<td>' + esc(row.name) + '</td>' +
+            '<td>' + esc(row.kana) + '</td>' +
+            '<td>' + esc(row.age) + '</td>' +
+            '<td>' + esc(row.tel) + '</td>' +
+            '<td>' + esc(row.email) + '</td>' +
+            '<td>' + esc(row.cc) + '</td>' +
+            '<td>' + esc(row.experience) + '</td>' +
+            '<td>' + esc(row.dates) + '</td>' +
+            '<td class="wrap-cell">' + esc(row.message) + '</td>' +
+            '</tr>';
+        }).join('');
+
+        tablewrap.style.display = 'block';
+      })
+      .catch(function () {
+        loadBtn.disabled = false;
+        loadBtn.textContent = '表示する';
+        showMsg('通信に失敗しました。しばらくしてから、もう一度お試しください。', false);
+      });
+  }
+
+  loadBtn.addEventListener('click', load);
+  keyInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
+
+  if (savedKey) load();
+})();
+</script>
+</body>
+</html>
