@@ -56,39 +56,49 @@ header{
 .hbar .nm{font-size:15px;font-weight:900;color:var(--navy);line-height:1.3;}
 .hbar .to{margin-left:auto;font-size:13.5px;text-decoration:none;color:var(--navy);font-weight:700;white-space:nowrap;}
 .hbar .to:hover{text-decoration:underline;text-underline-offset:3px;}
+.hbar .admin{margin-left:auto;font-size:11.5px;text-decoration:none;color:var(--ink-soft);white-space:nowrap;}
+.hbar .admin:hover{text-decoration:underline;text-underline-offset:3px;}
+.hbar .to{margin-left:16px;}
 
 /* ============ hero ============ */
-.hero{padding:44px 0 34px;text-align:center;}
+.hero{padding:24px 0 34px;text-align:center;}
+.hero .operator{
+  margin:0 0 20px;font-size:12.5px;color:var(--ink-soft);letter-spacing:.02em;
+}
+.hero .operator b{color:var(--navy);font-weight:700;}
 .hero .kicker{
   display:inline-block;font-size:12px;letter-spacing:.22em;font-weight:700;
   color:var(--red);background:#FBEAE4;padding:5px 16px;border-radius:999px;
 }
 .hero h1{
-  margin:15px 0 4px;font-size:clamp(24px,5.4vw,34px);font-weight:900;color:var(--navy);
+  margin:15px 0 0;font-size:clamp(24px,5.4vw,34px);font-weight:900;color:var(--navy);
   line-height:1.5;letter-spacing:.01em;
 }
-.hero .sub{margin:0;font-size:15px;color:var(--ink-soft);}
 
-.welcome{
-  margin:26px auto 0;background:#fff;border:1px solid var(--line);border-radius:22px;
-  padding:24px 24px 22px;box-shadow:var(--shadow);text-align:left;
+/* 挨拶文と案内ポスターは、ひとつの枠にまとめて入れる */
+.intro-card{
+  margin:20px auto 0;background:#fff;border:1px solid var(--line);border-radius:22px;
+  padding:24px 24px 26px;box-shadow:var(--shadow);text-align:left;
 }
 .welcome h2{margin:0 0 10px;font-size:19px;font-weight:900;color:var(--navy);text-align:center;}
 .welcome p{margin:0 0 10px;font-size:15.5px;}
 .welcome p:last-child{margin-bottom:0;}
 .welcome .push{color:var(--red);font-weight:700;}
 
-/* 開催日の案内 */
-.days{
-  margin:22px auto 0;background:#EAF2F5;border:1px solid #CBDEE6;border-radius:20px;padding:20px 22px;
+/* 開催日の案内（案内ポスター） */
+.poster{margin:24px auto 0;}
+.poster img{
+  width:100%;border-radius:16px;border:1px solid var(--line);
 }
-.days h3{margin:0 0 10px;font-size:16px;font-weight:900;color:var(--navy);}
-.days ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px 10px;}
-.days li{
-  background:#fff;border:1px solid #CBDEE6;border-radius:999px;
-  padding:6px 15px;font-size:15px;font-weight:700;color:var(--navy);
+
+/* 開催概要（場所・対象・持ち物など） */
+.details{
+  margin:20px auto 0;background:#EAF2F5;border:1px solid #CBDEE6;border-radius:16px;
+  padding:18px 20px;display:flex;flex-direction:column;gap:10px;
 }
-.days .note{margin:11px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.8;}
+.d-row{display:flex;gap:14px;}
+.d-row dt{flex:0 0 5.5em;font-size:13.5px;font-weight:900;color:var(--navy);}
+.d-row dd{margin:0;flex:1 1 auto;font-size:14.5px;color:var(--ink);line-height:1.7;}
 
 /* ============ form ============ */
 .formsec{padding:34px 0 70px;}
@@ -109,6 +119,7 @@ header{
 .form input[type=text],
 .form input[type=tel],
 .form input[type=email],
+.form input[type=date],
 .form select,
 .form textarea{
   width:100%;padding:14px 15px;border-radius:13px;border:1.5px solid #DDD0B8;background:#FFFDF8;
@@ -137,8 +148,31 @@ header{
 .choice:has(input:checked){border-color:var(--navy);background:#EAF2F5;font-weight:700;color:var(--navy);}
 .choice:has(input:focus-visible){box-shadow:0 0 0 3px rgba(31,90,114,.13);}
 
-.err{color:#B23B3B;font-size:14px;margin:0;font-weight:700;}
-.err.small{font-weight:500;font-size:13.5px;}
+.err{
+  color:#C0392B;font-size:16px;margin:0;font-weight:900;line-height:1.7;
+  background:#FBEAE4;border:1.5px solid #E8B9AC;border-radius:14px;
+  padding:14px 18px;display:flex;align-items:flex-start;gap:10px;
+}
+.err::before{content:"⚠";font-size:19px;line-height:1.3;flex:0 0 auto;}
+.err.small{font-weight:700;font-size:14.5px;}
+
+/* ============ 確認画面 ============ */
+.confirm{
+  background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px 26px;
+  box-shadow:var(--shadow);
+}
+.confirm h2{margin:0 0 6px;font-size:19px;font-weight:900;color:var(--navy);}
+.confirm .lead{margin:0 0 22px;font-size:14px;color:var(--ink-soft);line-height:1.85;}
+.c-rows{margin:0 0 26px;display:flex;flex-direction:column;}
+.c-row{
+  display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);
+}
+.c-row:last-child{border-bottom:none;}
+.c-row dt{flex:0 0 9.5em;font-size:14px;font-weight:800;color:#3F535D;}
+.c-row dd{margin:0;flex:1 1 auto;font-size:15.5px;color:var(--ink);white-space:pre-wrap;word-break:break-word;}
+.c-row dd.empty{color:var(--ink-soft);font-weight:500;}
+.c-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.c-actions .btn{flex:1 1 200px;}
 
 /* 送信ボタン */
 .btn{
@@ -158,7 +192,7 @@ header{
   background:#E4EFE2;border:1px solid #C7DCC2;border-radius:24px;padding:44px 26px;text-align:center;
   box-shadow:var(--shadow);
 }
-.done .em{font-size:42px;line-height:1.2;}
+.done .em{width:180px;max-width:60%;height:auto;margin:0 auto;}
 .done h2{margin:10px 0 8px;color:#3E5744;font-size:21px;font-weight:900;}
 .done p{margin:0 0 6px;font-size:15px;color:#4B6152;}
 .done .back{margin-top:22px;}
@@ -174,10 +208,15 @@ footer .cp{opacity:.72;margin-top:12px;}
 /* スマホ */
 @media (max-width:640px){
   .form{padding:24px 18px;border-radius:20px;}
-  .welcome{padding:20px 18px;border-radius:18px;}
-  .days{padding:17px 18px;border-radius:18px;}
+  .intro-card{padding:20px 18px 22px;border-radius:18px;}
+  .details{padding:16px 18px;}
+  .d-row{flex-direction:column;gap:2px;}
+  .d-row dt{flex:none;}
   .btn{width:100%;}
   .choices.row .choice{flex:1 1 100%;}
+  .confirm{padding:24px 18px;border-radius:20px;}
+  .c-row{flex-direction:column;gap:3px;}
+  .c-row dt{flex:none;}
 }
 @media (prefers-reduced-motion:reduce){
   .btn{transition:none;}
@@ -191,31 +230,35 @@ footer .cp{opacity:.72;margin-top:12px;}
   <div class="hbar">
     <img src="image/roy-avatar.png" alt="">
     <div class="nm">Roy's Channel</div>
+    <a class="admin" href="bt-apply-admin.html">管理用</a>
     <a class="to" href="./">トップへ</a>
   </div>
 </header>
 
 <section class="hero">
   <div class="narrow">
+    <p class="operator">運営・管理は<b>【Roy's Channel】</b>がおこなっています</p>
     <span class="kicker">BOUND TENNIS</span>
     <h1>バウンドテニス教室<br>参加申込みフォーム</h1>
-    <p class="sub">はじめての方こそ、大歓迎です。</p>
 
-    <div class="welcome">
-      <h2>バウンドテニス教室へようこそ！</h2>
-      <p>「やってみたいけど自信がない…」そんな方こそ大歓迎です。ボールを打ったことがない方でも、道具の持ち方から丁寧にお教えしますので、安心してお申込みください。</p>
-      <p class="push">「ちょっとやってみようかな」その気持ちだけで大丈夫です。皆さんのお申込み、お待ちしています！</p>
-    </div>
+    <div class="intro-card" id="intro-card">
+      <div class="welcome">
+        <h2>バウンドテニス教室へようこそ！</h2>
+        <p>「やってみたいけど自信がない…」そんな方こそ大歓迎です。ボールを打ったことがない方でも、道具の持ち方から丁寧にお教えしますので、安心してお申込みください。</p>
+        <p class="push">「ちょっとやってみようかな」その気持ちだけで大丈夫です。皆さんのお申込み、お待ちしています！</p>
+      </div>
 
-    <div class="days">
-      <h3>開催日</h3>
-      <ul>
-        <li>10月10日(土)</li>
-        <li>10月17日(土)</li>
-        <li>10月24日(土)</li>
-        <li>11月7日(土)</li>
-      </ul>
-      <p class="note">ご都合のよい日を、いくつでもお選びいただけます。</p>
+      <div class="poster">
+        <img src="image/bt-kyoushitsu-flyer-kari.jpg" alt="バウンドテニス教室 案内ポスター">
+      </div>
+
+      <dl class="details">
+        <div class="d-row"><dt>時間</dt><dd>午後7:30〜9:00</dd></div>
+        <div class="d-row"><dt>場所</dt><dd>吉津小学校</dd></div>
+        <div class="d-row"><dt>対象</dt><dd>小学4年生以上<br><span style="font-size:13px;color:var(--ink-soft);">※小学4年生以下のお子さんの参加を希望される方は、ページ最後の「質問・ご要望」欄にご記入ください。</span></dd></div>
+        <div class="d-row"><dt>持ち物</dt><dd>体育館シューズ、タオル、飲み物<br>（ラケットは貸し出しがあります）</dd></div>
+        <div class="d-row"><dt>受付締切</dt><dd>10月2日(金)</dd></div>
+      </dl>
     </div>
   </div>
 </section>
@@ -227,47 +270,42 @@ footer .cp{opacity:.72;margin-top:12px;}
 
       <div class="field">
         <div class="q"><span>お名前</span><span class="badge req">必 須</span></div>
-        <input type="text" id="f-name" name="name" placeholder="山田 花子" autocomplete="name">
+        <input type="text" id="f-name" name="name" autocomplete="name">
       </div>
 
       <div class="field">
         <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
         <p class="hint">ひらがなでも大丈夫です。</p>
-        <input type="text" id="f-kana" name="kana" placeholder="ヤマダ ハナコ">
+        <input type="text" id="f-kana" name="kana">
       </div>
 
       <div class="field">
-        <div class="q"><span>年齢（年代）</span><span class="badge req">必 須</span></div>
-        <p class="hint">「60代」のように大まかで結構です。</p>
-        <select id="f-age" name="age">
-          <option value="">選んでください</option>
-          <option>10代以下</option>
-          <option>20代</option>
-          <option>30代</option>
-          <option>40代</option>
-          <option>50代</option>
-          <option>60代</option>
-          <option>70代</option>
-          <option>80代以上</option>
-        </select>
+        <div class="q"><span>生年月日</span><span class="badge req">必 須</span></div>
+        <p class="hint">スポーツ保険への加入に使用します。</p>
+        <input type="date" id="f-birthdate" name="birthdate" autocomplete="bday">
       </div>
 
       <div class="field">
         <div class="q"><span>電話番号</span><span class="badge req">必 須</span></div>
-        <p class="hint">当日ご連絡がつく番号をお書きください。</p>
-        <input type="tel" id="f-tel" name="tel" placeholder="090-1234-5678" autocomplete="tel" inputmode="tel">
+        <p class="hint">当日ご連絡がつく番号をお書きください。ハイフン（－）は無くても構いません。</p>
+        <input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="tel">
       </div>
 
       <div class="field">
-        <div class="q"><span>メールアドレス</span><span class="badge req">必 須</span></div>
-        <p class="hint">こちらへ返信いたします。</p>
-        <input type="email" id="f-email" name="email" placeholder="example@mail.com" autocomplete="email" inputmode="email">
+        <div class="q"><span>メールアドレス</span><span class="badge opt">任 意</span></div>
+        <p class="hint">ご入力いただくと、こちらへ受付完了のメールをお送りします。</p>
+        <input type="email" id="f-email" name="email" autocomplete="email" inputmode="email">
       </div>
 
       <div class="field">
-        <div class="q"><span>確認メールを追加で送る宛先（CC）</span><span class="badge opt">任 意</span></div>
-        <p class="hint">ご家族の方などにも申込み内容を共有したいときは、メールアドレスをお書きください。複数ある場合はカンマ（,）で区切ってください。</p>
-        <input type="text" id="f-cc" name="cc" placeholder="example2@mail.com, example3@mail.com" autocomplete="off">
+        <div class="q"><span>郵便番号</span><span class="badge opt">任 意</span></div>
+        <p class="hint">ハイフン（－）無しの7桁で入力すると、下の住所を自動で入力します。</p>
+        <input type="text" id="f-postal" name="postalCode" autocomplete="off" inputmode="numeric" maxlength="8">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>住所</span><span class="badge opt">任 意</span></div>
+        <input type="text" id="f-address" name="address" autocomplete="off">
       </div>
 
       <div class="field">
@@ -293,7 +331,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       <div class="field">
         <div class="q"><span>質問・ご要望</span><span class="badge opt">任 意</span></div>
         <p class="hint">気になることがあれば、なんでもお書きください。</p>
-        <textarea id="f-msg" name="message" placeholder="例）ラケットは借りられますか？"></textarea>
+        <textarea id="f-msg" name="message"></textarea>
       </div>
 
       <!-- 迷惑メール対策。人には見えない欄で、埋まっていたら送らない -->
@@ -304,16 +342,29 @@ footer .cp{opacity:.72;margin-top:12px;}
       </div>
 
       <p class="err" id="f-err" style="display:none;"></p>
-      <button type="submit" class="btn btn-primary" id="f-btn">この内容で申し込む</button>
+      <button type="submit" class="btn btn-primary" id="f-btn">この内容を確認する</button>
     </form>
 
+    <div class="confirm" id="f-confirm" style="display:none;">
+      <h2>入力内容のご確認</h2>
+      <p class="lead">この内容でよろしければ「送信する」を押してください。直す場合は「戻る」から入力画面にもどれます。</p>
+
+      <dl class="c-rows" id="c-rows"></dl>
+
+      <p class="err" id="c-err" style="display:none;"></p>
+      <div class="c-actions">
+        <button type="button" class="btn btn-ghost" id="c-back">← 戻って直す</button>
+        <button type="button" class="btn btn-primary" id="c-send">この内容で送信する</button>
+      </div>
+    </div>
+
     <div class="done" id="f-done" style="display:none;">
-      <div class="em">🎾</div>
+      <img class="em" src="image/bt-good-work.png" alt="おつかれさまぁ♪">
       <h2>お申込みありがとうございます</h2>
       <p>内容を確認して、折り返しご連絡いたします。</p>
-      <p>ご入力いただいたメールアドレスに、受付完了メールをお送りしました。</p>
+      <p id="f-done-mail">ご入力いただいたメールアドレスに、受付完了メールをお送りしました。</p>
       <p>当日、お会いできるのを楽しみにしています！</p>
-      <div class="back"><a class="btn btn-ghost" href="./">Roy's Channel のトップへ</a></div>
+      <div class="back"><button type="button" class="btn btn-ghost" id="f-close">閉じる</button></div>
     </div>
 
     <p class="alt" id="f-alt">
@@ -336,31 +387,99 @@ footer .cp{opacity:.72;margin-top:12px;}
 (function () {
   var API = 'https://roy-senior-site-api.roy-s1105.workers.dev';
 
-  var form = document.getElementById('btform');
-  var btn  = document.getElementById('f-btn');
-  var err  = document.getElementById('f-err');
+  var form     = document.getElementById('btform');
+  var btn      = document.getElementById('f-btn');
+  var err      = document.getElementById('f-err');
+  var confirm  = document.getElementById('f-confirm');
+  var cRows    = document.getElementById('c-rows');
+  var cErr     = document.getElementById('c-err');
+  var backBtn  = document.getElementById('c-back');
+  var sendBtn  = document.getElementById('c-send');
+  var doneEl   = document.getElementById('f-done');
+  var closeBtn = document.getElementById('f-close');
+  var altEl    = document.getElementById('f-alt');
+  var birthEl  = document.getElementById('f-birthdate');
+  var introEl  = document.getElementById('intro-card');
+  var postalEl  = document.getElementById('f-postal');
+  var addressEl = document.getElementById('f-address');
+
+  // 生年月日は今日より先を選べないようにする
+  (function () {
+    var t = new Date();
+    var mm = String(t.getMonth() + 1).padStart(2, '0');
+    var dd = String(t.getDate()).padStart(2, '0');
+    birthEl.max = t.getFullYear() + '-' + mm + '-' + dd;
+  })();
+
+  // 郵便番号（7桁そろったら）から住所を自動入力する。住所欄が空のときだけ埋める
+  // （すでに書いてある内容を勝手に上書きしないため）。無料の郵便番号API（zipcloud）を使用。
+  postalEl.addEventListener('input', function () {
+    var digits = postalEl.value.replace(/[^0-9]/g, '');
+    if (digits.length !== 7) return;
+    if (addressEl.value.trim()) return;
+
+    fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode=' + digits)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.results && d.results[0] && !addressEl.value.trim()) {
+          var r = d.results[0];
+          addressEl.value = r.address1 + r.address2 + r.address3;
+        }
+      })
+      .catch(function () {});
+  });
+
+  var pending = null; // 確認画面に出している、検証ずみの申込みデータ
 
   function val(id) { return document.getElementById(id).value.trim(); }
   function showErr(msg, focusId) {
     err.textContent = msg;
-    err.style.display = 'block';
+    err.style.display = 'flex';
     err.scrollIntoView({ block: 'center', behavior: 'smooth' });
     if (focusId) { var el = document.getElementById(focusId); if (el) el.focus({ preventScroll: true }); }
+  }
+
+  // 参考表示用の年齢計算（正式な記録はサーバー側で計算する）
+  function calcAge(birthdate) {
+    var b = new Date(birthdate + 'T00:00:00');
+    var t = new Date();
+    var age = t.getFullYear() - b.getFullYear();
+    var m = t.getMonth() - b.getMonth();
+    if (m < 0 || (m === 0 && t.getDate() < b.getDate())) { age--; }
+    return age;
+  }
+  function fmtBirthdate(birthdate) {
+    var p = birthdate.split('-');
+    return p[0] + '年' + p[1] + '月' + p[2] + '日';
+  }
+
+  function addRow(label, value, isEmpty) {
+    var row = document.createElement('div');
+    row.className = 'c-row';
+    var dt = document.createElement('dt');
+    dt.textContent = label;
+    var dd = document.createElement('dd');
+    dd.textContent = value;
+    if (isEmpty) { dd.className = 'empty'; }
+    row.appendChild(dt);
+    row.appendChild(dd);
+    cRows.appendChild(row);
   }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     // 迷惑メール対策の欄が埋まっていたら、何もせず成功したように見せる
-    if (val('f-hp')) { form.style.display = 'none'; document.getElementById('f-done').style.display = 'block'; return; }
+    if (val('f-hp')) { form.style.display = 'none'; doneEl.style.display = 'block'; return; }
 
-    var name  = val('f-name');
-    var kana  = val('f-kana');
-    var age   = val('f-age');
-    var tel   = val('f-tel');
-    var email = val('f-email');
-    var cc    = val('f-cc');
-    var msg   = val('f-msg');
+    var name      = val('f-name');
+    var kana      = val('f-kana');
+    var birthdate = val('f-birthdate');
+    var tel       = val('f-tel');
+    var email     = val('f-email');
+    var postal    = val('f-postal');
+    var address   = val('f-address');
+    var msg       = val('f-msg');
 
     var expEl = form.querySelector('input[name="experience"]:checked');
     var exp   = expEl ? expEl.value : '';
@@ -370,52 +489,97 @@ footer .cp{opacity:.72;margin-top:12px;}
       function (el) { return el.value; }
     );
 
-    if (!name)  { return showErr('お名前をご記入ください。', 'f-name'); }
-    if (!kana)  { return showErr('フリガナをご記入ください。', 'f-kana'); }
-    if (!age)   { return showErr('年齢（年代）をお選びください。', 'f-age'); }
-    if (!tel)   { return showErr('電話番号をご記入ください。', 'f-tel'); }
+    // メールアドレス・郵便番号・住所・質問ご要望は「任意」のため、形式が多少ゆるくても
+    // ここではチェックしない（未入力はもちろん、何かしら書かれていれば先へ進める）。
+    if (!name)      { return showErr('「お名前」が入力されていません。ご記入をお願いします。', 'f-name'); }
+    if (!kana)      { return showErr('「フリガナ」が入力されていません。ご記入をお願いします。', 'f-kana'); }
+    if (!birthdate) { return showErr('「生年月日」が入力されていません。ご記入をお願いします。', 'f-birthdate'); }
+    if (birthdate > birthEl.max) { return showErr('「生年月日」をご確認ください。今日より先の日付は選べません。', 'f-birthdate'); }
+    if (!tel)       { return showErr('「電話番号」が入力されていません。ご記入をお願いします。', 'f-tel'); }
     if (!/[0-9]{9,}/.test(tel.replace(/[^0-9]/g, ''))) {
-      return showErr('電話番号をご確認ください。（市外局番からお願いします）', 'f-tel');
+      return showErr('「電話番号」をご確認ください。市外局番から、数字だけで9桁以上ご記入ください。', 'f-tel');
     }
-    if (!email) { return showErr('メールアドレスをご記入ください。', 'f-email'); }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return showErr('メールアドレスをご確認ください。', 'f-email');
-    }
-    if (!exp)   { return showErr('バウンドテニスの経験をお選びください。'); }
-    if (!dates.length) { return showErr('参加希望日を1つ以上お選びください。'); }
-    if (cc) {
-      var ccList = cc.split(/[,\n、]/).map(function (v) { return v.trim(); }).filter(Boolean);
-      var badCc = ccList.filter(function (v) { return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); });
-      if (badCc.length) { return showErr('CCのメールアドレスをご確認ください。（カンマ区切りで複数入力できます）', 'f-cc'); }
-    }
+    if (!exp)   { return showErr('「バウンドテニスの経験」を選んでください。'); }
+    if (!dates.length) { return showErr('「参加希望日」を1つ以上選んでください。'); }
 
     err.style.display = 'none';
-    btn.textContent = '送信中…';
-    btn.disabled = true;
+
+    pending = {
+      name: name, kana: kana, birthdate: birthdate, tel: tel, email: email,
+      postalCode: postal, address: address,
+      experience: exp, dates: dates, message: msg
+    };
+
+    // 確認画面を組み立てる
+    cRows.innerHTML = '';
+    addRow('お名前', name);
+    addRow('フリガナ', kana);
+    addRow('生年月日', fmtBirthdate(birthdate) + '（参考：満' + calcAge(birthdate) + '歳）');
+    addRow('電話番号', tel);
+    addRow('メールアドレス', email || '（未入力）', !email);
+    addRow('郵便番号', postal || '（未入力）', !postal);
+    addRow('住所', address || '（未入力）', !address);
+    addRow('バウンドテニスの経験', exp);
+    addRow('参加希望日', dates.join(' ／ '));
+    addRow('質問・ご要望', msg || '（記入なし）', !msg);
+
+    cErr.style.display = 'none';
+    sendBtn.textContent = 'この内容で送信する';
+    sendBtn.disabled = false;
+
+    introEl.style.display = 'none';
+    form.style.display = 'none';
+    confirm.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  closeBtn.addEventListener('click', function () {
+    window.close();
+    // ブラウザの仕組み上、スクリプトから開いたタブでない場合は閉じられないことがある。
+    // その場合にそなえて、少し待ってからメッセージに切り替える。
+    setTimeout(function () {
+      doneEl.innerHTML = '<p>このタブを閉じてお進みください。</p>';
+    }, 400);
+  });
+
+  backBtn.addEventListener('click', function () {
+    confirm.style.display = 'none';
+    introEl.style.display = '';
+    form.style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  sendBtn.addEventListener('click', function () {
+    if (!pending) { return; }
+
+    cErr.style.display = 'none';
+    sendBtn.textContent = '送信中…';
+    sendBtn.disabled = true;
+    backBtn.disabled = true;
 
     fetch(API + '/bt-apply', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: name, kana: kana, age: age, tel: tel, email: email, cc: cc,
-        experience: exp, dates: dates, message: msg
-      })
+      body: JSON.stringify(pending)
     })
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (d && d.ok) {
-          form.style.display = 'none';
-          document.getElementById('f-alt').style.display = 'none';
-          document.getElementById('f-done').style.display = 'block';
+          confirm.style.display = 'none';
+          altEl.style.display = 'none';
+          document.getElementById('f-done-mail').style.display = pending.email ? 'block' : 'none';
+          doneEl.style.display = 'block';
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-          btn.textContent = 'この内容で申し込む'; btn.disabled = false;
-          showErr('送信に失敗しました。しばらくしてから、もう一度お試しください。');
+          sendBtn.textContent = 'この内容で送信する'; sendBtn.disabled = false; backBtn.disabled = false;
+          cErr.textContent = '送信できませんでした。お手数ですが、少し時間をおいてから、もう一度「送信する」を押してください。';
+          cErr.style.display = 'flex';
         }
       })
       .catch(function () {
-        btn.textContent = 'この内容で申し込む'; btn.disabled = false;
-        showErr('送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。');
+        sendBtn.textContent = 'この内容で送信する'; sendBtn.disabled = false; backBtn.disabled = false;
+        cErr.textContent = '送信できませんでした。電波やWi-Fiの状態をご確認のうえ、もう一度「送信する」を押してください。';
+        cErr.style.display = 'flex';
       });
   });
 })();
