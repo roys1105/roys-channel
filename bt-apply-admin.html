@@ -16,7 +16,10 @@ body{
   padding:24px 16px 60px;
 }
 .wrap{max-width:1100px;margin:0 auto;}
+.back{display:inline-block;font-size:13px;color:#5E7079;text-decoration:none;margin:0 0 14px;}
+.back:hover{text-decoration:underline;text-underline-offset:3px;}
 h1{font-size:20px;font-weight:900;color:#1F5A72;margin:0 0 18px;}
+h2{font-size:16px;font-weight:900;color:#1F5A72;margin:34px 0 12px;}
 .keybox{
   background:#fff;border:1px solid #E3D8C4;border-radius:14px;padding:18px 20px;
   display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px;
@@ -30,20 +33,92 @@ h1{font-size:20px;font-weight:900;color:#1F5A72;margin:0 0 18px;}
   font-weight:700;font-size:14.5px;cursor:pointer;
 }
 .keybox button:hover{background:#164152;}
+.keybox button:disabled{background:#8FA7B1;cursor:default;}
 .msg{font-size:13.5px;color:#B23B3B;margin:0 0 16px;font-weight:700;}
 .msg.ok{color:#4B6152;}
 .count{font-size:13.5px;color:#5E7079;margin:0 0 10px;}
 .tablewrap{overflow-x:auto;background:#fff;border:1px solid #E3D8C4;border-radius:14px;}
 table{border-collapse:collapse;width:100%;min-width:960px;font-size:13.5px;}
 th,td{padding:10px 12px;border-bottom:1px solid #EFE7D6;text-align:left;white-space:nowrap;vertical-align:top;}
-td.wrap-cell{white-space:pre-wrap;max-width:260px;}
+td.wrap-cell{white-space:pre-wrap;max-width:260px;overflow-wrap:anywhere;}
+th.addr-cell,td.addr-cell{width:14em;min-width:14em;max-width:14em;white-space:normal;word-break:break-all;}
 th{background:#EAF2F5;color:#1F5A72;font-weight:900;position:sticky;top:0;}
 tr:hover td{background:#FBF8F0;}
 .empty{padding:30px;text-align:center;color:#5E7079;font-size:14px;}
+
+.bulkbar{
+  display:flex;align-items:center;gap:14px;margin-bottom:10px;
+  font-size:13.5px;color:#5E7079;
+}
+.bulkbar button{
+  padding:8px 18px;border-radius:999px;border:none;background:#C0392B;color:#fff;
+  font-weight:700;font-size:13px;cursor:pointer;
+}
+.bulkbar button:hover{background:#9E2E20;}
+.bulkbar button:disabled{background:#D9C7C0;cursor:default;}
+.bulkbar button.export{background:#2E7D32;margin-left:auto;}
+.bulkbar button.export:hover{background:#256428;}
+
+/* CC宛先の管理 */
+.cc-box{background:#fff;border:1px solid #E3D8C4;border-radius:14px;padding:18px 20px;}
+.cc-add{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+.cc-add input{
+  flex:1 1 260px;padding:10px 12px;border-radius:10px;border:1.5px solid #DDD0B8;
+  font-size:15px;font-family:inherit;
+}
+.cc-add button{
+  padding:10px 20px;border-radius:999px;border:none;background:#1F5A72;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.cc-add button:hover{background:#164152;}
+.cc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.cc-list li{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:#FBF8F0;border:1px solid #EFE7D6;border-radius:10px;padding:9px 13px;font-size:14.5px;
+}
+.cc-list .del{
+  border:none;background:#FBEAE4;color:#C0392B;font-weight:700;font-size:12.5px;
+  border-radius:999px;padding:5px 12px;cursor:pointer;flex:0 0 auto;
+}
+.cc-list .del:hover{background:#F3D2C6;}
+.cc-empty{font-size:13.5px;color:#5E7079;}
+
+/* 管理キーの変更 */
+.keychange{background:#fff;border:1px solid #E3D8C4;border-radius:14px;padding:18px 20px;margin-bottom:22px;}
+.keychange summary{cursor:pointer;font-size:14.5px;font-weight:800;color:#1F5A72;}
+.keychange-body{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.keychange-body input{
+  flex:1 1 220px;padding:10px 12px;border-radius:10px;border:1.5px solid #DDD0B8;
+  font-size:15px;font-family:inherit;
+}
+.keychange-body button{
+  padding:10px 20px;border-radius:999px;border:none;background:#1F5A72;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.keychange-body button:hover{background:#164152;}
+.keychange .hint{font-size:12.5px;color:#5E7079;margin:8px 0 0;}
+
+/* 送信元アドレスの変更 */
+.mailfrom{background:#fff;border:1px solid #E3D8C4;border-radius:14px;padding:18px 20px;margin-bottom:22px;}
+.mailfrom .current{font-size:14.5px;margin:0 0 14px;}
+.mailfrom .current b{color:#1F5A72;}
+.mailfrom-body{display:flex;flex-wrap:wrap;gap:10px;}
+.mailfrom-body input{
+  flex:1 1 260px;padding:10px 12px;border-radius:10px;border:1.5px solid #DDD0B8;
+  font-size:15px;font-family:inherit;
+}
+.mailfrom-body button{
+  padding:10px 20px;border-radius:999px;border:none;background:#1F5A72;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.mailfrom-body button:hover{background:#164152;}
+.mailfrom .hint{font-size:12.5px;color:#5E7079;margin:12px 0 0;line-height:1.8;}
+.mailfrom .warn{font-size:12.5px;color:#C0392B;margin:8px 0 0;font-weight:700;line-height:1.8;}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <a class="back" href="bt-kyoushitsu.html">← 申込みフォームへ戻る</a>
   <h1>バウンドテニス教室 申込み一覧（管理用）</h1>
 
   <div class="keybox">
@@ -51,19 +126,67 @@ tr:hover td{background:#FBF8F0;}
     <button id="load">表示する</button>
   </div>
   <p class="msg" id="msg" style="display:none;"></p>
+
+  <details class="keychange">
+    <summary>管理キーを変更する</summary>
+    <div class="keychange-body">
+      <input type="password" id="kc-new" placeholder="新しい管理キー（4文字以上）">
+      <input type="password" id="kc-new2" placeholder="もう一度入力してください">
+      <button id="kc-btn">変更する</button>
+    </div>
+    <p class="hint">上のキー入力欄に、いま使える管理キーを入れた状態で押してください。変更後は、新しいキーがこの画面のキー欄にも自動で入りますが、保存はされません（次に開くときは、あらためて入力が必要です）。</p>
+    <p class="msg" id="kc-msg" style="display:none;"></p>
+  </details>
+
+  <h2>申込みメールの送信元アドレス</h2>
+  <div class="mailfrom">
+    <p class="current">現在の送信元： <b id="mf-current">（読み込み中…）</b></p>
+    <div class="mailfrom-body">
+      <input type="email" id="mf-email" placeholder="info@あなたの独自ドメイン.com">
+      <button id="mf-btn">変更する</button>
+    </div>
+    <p class="msg" id="mf-msg" style="display:none;"></p>
+    <p class="hint">初期状態はResendの「お試し用」アドレス（onboarding@resend.dev）です。このままだとCCなど、ロイさん以外の宛先にはメールが送れません。CCを実際に使うには、<a href="https://resend.com/domains" target="_blank" rel="noopener">resend.com/domains</a>で独自ドメインを認証してから、そのドメインのアドレスに変更してください。</p>
+    <p class="warn">※ 独自ドメインを認証する前に変更すると、申込みメール自体が届かなくなります。認証が済んでから変更してください。</p>
+  </div>
+
+  <h2>申込み通知メールのCC宛先</h2>
+  <p class="count">ここに登録したメールアドレスには、申込みが入るたびに管理者あてメールのCCとして届きます（件数の上限なし）。</p>
+  <div class="cc-box">
+    <div class="cc-add">
+      <input type="email" id="cc-email" placeholder="coach@example.com">
+      <button id="cc-add-btn">追加する</button>
+    </div>
+    <p class="msg" id="cc-msg" style="display:none;"></p>
+    <ul class="cc-list" id="cc-list"></ul>
+    <p class="cc-empty" id="cc-empty" style="display:none;">まだ登録されていません。</p>
+  </div>
+
+  <h2>申込み一覧</h2>
   <p class="count" id="count" style="display:none;"></p>
+
+  <div class="bulkbar" id="bulkbar" style="display:none;">
+    <span id="bulk-count">0件選択中</span>
+    <button type="button" id="bulk-del-btn" disabled>選択した行を削除</button>
+    <button type="button" id="export-btn" class="export">Excel用ファイルを保存（CSV）</button>
+  </div>
+  <p class="msg" id="del-msg" style="display:none;"></p>
+  <p class="msg" id="export-msg" style="display:none;"></p>
 
   <div class="tablewrap" id="tablewrap" style="display:none;">
     <table>
       <thead>
         <tr>
+          <th><input type="checkbox" id="check-all"></th>
           <th>受付日時</th>
           <th>お名前</th>
           <th>フリガナ</th>
+          <th>生年月日</th>
           <th>年齢</th>
           <th>電話番号</th>
           <th>メール</th>
-          <th>CC</th>
+          <th>郵便番号</th>
+          <th class="addr-cell">住所</th>
           <th>経験</th>
           <th>参加希望日</th>
           <th>質問・要望</th>
@@ -84,14 +207,41 @@ tr:hover td{background:#FBF8F0;}
   var tablewrap = document.getElementById('tablewrap');
   var tbody    = document.getElementById('tbody');
 
-  // 一度入れたキーは、このブラウザだけに覚えさせておく（毎回入力しなくていいように）
-  var savedKey = localStorage.getItem('bt_admin_key');
-  if (savedKey) keyInput.value = savedKey;
+  var ccEmailInput = document.getElementById('cc-email');
+  var ccAddBtn     = document.getElementById('cc-add-btn');
+  var ccMsg        = document.getElementById('cc-msg');
+  var ccListEl     = document.getElementById('cc-list');
+  var ccEmptyEl    = document.getElementById('cc-empty');
 
-  function showMsg(text, ok) {
-    msg.textContent = text;
-    msg.className = 'msg' + (ok ? ' ok' : '');
-    msg.style.display = 'block';
+  var kcNewInput  = document.getElementById('kc-new');
+  var kcNew2Input = document.getElementById('kc-new2');
+  var kcBtn       = document.getElementById('kc-btn');
+  var kcMsg       = document.getElementById('kc-msg');
+
+  var mfCurrentEl = document.getElementById('mf-current');
+  var mfEmailInput = document.getElementById('mf-email');
+  var mfBtn        = document.getElementById('mf-btn');
+  var mfMsg        = document.getElementById('mf-msg');
+
+  var checkAllEl  = document.getElementById('check-all');
+  var bulkbarEl   = document.getElementById('bulkbar');
+  var bulkCountEl = document.getElementById('bulk-count');
+  var bulkDelBtn  = document.getElementById('bulk-del-btn');
+  var delMsg      = document.getElementById('del-msg');
+  var exportBtn   = document.getElementById('export-btn');
+  var exportMsg   = document.getElementById('export-msg');
+
+  var lastRows = []; // 直近に読み込んだ申込み一覧（CSV書き出し用）
+
+  // 管理キーはブラウザに保存しない。開くたびに必ず入力し、正しい場合だけ以下を表示する
+  // （保存すると、次に開いたときに自動で全件表示されてしまうため）。
+  // 以前のバージョンで保存されていた分があれば、念のため消しておく。
+  try { localStorage.removeItem('bt_admin_key'); } catch (e) {}
+
+  function showMsg(el, text, ok) {
+    el.textContent = text;
+    el.className = 'msg' + (ok ? ' ok' : '');
+    el.style.display = 'block';
   }
 
   function fmtDate(iso) {
@@ -106,12 +256,267 @@ tr:hover td{background:#FBF8F0;}
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  function currentKey() { return keyInput.value.trim(); }
+
+  function loadCcList() {
+    var key = currentKey();
+    if (!key) return;
+
+    fetch(API + '/bt-cc-recipients?key=' + encodeURIComponent(key))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { return; }
+        var rows = d.results || [];
+        if (!rows.length) {
+          ccListEl.innerHTML = '';
+          ccEmptyEl.style.display = 'block';
+          return;
+        }
+        ccEmptyEl.style.display = 'none';
+        ccListEl.innerHTML = rows.map(function (row) {
+          return '<li><span>' + esc(row.email) + '</span>' +
+            '<button class="del" data-id="' + row.id + '">削除</button></li>';
+        }).join('');
+
+        Array.prototype.forEach.call(ccListEl.querySelectorAll('.del'), function (btn) {
+          btn.addEventListener('click', function () { removeCc(btn.getAttribute('data-id')); });
+        });
+      })
+      .catch(function () {});
+  }
+
+  function addCc() {
+    var key = currentKey();
+    if (!key) { showMsg(ccMsg, '先に管理キーを入力してください。', false); return; }
+    var email = ccEmailInput.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showMsg(ccMsg, 'メールアドレスをご確認ください。', false);
+      return;
+    }
+
+    ccAddBtn.disabled = true;
+    fetch(API + '/bt-cc-recipients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: key, email: email })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        ccAddBtn.disabled = false;
+        if (!d || !d.ok) { showMsg(ccMsg, '追加に失敗しました。キーをご確認ください。', false); return; }
+        ccEmailInput.value = '';
+        ccMsg.style.display = 'none';
+        loadCcList();
+      })
+      .catch(function () {
+        ccAddBtn.disabled = false;
+        showMsg(ccMsg, '通信に失敗しました。もう一度お試しください。', false);
+      });
+  }
+
+  function removeCc(id) {
+    var key = currentKey();
+    if (!key || !id) return;
+    if (!window.confirm('このCC宛先を削除しますか？')) return;
+
+    fetch(API + '/bt-cc-recipients?key=' + encodeURIComponent(key) + '&id=' + encodeURIComponent(id), {
+      method: 'DELETE'
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { showMsg(ccMsg, '削除に失敗しました。', false); return; }
+        loadCcList();
+      })
+      .catch(function () { showMsg(ccMsg, '通信に失敗しました。', false); });
+  }
+
+  function changeKey() {
+    var current = currentKey();
+    if (!current) { showMsg(kcMsg, '上のキー入力欄に、いま使える管理キーを入れてください。', false); return; }
+    var newKey  = kcNewInput.value.trim();
+    var newKey2 = kcNew2Input.value.trim();
+    if (newKey.length < 4) { showMsg(kcMsg, '新しい管理キーは4文字以上にしてください。', false); return; }
+    if (newKey !== newKey2) { showMsg(kcMsg, '新しい管理キーが一致しません。もう一度ご確認ください。', false); return; }
+
+    kcBtn.disabled = true;
+    fetch(API + '/bt-admin-key', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ currentKey: current, newKey: newKey })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        kcBtn.disabled = false;
+        if (!d || !d.ok) { showMsg(kcMsg, '変更に失敗しました。現在の管理キーをご確認ください。', false); return; }
+
+        keyInput.value = newKey;
+        kcNewInput.value = '';
+        kcNew2Input.value = '';
+        showMsg(kcMsg, '管理キーを変更しました。次回からは新しいキーをお使いください。', true);
+      })
+      .catch(function () {
+        kcBtn.disabled = false;
+        showMsg(kcMsg, '通信に失敗しました。もう一度お試しください。', false);
+      });
+  }
+
+  function loadMailFrom() {
+    var key = currentKey();
+    if (!key) return;
+
+    fetch(API + '/bt-mail-from?key=' + encodeURIComponent(key))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { return; }
+        mfCurrentEl.textContent = d.email + (d.isDefault ? '（Resendのお試し用アドレス）' : '');
+      })
+      .catch(function () {});
+  }
+
+  function changeMailFrom() {
+    var key = currentKey();
+    if (!key) { showMsg(mfMsg, '先に管理キーを入力してください。', false); return; }
+    var email = mfEmailInput.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showMsg(mfMsg, 'メールアドレスをご確認ください。', false);
+      return;
+    }
+
+    mfBtn.disabled = true;
+    fetch(API + '/bt-mail-from', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: key, email: email })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        mfBtn.disabled = false;
+        if (!d || !d.ok) { showMsg(mfMsg, '変更に失敗しました。キーをご確認ください。', false); return; }
+        mfEmailInput.value = '';
+        showMsg(mfMsg, '送信元アドレスを変更しました。', true);
+        loadMailFrom();
+      })
+      .catch(function () {
+        mfBtn.disabled = false;
+        showMsg(mfMsg, '通信に失敗しました。もう一度お試しください。', false);
+      });
+  }
+
+  function selectedIds() {
+    return Array.prototype.map.call(
+      tbody.querySelectorAll('input[type="checkbox"]:checked'),
+      function (el) { return el.getAttribute('data-id'); }
+    );
+  }
+
+  function updateBulkBar() {
+    var ids = selectedIds();
+    bulkCountEl.textContent = ids.length + '件選択中';
+    bulkDelBtn.disabled = !ids.length;
+
+    var all = tbody.querySelectorAll('input[type="checkbox"]');
+    checkAllEl.checked = all.length > 0 && ids.length === all.length;
+  }
+
+  function deleteApplications(ids) {
+    var key = currentKey();
+    if (!key || !ids.length) return;
+
+    return fetch(API + '/bt-applications?key=' + encodeURIComponent(key) + '&ids=' + encodeURIComponent(ids.join(',')), {
+      method: 'DELETE'
+    }).then(function (r) { return r.json(); });
+  }
+
+  // CSVの1マス分をエスケープする（カンマ・改行・ダブルクォートを含む場合は "" で囲む）
+  function csvCell(v) {
+    var s = (v == null ? '' : v).toString();
+    if (/[",\n\r]/.test(s)) {
+      s = '"' + s.replace(/"/g, '""') + '"';
+    }
+    return s;
+  }
+
+  function buildCsv(rows) {
+    var headers = ['受付日時', 'お名前', 'フリガナ', '生年月日', '年齢', '電話番号', 'メール', '郵便番号', '住所', '経験', '参加希望日', '質問・要望'];
+    var lines = [headers.map(csvCell).join(',')];
+    rows.forEach(function (row) {
+      lines.push([
+        fmtDate(row.created_at),
+        row.name,
+        row.kana,
+        row.birthdate,
+        row.age != null ? row.age + '歳' : '',
+        row.tel,
+        row.email,
+        row.postal_code,
+        row.address,
+        row.experience,
+        row.dates,
+        row.message
+      ].map(csvCell).join(','));
+    });
+    // 先頭にBOMを付ける（無いとExcelで日本語が文字化けするため）
+    return '﻿' + lines.join('\r\n');
+  }
+
+  function suggestedCsvFilename() {
+    var t = new Date();
+    var y = t.getFullYear();
+    var m = String(t.getMonth() + 1).padStart(2, '0');
+    var d = String(t.getDate()).padStart(2, '0');
+    return 'バウンドテニス教室_申込み一覧_' + y + m + d + '.csv';
+  }
+
+  async function exportCsv() {
+    if (!lastRows.length) {
+      showMsg(exportMsg, '書き出せる申込みがありません。先に一覧を表示してください。', false);
+      return;
+    }
+
+    var csv = buildCsv(lastRows);
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    var filename = suggestedCsvFilename();
+
+    // 対応しているブラウザ（Chrome・Edgeなど）では、保存先を選べるダイアログを出す
+    if (window.showSaveFilePicker) {
+      try {
+        var handle = await window.showSaveFilePicker({
+          suggestedName: filename,
+          types: [{ description: 'CSVファイル', accept: { 'text/csv': ['.csv'] } }]
+        });
+        var writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        showMsg(exportMsg, '保存しました。', true);
+      } catch (e) {
+        // キャンセルした場合はエラー表示しない
+        if (e && e.name !== 'AbortError') {
+          showMsg(exportMsg, '保存に失敗しました。もう一度お試しください。', false);
+        }
+      }
+      return;
+    }
+
+    // 保存先を選べないブラウザ（Safari・Firefoxなど）は、ふつうのダウンロードにする
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showMsg(exportMsg, 'ダウンロードフォルダに保存しました（このブラウザは保存先を選べません）。', true);
+  }
+
   function load() {
-    var key = keyInput.value.trim();
-    if (!key) { showMsg('管理キーを入力してください。', false); return; }
+    var key = currentKey();
+    if (!key) { showMsg(msg, '管理キーを入力してください。', false); return; }
 
     msg.style.display = 'none';
+    delMsg.style.display = 'none';
     tablewrap.style.display = 'none';
+    bulkbarEl.style.display = 'none';
     countEl.style.display = 'none';
     loadBtn.disabled = true;
     loadBtn.textContent = '読み込み中…';
@@ -124,47 +529,83 @@ tr:hover td{background:#FBF8F0;}
       .then(function (d) {
         loadBtn.disabled = false;
         loadBtn.textContent = '表示する';
-        if (!d || !d.ok) { showMsg('キーが正しくないか、取得に失敗しました。', false); return; }
+        if (!d || !d.ok) { showMsg(msg, 'キーが正しくないか、取得に失敗しました。', false); return; }
 
-        localStorage.setItem('bt_admin_key', key);
+        loadCcList();
+        loadMailFrom();
 
         var rows = d.results || [];
+        lastRows = rows;
         if (!rows.length) {
-          showMsg('まだ申込みはありません。', true);
+          showMsg(msg, 'まだ申込みはありません。', true);
           return;
         }
 
         countEl.textContent = '全 ' + rows.length + ' 件（新しい順）';
         countEl.style.display = 'block';
+        bulkbarEl.style.display = 'flex';
+        checkAllEl.checked = false;
 
         tbody.innerHTML = rows.map(function (row) {
           return '<tr>' +
+            '<td><input type="checkbox" data-id="' + row.id + '"></td>' +
             '<td>' + esc(fmtDate(row.created_at)) + '</td>' +
             '<td>' + esc(row.name) + '</td>' +
             '<td>' + esc(row.kana) + '</td>' +
-            '<td>' + esc(row.age) + '</td>' +
+            '<td>' + esc(row.birthdate) + '</td>' +
+            '<td>' + esc(row.age != null ? row.age + '歳' : '') + '</td>' +
             '<td>' + esc(row.tel) + '</td>' +
             '<td>' + esc(row.email) + '</td>' +
-            '<td>' + esc(row.cc) + '</td>' +
+            '<td>' + esc(row.postal_code) + '</td>' +
+            '<td class="addr-cell">' + esc(row.address) + '</td>' +
             '<td>' + esc(row.experience) + '</td>' +
             '<td>' + esc(row.dates) + '</td>' +
             '<td class="wrap-cell">' + esc(row.message) + '</td>' +
             '</tr>';
         }).join('');
 
+        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (el) {
+          el.addEventListener('change', updateBulkBar);
+        });
+
+        updateBulkBar();
         tablewrap.style.display = 'block';
       })
       .catch(function () {
         loadBtn.disabled = false;
         loadBtn.textContent = '表示する';
-        showMsg('通信に失敗しました。しばらくしてから、もう一度お試しください。', false);
+        showMsg(msg, '通信に失敗しました。しばらくしてから、もう一度お試しください。', false);
       });
   }
 
+  checkAllEl.addEventListener('change', function () {
+    Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (el) {
+      el.checked = checkAllEl.checked;
+    });
+    updateBulkBar();
+  });
+
+  bulkDelBtn.addEventListener('click', function () {
+    var ids = selectedIds();
+    if (!ids.length) return;
+    if (!window.confirm(ids.length + '件の申込みを削除しますか？（元に戻せません）')) return;
+
+    bulkDelBtn.disabled = true;
+    deleteApplications(ids)
+      .then(function (d) {
+        if (!d || !d.ok) { showMsg(delMsg, '削除に失敗しました。', false); bulkDelBtn.disabled = false; return; }
+        load();
+      })
+      .catch(function () { showMsg(delMsg, '通信に失敗しました。', false); bulkDelBtn.disabled = false; });
+  });
+
   loadBtn.addEventListener('click', load);
   keyInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
-
-  if (savedKey) load();
+  ccAddBtn.addEventListener('click', addCc);
+  ccEmailInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') addCc(); });
+  kcBtn.addEventListener('click', changeKey);
+  mfBtn.addEventListener('click', changeMailFrom);
+  exportBtn.addEventListener('click', exportCsv);
 })();
 </script>
 </body>
