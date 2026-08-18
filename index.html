@@ -286,6 +286,26 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
 }
 .kz-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
 
+/* ============ お知らせ（バウンドテニス教室） ============ */
+.notice{padding:56px 0 60px;background:#FBEAE4;border-top:1px solid #F0D2C6;border-bottom:1px solid #F0D2C6;}
+.nt-badge{
+  display:inline-block;font-size:12px;letter-spacing:.14em;font-weight:800;
+  color:#fff;background:var(--red);padding:6px 16px;border-radius:999px;margin-bottom:14px;
+}
+.nt-grid{display:grid;grid-template-columns:280px 1fr;gap:36px;align-items:start;margin-top:8px;}
+.nt-poster img{
+  width:100%;border-radius:16px;border:1px solid var(--line);
+  box-shadow:0 10px 28px rgba(53,43,30,.16);
+}
+.nt-title{margin:0 0 12px;font-size:clamp(20px,3.6vw,26px);font-weight:900;color:var(--navy);line-height:1.5;}
+.nt-lead{margin:0 0 18px;font-size:15.5px;color:#3C525C;}
+.nt-lead strong{color:var(--red);}
+.nt-note{
+  margin:0 0 24px;font-size:13px;color:var(--ink-soft);background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:11px 15px;line-height:1.8;
+}
+.nt-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
+
 /* ============ profile ============ */
 .profile{padding:74px 0;}
 .pf-grid{display:grid;grid-template-columns:300px 1fr;gap:44px;align-items:start;}
@@ -420,6 +440,8 @@ footer .cp .en{font-size:14px;}
   .s-cards{grid-template-columns:1fr;max-width:520px;}
   .kz-grid{grid-template-columns:1fr;gap:30px;}
   .kz-cover{max-width:320px;margin:0 auto;}
+  .nt-grid{grid-template-columns:1fr;gap:24px;}
+  .nt-poster{max-width:280px;margin:0 auto;}
   .pf-grid{grid-template-columns:1fr;gap:34px;}
   .pf-photo{max-width:320px;margin:0 auto;}
   .like{grid-template-columns:1fr;gap:0;}
@@ -465,6 +487,7 @@ footer .cp .en{font-size:14px;}
       </span>
     </a>
     <nav class="pc">
+      <a href="#notice">お知らせ</a>
       <a href="#faces">3つの顔</a>
       <a href="#senior">シニア相談室</a>
       <a href="#kouza">講座</a>
@@ -476,6 +499,7 @@ footer .cp .en{font-size:14px;}
     <button class="burger" id="burger" aria-label="メニュー" aria-expanded="false">☰</button>
   </div>
   <nav class="sp" id="spnav">
+    <a href="#notice">お知らせ</a>
     <a href="#faces">3つの顔</a>
     <a href="#senior">シニア相談室</a>
     <a href="#kouza">講座</a>
@@ -509,6 +533,40 @@ footer .cp .en{font-size:14px;}
   </div>
   <div class="hero-strip">
     <span class="strip-cap">📍 瀬戸内海の夕日（香川県三豊市）</span>
+  </div>
+</section>
+
+<!-- ============ お知らせ（バウンドテニス教室） ============ -->
+<section class="notice" id="notice">
+  <div class="wrap">
+    <span class="nt-badge">📣 お知らせ</span>
+    <h2 class="nt-title">三豊市スポーツ協会バウンドテニス部主催<br>「バウンドテニス教室」開催のお知らせ</h2>
+
+    <div class="nt-grid">
+      <div class="nt-poster">
+        <img src="image/bt-kyoushitsu-flyer-kari.jpg" alt="バウンドテニス教室 案内ポスター">
+      </div>
+
+      <div class="nt-body">
+        <p class="nt-lead">
+          三豊市スポーツ協会バウンドテニス部が主催する「バウンドテニス教室」を開催します。
+          <strong>ボールを打ったことがない方でも大歓迎</strong>。道具の持ち方から丁寧にお教えしますので、
+          お気軽にご参加ください。
+        </p>
+
+        <p class="nt-note">
+          場所：吉津小学校／対象：小学4年生以上／受付締切：10月2日(金)<br>
+          日時・持ち物など詳しい内容は、申込みフォームのページでご確認ください。
+        </p>
+
+        <div class="nt-cta">
+          <a class="btn btn-red" href="bt-kyoushitsu">
+            参加申込みフォームへ →
+          </a>
+          <p class="note">開催日・入力項目など、詳しくは申込みフォームのページでご確認ください</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
