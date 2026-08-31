@@ -10,8 +10,8 @@
    ※ロイさんのメモ：転送をやめたいときは、この <script> ブロックごと消す。 */
 (function () {
   try {
-    if (location.hostname === 'roys1105.github.io') {
-      var rest = location.pathname.replace(/^\/roys-channel\/?/, '');
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
       location.replace('https://royschannel.com/' + rest + location.search + location.hash);
     }
   } catch (e) {}
