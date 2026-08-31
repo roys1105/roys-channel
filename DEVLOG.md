@@ -5,6 +5,51 @@
 
 ---
 
+## 2026-08-31（日）その2 — バウンドテニス教室の案内ポスターがライブで表示されていなかった
+
+### やったこと
+- ロイさんから「案内ポスターが表示されない」と相談。原因は**画像2枚が未コミット**だった。
+  2026-08-16 にローカルの `image/` に置いたまま `git add` しておらず、Cloudflare Pages の
+  ビルドに渡っていなかった（`git status` では `??` のまま）。
+- 2枚をコミットして push（commit `b60b1f5`）。
+  - `image/bt-kyoushitsu-flyer-kari.jpg`（256,815バイト）… `index.html` と `bt-kyoushitsu.html` で参照
+  - `image/bt-good-work.png`（222,653バイト）… `bt-kyoushitsu.html` で参照
+- あわせて `.wrangler/`（wranglerの作業用キャッシュ）を `.gitignore` に追加。
+  これで roys-channel の未コミットは0件になった。
+
+### わかったこと・つまずいたこと
+- **★Cloudflare Pages は存在しないファイルにも HTTP 200 を返す。** 中身は404ページのHTMLで、
+  `Content-Type: text/html; charset=utf-8` になっている。**ステータスコードだけ見ると
+  「ファイルはある」と誤判定する**（今回、一度そう判定しかけた）。
+  正しい判定は `Content-Type`：
+
+  ```bash
+  curl -s -o /dev/null -D - "https://royschannel.com/image/xxx.jpg" | grep -i "content-type"
+  ```
+
+  - ある … `Content-Type: image/jpeg` ＋ `Content-Length` が付く
+  - 無い … `Content-Type: text/html`（`Content-Length` が無い）
+
+  この判定方法を `site-kit/references/11-verify.md` と `12-pitfalls.md` に書き足した。
+- **予防**：画像を足したら、HTMLを直すのと同じ commit に画像も入れる。
+  `git status` に `??` の画像が残っていたら、それは本番に出ていない。
+- ブラウザのスクリーンショットが真っ白しか撮れず、目視での証拠は残せなかった。
+  代わりに JS で `naturalWidth` / `complete` を読んで確認した。
+
+### 次にやること
+- 特になし（この件は完了）。
+
+### 動作確認
+- **ライブ確認ずみ。** `royschannel.com/image/bt-kyoushitsu-flyer-kari.jpg` が
+  `Content-Type: image/jpeg` / `Content-Length: 256815`（ローカルのファイルサイズと完全一致）。
+  `bt-good-work.png` も `image/png` / `222653` で一致。
+- 旧URL `roys-channel.pages.dev` 側も同じビルドなので直っていることを確認。
+- ブラウザ（`https://royschannel.com/`）で当該 `<img>` を JS で調べ、
+  `naturalWidth=900` `naturalHeight=1282` `complete=true`、
+  **ページ内の壊れた画像は0件**であることを確認。
+- push から反映まで約20秒。
+
+
 ## 2026-08-31（日）— 独自ドメイン royschannel.com へ移行（内部URLの書き換え・公開ずみ）
 
 ### やったこと
