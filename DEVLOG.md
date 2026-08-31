@@ -5,6 +5,59 @@
 
 ---
 
+## 2026-08-31（日）その4 — バウンドテニス2ページの転送漏れを解消／og:image を絶対URLに
+
+### やったこと（commit `bf3d918`・push・ライブ確認ずみ）
+1. **`bt-kyoushitsu.html`（申込みフォーム）**
+   - 旧住所からの転送スクリプトを追加（`index.html` と同じ形。旧2ホスト対応＋先頭スラッシュ落とし）
+   - `<link rel="canonical" href="https://royschannel.com/bt-kyoushitsu">` を追加（`.html` 無し）
+2. **`bt-apply-admin.html`（管理ページ）**
+   - 転送スクリプトのみ追加。**canonical は入れない**
+     （`noindex,nofollow` のページに正規URLを宣言する意味がなく、むしろ紛らわしい）
+3. **`index.html`**
+   - `og:image` を相対パス `image/roy-chara-side.jpg` から
+     `https://royschannel.com/image/roy-chara-side.jpg` へ変更
+
+### わかったこと・つまずいたこと
+- **この2ページには以前から転送も canonical も入っていなかった。**
+  `site-kit/references/01-architecture.md` の「全ページの `<head>` の先頭に」という記述が
+  この2ページについて正しくなかった。**新しいページを作ったら転送スクリプトを入れ忘れない。**
+  同ドキュメントを現状（旧2ホスト対応・スラッシュ落とし・この落とし穴）に合わせて更新した。
+- **`og:image` は絶対URLで書く。** 相対パスだとSNSのクローラが画像を拾えない。
+  シニアサイトのOGP作業で同じ論点に当たり、こちらにも同じ問題が残っていたのを見つけた。
+- 挿入した転送ブロックのJSは **node で構文検査してから** commit した
+  （正規表現の `\/` を含むので、書き込み時のエスケープ崩れを検知するため）。
+- `bt-kyoushitsu.html`・`bt-apply-admin.html` は **LF**、`index.html` は **CRLF**。
+  `io.open(newline='')` で各ファイルの改行を保った（差分は追記のみ：14行／13行／1行）。
+- ブラウザから `*.pages.dev` へのアクセスが途中から拒否されるようになったため、
+  **旧URLからの転送はブラウザで実測できなかった。** 代わりに旧URLの生HTMLを `curl` で取得し、
+  転送コードが配信されていることを確認した（同じコードでの転送動作は
+  senior-site 側で実測ずみ）。
+
+### 次にやること
+- `index.html` に `og:url` が無い（`og:title`・`og:description`・`og:type`・`og:image` はある）。
+  足すなら1行。急ぎではない。
+- `bt-kyoushitsu.html` に `og:image` が無い（`og:title`・`og:description` はある）。
+  SNSに貼ったときカード画像が出ない。
+- `www.royschannel.com` → apex への Redirect Rule（今も `www` で普通に開けるので必須ではない）
+
+### 動作確認
+- ローカル（`http://localhost:8765/roys-channel/bt-kyoushitsu.html`）… localhost では転送せず、
+  canonical は新ドメイン、**フォーム16項目**と案内ポスター（900×1282）が無事、壊れた画像0件。
+  管理ページも転送せず、canonical は0件・`robots` は `noindex,nofollow` のまま。
+- **ライブ確認ずみ。**
+  - `https://royschannel.com/bt-kyoushitsu` … 転送されず正常表示（無限ループなし）、
+    canonical `https://royschannel.com/bt-kyoushitsu`、フォーム16項目、壊れた画像0件
+  - 旧URL `roys-channel.pages.dev/bt-kyoushitsu` と `/bt-apply-admin` の生HTMLに
+    転送コード（`indexOf(location.hostname)`・`'roys-channel.pages.dev'`・
+    `replace(/^\//, '')`）が配信されていることを `curl` で確認
+  - `https://royschannel.com/` の `og:image` が絶対URLになっていることをブラウザで確認。
+    その画像は `Content-Type: image/jpeg` / `Content-Length: 158377` で配信されている
+- **未実測**：旧URLを実際に開いたときの転送動作（ブラウザ側の制限のため）。
+  ロイさんの手元で `https://roys-channel.pages.dev/bt-kyoushitsu` を開くと確認できる。
+- **未実測**：SNSに貼ったときのカード表示。
+
+
 ## 2026-08-31（日）その3 — 旧 pages.dev から新ドメインへの転送を有効化（移行の2段目）
 
 ### やったこと
