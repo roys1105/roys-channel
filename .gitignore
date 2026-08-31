@@ -4,3 +4,6 @@ _backup/
 # 作業中の一時ファイル
 *.tmp
 preview-*.html
+
+# wrangler の作業用キャッシュ（コミットしない）
+.wrangler/
