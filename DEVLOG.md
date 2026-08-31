@@ -5,6 +5,48 @@
 
 ---
 
+## 2026-08-31（日）— 独自ドメイン royschannel.com へ移行（内部URLの書き換え・公開ずみ）
+
+### やったこと
+- `royschannel.com`（お名前.com取得）を Cloudflare に接続し、DNSを Cloudflare に移した。
+  Pages プロジェクト `roys-channel` に `royschannel.com` と `www.royschannel.com` を
+  カスタムドメインとして追加（どちらもアクティブ・SSL有効）。
+- `index.html` の旧URL9箇所を書き換え（commit `c353d1d`・push ずみ）。
+  - canonical → `https://royschannel.com/`
+  - 旧住所（github.io）からの転送先 → `https://royschannel.com/`
+  - シニアサイトへの相互リンク4本 → `https://it.royschannel.com/...`
+  - コメント2箇所の記述
+- 書き換えは `dev/tool/domain-migration/migrate_domain.py` で実施（dry-run→apply の2段構え）。
+
+### わかったこと・つまずいたこと
+- **`LIVE_HOSTS` を見落とすと訪問数が0になる。** senior-site の5ファイルに
+  `var LIVE_HOSTS = [...]` があり、ここに載っているホスト名でしか計測しない。
+  **新旧の両方を入れた**（旧 pages.dev も開けたままなので、片方だけだと取りこぼす）。
+- **`LIVE_VISIT_PAGES`（数える側）は直す必要が無かった。** 記憶に「2か所とも直す」とあったので
+  確認したが、中身は**パスの配列**でホスト名を含まない。新ドメインでもトップのパスは `/` のまま
+  （送る側は `page: location.pathname || "/"`）。
+- **旧 pages.dev → 新ドメインの転送は、あえて別の段（2段目）にした。** 1回のpushで一緒に入れると、
+  独自ドメインの設定が効いていなかったときに旧URLも新URLも両方開けなくなる。
+- Cloudflare の画面の文言が変わっていた：「Add a domain」→「サイトを追加」→「**ドメインを接続**」。
+  お名前.com も「ドメイン」ではなく「**ネームサーバー / DNS**」メニューの下だった。
+- **Pages プロジェクトはドメイン画面の検索窓では出てこない。** 左上のロゴでアカウントホームに
+  戻り「Workers」の「>」から。`wrangler` に `pages domain` サブコマンドは無い（4.123.0）。
+- お名前.com 由来の **NSレコード22件**（各サブドメインを `*.onamae.com` に委任）がスキャンで
+  見つかったので削除した。`it` の委任が残っていると `it.royschannel.com` が使えなくなる。
+
+### 次にやること
+- 旧 `pages.dev` から新ドメインへの転送を有効化（`migrate_domain.py --stage 2 --apply` → push）
+- `www.royschannel.com` → apex への Redirect Rule を Cloudflare で1本
+- note・YouTube固定コメントに貼った旧URLの差し替え（手作業）
+
+### 動作確認
+- ローカル（`http://localhost:8765/roys-channel/index.html`）… canonical が新ドメイン、
+  シニアサイトへのリンク4本すべて `it.royschannel.com`、`pages.dev` のリンクは0本。
+  localhost では転送が発動しないことも確認。
+- **ライブ確認ずみ。** `curl -sL` で `https://royschannel.com/`・`https://www.royschannel.com/`・
+  `https://royschannel.com/bt-kyoushitsu` すべて HTTP 200、生HTMLに `pages.dev` が**0件**。
+- 旧 `https://roys-channel.pages.dev/` も HTTP 200 で開ける（2段目の前なので正常）。
+
 ## 2026-08-18（火）その9 — バウンドテニスボタンの文言を微調整
 
 ### やったこと
