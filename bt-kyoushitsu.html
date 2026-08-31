@@ -2,8 +2,22 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<script>
+/* --- 旧住所（GitHub Pages・旧 pages.dev）で開かれたら、新しい住所へ送る ---
+   公開先は Cloudflare Pages（royschannel.com）。
+   ※ロイさんのメモ：転送をやめたいときは、この <script> ブロックごと消す。 */
+(function () {
+  try {
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
+      location.replace('https://royschannel.com/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>バウンドテニス教室 参加申込み｜Roy's Channel</title>
+<link rel="canonical" href="https://royschannel.com/bt-kyoushitsu">
 <meta name="description" content="バウンドテニス教室の参加申込みフォームです。ボールを打ったことがない方でも大歓迎。道具の持ち方から丁寧にお教えします。">
 <meta name="robots" content="noindex">
 <meta property="og:title" content="バウンドテニス教室 参加申込み">

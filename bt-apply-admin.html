@@ -2,6 +2,19 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<script>
+/* --- 旧住所（GitHub Pages・旧 pages.dev）で開かれたら、新しい住所へ送る ---
+   公開先は Cloudflare Pages（royschannel.com）。
+   ※ロイさんのメモ：転送をやめたいときは、この <script> ブロックごと消す。 */
+(function () {
+  try {
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
+      location.replace('https://royschannel.com/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>バウンドテニス教室 申込み一覧（管理用）｜Roy's Channel</title>
 <meta name="robots" content="noindex,nofollow">
