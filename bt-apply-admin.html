@@ -271,11 +271,17 @@ tr:hover td{background:#FBF8F0;}
 
   function currentKey() { return keyInput.value.trim(); }
 
+  // 管理キーはURLに付けず、X-Admin-Key ヘッダーで送る。
+  // ?key= に付けるとWorkerのログにURLごと残り、キーが平文で読めてしまう
+  // （2026-09-02、wrangler tail で実際に読めることを確認した）。
+  // Worker側は以前から両方を受け付ける作りなので、Workerの変更は不要。
+  function adminHeaders(key) { return { 'X-Admin-Key': key }; }
+
   function loadCcList() {
     var key = currentKey();
     if (!key) return;
 
-    fetch(API + '/bt-cc-recipients?key=' + encodeURIComponent(key))
+    fetch(API + '/bt-cc-recipients', { headers: adminHeaders(key) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d || !d.ok) { return; }
@@ -332,8 +338,9 @@ tr:hover td{background:#FBF8F0;}
     if (!key || !id) return;
     if (!window.confirm('このCC宛先を削除しますか？')) return;
 
-    fetch(API + '/bt-cc-recipients?key=' + encodeURIComponent(key) + '&id=' + encodeURIComponent(id), {
-      method: 'DELETE'
+    fetch(API + '/bt-cc-recipients?id=' + encodeURIComponent(id), {
+      method: 'DELETE',
+      headers: adminHeaders(key)
     })
       .then(function (r) { return r.json(); })
       .then(function (d) {
@@ -377,7 +384,7 @@ tr:hover td{background:#FBF8F0;}
     var key = currentKey();
     if (!key) return;
 
-    fetch(API + '/bt-mail-from?key=' + encodeURIComponent(key))
+    fetch(API + '/bt-mail-from', { headers: adminHeaders(key) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d || !d.ok) { return; }
@@ -435,8 +442,9 @@ tr:hover td{background:#FBF8F0;}
     var key = currentKey();
     if (!key || !ids.length) return;
 
-    return fetch(API + '/bt-applications?key=' + encodeURIComponent(key) + '&ids=' + encodeURIComponent(ids.join(',')), {
-      method: 'DELETE'
+    return fetch(API + '/bt-applications?ids=' + encodeURIComponent(ids.join(',')), {
+      method: 'DELETE',
+      headers: adminHeaders(key)
     }).then(function (r) { return r.json(); });
   }
 
@@ -534,7 +542,7 @@ tr:hover td{background:#FBF8F0;}
     loadBtn.disabled = true;
     loadBtn.textContent = '読み込み中…';
 
-    fetch(API + '/bt-applications?key=' + encodeURIComponent(key))
+    fetch(API + '/bt-applications', { headers: adminHeaders(key) })
       .then(function (r) {
         if (!r.ok) throw new Error('http_' + r.status);
         return r.json();
