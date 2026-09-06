@@ -57,7 +57,12 @@
   Claude入門＝動画18本・poster18枚・画像4枚とも **200**、目次18本のアンカーは**全部つながる**、
   取りこぼしの差し込み文字（`TOTAL_MIN` 等）**0件**
 - トップ … 新しい講座欄が表示され、ナビは9項目で崩れないことを画面で確認（PC幅800pxでも収まる）
-- **ライブ（royschannel.com）での確認は、push 後に別途記録する**
+- **ライブ（royschannel.com）でも確認ずみ**（push → Cloudflare Pages 自動ビルド）
+  - `/kouza/claude-nyumon`・`/kouza/inaka-hitori-kasegu` … どちらも 200 で正しい `<title>`
+  - 動画18本＋poster18枚（`claude_ep*`）… **36ファイルすべて 200**（`video/mp4`）
+  - 田舎暮らしの動画7本（`kouza_ep*`）… **7本すべて 200**
+  - トップの講座ボタン … `kouza/claude-nyumon`・`kouza/inaka-hitori-kasegu` の2本が出ている
+  - 表紙・クロ・プロフィール写真 … 5枚とも 200
 
 ## 2026-09-02（水）その2 — 申込みフォーム一式の作り方をスキル化（apply-form-api）
 
