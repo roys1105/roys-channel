@@ -285,6 +285,9 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
   background:#E1F0F3;border-radius:999px;padding:2px 9px;
 }
 .kz-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
+/* 2本目の講座欄（Claude入門）。同じ形が続くので、下地の色と細い線で区切る。 */
+.kouza.alt{background:#F5EFE2;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.kouza.alt .kz-list{grid-template-columns:1fr;}
 
 /* ============ お知らせ（バウンドテニス教室） ============ */
 .notice{padding:56px 0 60px;background:#FBEAE4;border-top:1px solid #F0D2C6;border-bottom:1px solid #F0D2C6;}
@@ -491,6 +494,7 @@ footer .cp .en{font-size:14px;}
       <a href="#faces">3つの顔</a>
       <a href="#senior">シニア相談室</a>
       <a href="#kouza">講座</a>
+      <a href="#kouza-claude">Claude入門</a>
       <a href="#profile">ロイについて</a>
       <a href="#likes">好きなこと</a>
       <a href="#channels">発信</a>
@@ -503,6 +507,7 @@ footer .cp .en{font-size:14px;}
     <a href="#faces">3つの顔</a>
     <a href="#senior">シニア相談室</a>
     <a href="#kouza">講座</a>
+    <a href="#kouza-claude">Claude入門</a>
     <a href="#profile">ロイについて</a>
     <a href="#likes">好きなこと</a>
     <a href="#channels">発信</a>
@@ -694,13 +699,55 @@ footer .cp .en{font-size:14px;}
         </ul>
 
         <div class="kz-cta">
-          <!-- 講座ページはURLこそシニアサイトの下にあるが、中身は Roy's Channel の講座。
-               名札方式は廃止したので、このタブのまま移動する（target は付けない）。
+          <!-- 2026-09-06：講座ページをシニアサイトの下から royschannel.com/kouza/ へ引っ越した。
+               同じサイトの中なので相対リンクで書く。
                リンクは .html を付けない形。Cloudflare Pages がその形で配るため。 -->
-          <a class="btn btn-primary" href="https://it.royschannel.com/material/inaka-hitori-kasegu">
+          <a class="btn btn-primary" href="kouza/inaka-hitori-kasegu">
             講座のページを見る →
           </a>
           <p class="note">いまは無料で公開中です</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 講座「Windowsユーザーのための Claude 入門」 ============ -->
+<section class="kouza alt" id="kouza-claude">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">NEW COURSE</span>
+      <h2>Windowsユーザーのための Claude 入門</h2>
+      <p>AI「Claude」を、Windowsのパソコンで使えるようになるまで。1本およそ3分・全18回の動画講座です。</p>
+    </div>
+
+    <div class="kz-grid">
+      <div class="kz-cover">
+        <img src="image/cover-claude.jpg" alt="講座「Windowsユーザーのための Claude 入門」の表紙">
+        <span class="kz-badge">全18回・無料</span>
+        <p class="kz-count" id="kz-count-claude">この講座が見られた回数　今日 <b>—</b>回／のべ <b>—</b>回</p>
+      </div>
+
+      <div class="kz-body">
+        <p class="kz-lead">
+          世の中の説明はMacばかりで、<strong>Windowsだと同じようにいかない</strong>。
+          そこでつまずいた自分の経験から、Windowsだけに必要な「下ごしらえ」まで含めて順番に解説しました。
+          全編フルテロップの字幕つきなので、音を出せない場所でもご覧いただけます。
+        </p>
+
+        <p class="kz-sub">3部構成（全18回・合計およそ57分）</p>
+        <ul class="kz-list">
+          <li><b>第1部</b>チャット編（第0〜5回）まずは相談相手として使う</li>
+          <li><b>第2部</b>Cowork編（第6〜11回）留守番を頼むように、仕事を任せる</li>
+          <li><b>第3部</b>Code編（第12〜17回）ホームページを1枚、世界に出す</li>
+        </ul>
+
+        <div class="kz-cta">
+          <!-- リンクは .html を付けない形。Cloudflare Pages がその形で配るため。 -->
+          <a class="btn btn-primary" href="kouza/claude-nyumon">
+            講座のページを見る →
+          </a>
+          <p class="note">いまは全18回とも無料で公開中です</p>
         </div>
       </div>
     </div>
@@ -961,27 +1008,38 @@ footer .cp .en{font-size:14px;}
      ・今日ぶん … results（日付つきの生データ）から
      ・のべ　　 … totals（サーバーが全期間を合計したもの）から。
        totals をまだ返さない古いWorkerのときは、results を足して代用する。 */
-  var countEl = document.getElementById('kz-count');
-  if (countEl) {
-    var KOUZA_PAGE = '/materials/inaka-hitori-kasegu.html';
+  /* 講座は2本あるので、「表示する欄」と「集計キー」の対応表を作ってまとめて数える。
+     page の字は、講座ページ側が track-page に送っているものと必ず同じにすること。
+     違う字にすると、そのページぶんが 0 のままになる。 */
+  var KOUZA_COUNTERS = [
+    { id: 'kz-count',        page: '/materials/inaka-hitori-kasegu.html' },
+    { id: 'kz-count-claude', page: '/materials/claude-nyumon.html' }
+  ];
+  var counters = KOUZA_COUNTERS.filter(function (c) {
+    c.el = document.getElementById(c.id);
+    return !!c.el;
+  });
+  if (counters.length) {
     fetch('https://roy-senior-site-api.roy-s1105.workers.dev/page-stats')
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (!data || !data.ok) { return; }
         var today = jstToday();
-        var todayCount = 0, totalCount = 0;
-        (data.results || []).forEach(function (row) {
-          if (row.type === 'material' && row.page === KOUZA_PAGE && row.date === today) {
-            todayCount += row.count;
-          }
+        counters.forEach(function (c) {
+          var todayCount = 0, totalCount = 0;
+          (data.results || []).forEach(function (row) {
+            if (row.type === 'material' && row.page === c.page && row.date === today) {
+              todayCount += row.count;
+            }
+          });
+          (data.totals || data.results || []).forEach(function (row) {
+            if (row.type === 'material' && row.page === c.page) {
+              totalCount += row.count;
+            }
+          });
+          c.el.innerHTML = 'この講座が見られた回数　今日 <b>' + todayCount +
+            '</b>回／のべ <b>' + totalCount + '</b>回';
         });
-        (data.totals || data.results || []).forEach(function (row) {
-          if (row.type === 'material' && row.page === KOUZA_PAGE) {
-            totalCount += row.count;
-          }
-        });
-        countEl.innerHTML = 'この講座が見られた回数　今日 <b>' + todayCount +
-          '</b>回／のべ <b>' + totalCount + '</b>回';
       })
       .catch(function () {});
   }

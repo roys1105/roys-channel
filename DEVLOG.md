@@ -5,6 +5,60 @@
 
 ---
 
+## 2026-09-06（日）— 講座を royschannel.com/kouza/ に集約し、Claude入門（全18回）を公開
+
+### やったこと
+**1. 「田舎暮らしのまま、独りで稼ぐ教科書」をシニアサイトから引っ越した。**
+ロイさんの指示（「it.royschannel.com の下から royschannel.com の下へ移したい」）。
+
+| | 前 | 後 |
+|---|---|---|
+| ページ | `it.royschannel.com/material/inaka-hitori-kasegu` | **`royschannel.com/kouza/inaka-hitori-kasegu`** |
+| 動画7本 | `senior-site/videos/kouza_ep*.mp4` | **`roys-channel/videos/kouza_ep*.mp4`** |
+| 旧URL | — | senior-site の **`_redirects` で 301 転送** |
+
+- ページの中で直したのは4か所：canonical／旧住所からの転送スクリプト（`roys-channel.pages.dev` 側へ）／
+  アクセス計測の `LIVE_HOSTS`／画像のパス（`../image/kuro/…` → `../image/…`、`profile-photo.jpg` → `photo-profile.jpg`）
+- **閲覧数の集計キー（`/materials/inaka-hitori-kasegu.html`）は変えていない。**
+  変えると、これまでの「見られた回数」がゼロから数え直しになるため
+- `index.html` の講座ボタンを相対リンク `kouza/inaka-hitori-kasegu` に変更
+
+**2. 「Windowsユーザーのための Claude 入門」（全18回）を新しく公開した。**
+
+- `kouza/claude-nyumon.html` … 新規。**見た目は隣の田舎暮らし講座と同じCSSを使い回した**
+  （生成スクリプトは `scratchpad/gen_claude_page.py`。回のデータから目次・カード18枚を組み立てる）
+- 動画18本 `videos/claude_ep0〜17.mp4`（**`完成_ご案内つき\` のほう**＝末尾に問い合わせ案内21.5秒つき）＋
+  poster 18枚 `claude_ep*.jpg`（各動画の6.0秒地点＝題名が出ている場面）
+- 表紙 `image/cover-claude.jpg`（第0回の題名の板を切り出したもの）
+- `index.html` に講座欄をもう1つ追加（`#kouza-claude`・`.kouza.alt`）。ナビにも「Claude入門」を追加（PC・スマホの2か所）
+- トップの「見られた回数」を**2本ぶんに一般化**（`KOUZA_COUNTERS` の対応表で回す形に）
+
+**3. `site-kit/references/01-architecture.md` を現状に合わせて直した**（`kouza/`・`videos/`・`_redirects`）。
+
+### わかったこと・つまずいたこと
+- **★第0回〜第5回の動画に、古い名札「全10回の入門講座」が焼き込まれたまま残っている。**
+  講座は全18回になったのに、題名の板の上のバッジだけ昔の数字。第6回以降は「第2部 Cowork編」等なので問題なし。
+  サイトの表紙は、この帯を**切り落として**作った（`crop=1760:600:84:245`）が、**動画の中身は直っていない**。
+  直すには `parts/ep01〜05_body.html` と `ep00/index.html` の1行を変えて**6本を書き出し直す（約1時間）**。
+  読み上げ・字幕は変わらないので**音声の作り直しは不要**（第16回のときと同じ）
+- **`_redirects` は改行コードに注意。** Windowsのgitは checkout時にCRLFへ変える設定なので、
+  `.gitattributes` に `_redirects text eol=lf` を書いて固定した（リポジトリ内はCRなしを確認）
+- **ナビへの追記で、6字下げの行に4字下げのパターンが部分一致した。**
+  PC用ナビに余計な行が1本入り、スマホ用には入らないという壊れ方をした。**行頭の空白まで含めて照合すること**
+- 画面が隠れていると、ブラウザのスクリーンショットは**スクロールしても中身が出ない**（描画が止まるため）。
+  縦長のビューポート（例 1000×5600）にして**一度に全体を撮る**と見られる
+
+### 次にやること
+- ロイさんの試聴・目視。とくに**第0〜5回の「全10回」表記を直すかどうか**の判断（直すなら6本の書き出し・約1時間）
+- note などに貼った旧URLは301で飛ぶが、**貼り替えられるものは新URLに直すと確実**
+
+### 動作確認
+- ローカル（`http://localhost:8765`）… 引っ越した田舎暮らし講座＝画像4枚・動画7本・poster7枚とも **200**。
+  Claude入門＝動画18本・poster18枚・画像4枚とも **200**、目次18本のアンカーは**全部つながる**、
+  取りこぼしの差し込み文字（`TOTAL_MIN` 等）**0件**
+- トップ … 新しい講座欄が表示され、ナビは9項目で崩れないことを画面で確認（PC幅800pxでも収まる）
+- **ライブ（royschannel.com）での確認は、push 後に別途記録する**
+
 ## 2026-09-02（水）その2 — 申込みフォーム一式の作り方をスキル化（apply-form-api）
 
 ### やったこと
