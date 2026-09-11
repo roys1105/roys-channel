@@ -78,10 +78,11 @@ table{border-collapse:collapse;width:100%;min-width:1400px;font-size:13px;}
 th,td{padding:10px 12px;border-bottom:1px solid #EDF0E3;text-align:left;white-space:nowrap;vertical-align:top;}
 th{background:#EEF3E3;color:#43552F;font-weight:700;position:sticky;top:0;}
 tr:hover td{background:#FBFCF7;}
-td.wrap-cell{white-space:pre-wrap;max-width:260px;overflow-wrap:anywhere;}
+/* どの欄も1行20文字（全角）で折り返す。td には max-width が効かないため、中身を .c で包んで幅を決める。
+   width:max-content が無いと、表が画面幅に収めようとして20文字より手前で折り返してしまう（表は横スクロールでよい） */
+td > .c{width:max-content;max-width:20em;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-all;}
 /* 幅の下限を決めないと、折り返し可の列が極端に潰される（教室の管理ページで実際に起きた） */
-th.addr-cell,td.addr-cell{width:14em;min-width:14em;max-width:14em;white-space:normal;word-break:break-all;}
-th.pl-cell,td.pl-cell{width:13em;min-width:13em;max-width:13em;white-space:pre-wrap;word-break:break-all;line-height:1.65;}
+td.pl-cell{line-height:1.65;}
 td.pl-cell .sub{color:#6B7A6B;font-size:12px;}
 td.pl-cell .mgr{color:#B4472F;font-weight:700;font-size:12px;}
 td.area-in{color:#43552F;font-weight:700;}
@@ -241,13 +242,13 @@ td.area-out{color:#8A6A20;font-weight:700;}
           <th>区分</th>
           <th>チーム名</th>
           <th>人数</th>
-          <th>チーム監督</th>
           <th>責任者 氏名</th>
           <th>責任者 フリガナ</th>
           <th>TEL又は携帯</th>
           <th>E-mail</th>
           <th>郵便番号</th>
-          <th class="addr-cell">住所</th>
+          <th>住所</th>
+          <th>チーム監督</th>
           <th class="pl-cell">No.1</th>
           <th class="pl-cell">No.2</th>
           <th class="pl-cell">No.3</th>
@@ -702,15 +703,19 @@ td.area-out{color:#8A6A20;font-weight:700;}
     showMsg(exportMsg, 'ダウンロードフォルダに保存しました（このブラウザは保存先を選べません）。', true);
   }
 
+  // 表の1マス。中身を .c で包み、1行20文字で折り返させる（CSS の td > .c）
+  function cell(cls, html) {
+    return '<td' + (cls ? ' class="' + cls + '"' : '') + '><div class="c">' + html + '</div></td>';
+  }
+
   function playerCell(p, isMgr) {
-    if (!p || (!p.name && !p.kana)) { return '<td class="pl-cell"></td>'; }
+    if (!p || (!p.name && !p.kana)) { return cell('pl-cell', ''); }
     var line2 = [p.sex, p.club].filter(function (v) { return v; }).join('・');
-    return '<td class="pl-cell">' +
+    return cell('pl-cell',
       esc(p.name) +
       (isMgr ? '<br><span class="mgr">★チーム監督</span>' : '') +
       '<br><span class="sub">' + esc(p.kana) + '</span>' +
-      (line2 ? '<br><span class="sub">' + esc(line2) + '</span>' : '') +
-      '</td>';
+      (line2 ? '<br><span class="sub">' + esc(line2) + '</span>' : ''));
   }
 
   function renderRows(rows) {
@@ -731,22 +736,22 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
       return '<tr>' +
         '<td><input type="checkbox" data-id="' + row.id + '"></td>' +
-        '<td>' + esc(fmtDate(row.created_at)) + '</td>' +
-        '<td class="' + (row.area === '香川県外' ? 'area-out' : 'area-in') + '">' + esc(row.area) + '</td>' +
-        '<td>' + esc(row.team_name) + '</td>' +
-        '<td>' + countOf(row) + '名</td>' +
-        '<td>' + esc(managerNameOf(row)) + '</td>' +
-        '<td>' + esc(row.leader_name) + '</td>' +
-        '<td>' + esc(row.leader_kana) + '</td>' +
-        '<td>' + esc(row.tel) + '</td>' +
-        '<td>' + esc(row.email) + '</td>' +
-        '<td>' + esc(row.postal_code) + '</td>' +
-        '<td class="addr-cell">' + esc(row.address) + '</td>' +
+        cell('', esc(fmtDate(row.created_at))) +
+        cell(row.area === '香川県外' ? 'area-out' : 'area-in', esc(row.area)) +
+        cell('', esc(row.team_name)) +
+        cell('', countOf(row) + '名') +
+        cell('', esc(row.leader_name)) +
+        cell('', esc(row.leader_kana)) +
+        cell('', esc(row.tel)) +
+        cell('', esc(row.email)) +
+        cell('', esc(row.postal_code)) +
+        cell('', esc(row.address)) +
+        cell('', esc(managerNameOf(row))) +
         playerCell(ps[0], String(mgrNo) === '1') +
         playerCell(ps[1], String(mgrNo) === '2') +
         playerCell(ps[2], String(mgrNo) === '3') +
         playerCell(ps[3], String(mgrNo) === '4') +
-        '<td class="wrap-cell">' + esc(notes) + '</td>' +
+        cell('', esc(notes)) +
         '</tr>';
     }).join('');
 
