@@ -18,6 +18,7 @@
 <link rel="canonical" href="https://royschannel.com/olive2-kennai">
 <meta name="description" content="第2回 オリーブ杯バウンドテニス大会（香川県内用）の参加申込みフォームです。申込は先着順で受け付けております。">
 <meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="image/kbta-logo.png">
 <meta property="og:title" content="第2回 オリーブ杯バウンドテニス大会 参加申込み（香川県内用）">
 <meta property="og:description" content="申込は先着順で受け付けております。締切：2026年10月23日（金曜日）">
 <meta property="og:type" content="website">
@@ -58,10 +59,10 @@ header{
   border-bottom:3px solid var(--olive);
 }
 .hbar{max-width:760px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:12px;}
+/* 協会のロゴ（白い丸）。ヘッダーの地も白なので、薄い縁取りで丸を見せる */
 .hbar .mark{
-  width:40px;height:40px;border-radius:50%;flex:0 0 auto;
-  background:var(--olive);color:#fff;display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:700;line-height:1;letter-spacing:.02em;
+  width:44px;height:44px;border-radius:50%;flex:0 0 auto;display:block;
+  background:#fff;box-shadow:0 0 0 1.5px #E6DADA;
 }
 .hbar .nm{font-size:15px;font-weight:700;color:var(--olive);line-height:1.35;}
 .hbar .nm small{display:block;font-size:11.5px;font-weight:500;color:var(--ink-soft);letter-spacing:.04em;}
@@ -108,6 +109,13 @@ header{
   font-size:14.5px;color:var(--ink-soft);line-height:1.85;
 }
 .notice .contact b{color:var(--ink);font-weight:700;}
+/* 取説（申込みのしかた）への入口 */
+.howto-link{margin:14px 0 0;text-align:center;}
+.howto-link a{
+  display:inline-block;padding:9px 18px;border-radius:999px;background:var(--olive-soft);
+  border:1.5px solid var(--olive-mid);color:var(--olive);font-weight:700;font-size:15px;text-decoration:none;
+}
+.howto-link a:hover{background:#E3EBD4;}
 
 /* ============ form ============ */
 .formsec{padding:30px 0 70px;}
@@ -294,7 +302,7 @@ footer .cp{opacity:.72;margin-top:12px;}
 
 <header>
   <div class="hbar">
-    <div class="mark">BT</div>
+    <img class="mark" src="image/kbta-logo.png" width="44" height="44" alt="香川県バウンドテニス協会のロゴ">
     <div class="nm">香川県バウンドテニス協会<small>KAGAWA BOUND TENNIS ASSOCIATION</small></div>
     <a class="admin" href="olive2-admin.html">管理用</a>
   </div>
@@ -318,6 +326,7 @@ footer .cp{opacity:.72;margin-top:12px;}
         TEL：<span data-office="tel">0875-73-3458</span>　／　FAX：<span data-office="fax">0875-73-3457</span><br>
         E-mail：<span data-office="email">nisihara@kagawa-yakult.co.jp</span>
       </div>
+      <p class="howto-link"><a href="olive2-howto.html">📘 申込みのしかた（図解）はこちら</a></p>
     </div>
   </div>
 </section>

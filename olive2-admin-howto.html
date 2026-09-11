@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<script>
+// 旧アドレスで開かれたときだけ、新しいアドレスへ移動する（新アドレスでは何もしない）
+(function () {
+  try {
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
+      location.replace('https://royschannel.com/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>管理ページ取扱説明書（図解）｜第2回 オリーブ杯｜香川県バウンドテニス協会</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="image/kbta-logo.png">
+<!-- 協会（管理者）向けの取説。この1枚から、Webページと印刷用のPDF（A4）の両方を作る。
+     図は image/olive2-howto/ （dev/site/kagawa-bt/howto-src/ の道具で作る。画面写真の名前・住所はすべて架空） -->
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --olive:#5E7A45;--olive-mid:#7E9B5E;--olive-soft:#EEF3E3;--ink:#2F3A32;--ink-soft:#6B7A6B;
+  --cream:#FAF7F0;--line:#DFE3D2;--red:#B4472F;--orange:#E67E22;--blue:#3A6EA5;
+}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','BIZ UDPGothic','Yu Gothic Medium','Yu Gothic','Meiryo',sans-serif;
+  color:var(--ink);background:var(--cream);font-size:17px;line-height:1.9;
+}
+a{color:var(--olive);}
+.top{background:#fff;border-bottom:3px solid var(--olive);}
+.top .bar{max-width:960px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+/* 協会のロゴ（白い丸）。ヘッダーの地も白なので、薄い縁取りで丸を見せる */
+.top .mark{width:44px;height:44px;border-radius:50%;flex:0 0 auto;display:block;background:#fff;box-shadow:0 0 0 1.5px #E6DADA;}
+.top .nm{font-weight:700;color:var(--olive);line-height:1.35;font-size:15px;}
+.top .nm small{display:block;font-size:11.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.04em;}
+.page{max-width:960px;margin:0 auto;padding:24px 20px 60px;}
+
+.cover{background:#fff;border:3px solid var(--olive);border-radius:18px;padding:26px 24px;text-align:center;margin:0 0 22px;}
+.cover .k{display:inline-block;font-size:12px;letter-spacing:.2em;font-weight:700;color:#fff;background:var(--olive-mid);padding:4px 14px;border-radius:999px;}
+.cover h1{margin:12px 0 6px;font-size:clamp(24px,4.6vw,32px);line-height:1.45;color:var(--olive);}
+.cover p{margin:0;color:var(--ink-soft);font-size:15px;}
+
+.toc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 22px;margin:0 0 26px;}
+.toc b{color:var(--olive);}
+.toc ol{margin:6px 0 0;padding-left:1.4em;columns:2;column-gap:32px;}
+.toc li{margin:2px 0;break-inside:avoid;}
+
+section{margin:0 0 34px;}
+h2{margin:0 0 14px;font-size:21px;color:#fff;background:var(--olive);padding:8px 16px;border-radius:10px;line-height:1.5;}
+h2 .n{display:inline-block;background:#fff;color:var(--olive);border-radius:999px;width:1.7em;height:1.7em;line-height:1.7em;text-align:center;margin-right:8px;font-size:16px;}
+h3{margin:22px 0 8px;font-size:18px;color:var(--olive);border-left:6px solid var(--olive-mid);padding-left:10px;line-height:1.5;}
+p{margin:0 0 12px;}
+
+.shot{margin:14px 0 18px;text-align:center;}
+.shot img{max-width:100%;height:auto;border-radius:6px;box-shadow:0 2px 10px rgba(60,70,45,.10);background:#fff;}
+.shot figcaption{font-size:14px;color:var(--ink-soft);margin-top:6px;}
+
+table.t{width:100%;border-collapse:collapse;background:#fff;font-size:16px;margin:8px 0 14px;}
+table.t th,table.t td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;line-height:1.7;}
+table.t th{background:var(--olive-soft);color:#43552F;}
+.url{font-family:'BIZ UDGothic','Consolas',monospace;word-break:break-all;}
+
+/* 手順：押す場所・打つもの・出る画面・違ったとき */
+ol.steps{list-style:none;counter-reset:s;margin:10px 0 16px;padding:0;}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 12px 48px;margin:0 0 10px;border-bottom:1px dashed var(--line);}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:2px;width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;font-weight:700;text-align:center;line-height:34px;}
+.do{font-weight:700;}
+.see{display:block;color:#4A5A48;margin-top:2px;}
+.see::before{content:"→ 出る画面：";font-weight:700;color:var(--olive);}
+.ng{display:block;margin-top:6px;padding:7px 12px;background:#FFF4EC;border-left:4px solid var(--orange);border-radius:4px;font-size:15.5px;}
+.ng::before{content:"違うときは：";font-weight:700;color:#B4632F;}
+kbd{display:inline-block;padding:0 8px;border:1px solid #9AA595;border-bottom-width:3px;border-radius:5px;background:#fff;font-family:inherit;font-size:15px;line-height:1.6;}
+
+.note{background:#FFF8E1;border:1.5px solid #E4C86A;border-radius:12px;padding:12px 16px;margin:10px 0 16px;font-size:16px;}
+.note b{color:#7A5B12;}
+.tip{background:#E8EEF6;border:1.5px solid #9DB4D2;border-radius:12px;padding:12px 16px;margin:10px 0 16px;font-size:16px;}
+.tip b{color:#22456B;}
+
+/* しくみの図 */
+.sys{display:grid;grid-template-columns:1fr 40px 1.2fr 40px 1.4fr;align-items:center;gap:0;margin:14px 0 18px;}
+.sys .col{display:flex;flex-direction:column;gap:10px;}
+.fb{background:#fff;border:2.5px solid var(--olive-mid);border-radius:14px;padding:10px 14px;text-align:center;font-weight:700;line-height:1.6;}
+.fb small{display:block;font-weight:500;color:var(--ink-soft);font-size:14px;}
+.fb.red{border-color:#D9534F;background:#FDECEA;}
+.fb.orange{border-color:var(--orange);background:#FDF0E3;}
+.fb.blue{border-color:var(--blue);background:#E8EEF6;}
+.fb.green{border-color:#3A7D44;background:#E8F3EA;}
+.arw{text-align:center;color:var(--olive);font-size:28px;font-weight:700;}
+.flow{display:flex;flex-direction:column;gap:0;margin:12px auto 18px;max-width:620px;}
+.flow .fa{text-align:center;color:var(--olive);font-size:26px;line-height:1.1;font-weight:700;}
+.flow .fa small{font-size:13.5px;color:var(--ink-soft);font-weight:500;display:block;}
+.flow .side{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+.mail{background:#fff;border:1.5px solid var(--line);border-radius:12px;margin:10px 0 18px;overflow:hidden;}
+.mail .mh{background:#F3F5EE;border-bottom:1px solid var(--line);padding:8px 14px;font-size:14.5px;line-height:1.7;}
+.mail .mh b{color:#43552F;}
+.mail pre{margin:0;padding:12px 14px;font-family:'BIZ UDGothic','MS Gothic',monospace;font-size:14px;line-height:1.75;white-space:pre-wrap;word-break:break-all;}
+
+.qa{width:100%;border-collapse:collapse;background:#fff;font-size:16px;}
+.qa th,.qa td{border:1px solid var(--line);padding:10px 12px;vertical-align:top;text-align:left;line-height:1.75;}
+.qa th{background:var(--olive-soft);width:32%;}
+
+footer{margin-top:30px;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);text-align:center;}
+
+@media (max-width:700px){
+  body{font-size:16px;}
+  .toc ol{columns:1;}
+  .sys{grid-template-columns:1fr;}
+  .sys .arw{transform:rotate(90deg);}
+  .flow .side{grid-template-columns:1fr;}
+  .qa th{width:auto;display:block;border-bottom:none;}
+  .qa td{display:block;}
+}
+
+/* 印刷（PDF・A4） */
+@page{size:A4;margin:12mm 12mm 14mm;}
+@media print{
+  body{background:#fff;font-size:11.5pt;line-height:1.75;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .page{max-width:none;padding:10px 0 0;}
+  .toc{break-after:page;}
+  section{break-before:page;margin:0;}
+  h2,h3{break-after:avoid;}
+  .shot,.flow,.sys,.mail,.note,.tip,table,ol.steps>li{break-inside:avoid;}
+  .shot img{box-shadow:none;border:1px solid #ddd;max-height:225mm;width:auto;}
+  a{text-decoration:none;color:inherit;}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <img class="mark" src="image/kbta-logo.png" width="44" height="44" alt="香川県バウンドテニス協会のロゴ">
+    <div class="nm">香川県バウンドテニス協会<small>KAGAWA BOUND TENNIS ASSOCIATION</small></div>
+  </div>
+</header>
+
+<main class="page">
+
+<div class="cover">
+  <span class="k">OLIVE CUP 2026</span> <span class="k">協会（管理者）向け</span>
+  <h1>第2回 オリーブ杯バウンドテニス大会<br>申込み　管理ページ取扱説明書（図解）</h1>
+  <p>申込みの一覧を見る・Excel用に保存する・受付の上限やキャンセル待ちを扱うための説明書です。<br>
+    パソコンに何かを新しく入れる必要はありません。いつものインターネット（Edge か Chrome）で使えます。</p>
+</div>
+
+<nav class="toc">
+  <b>もくじ</b>
+  <ol>
+    <li><a href="#s1">このフォルダに入っているもの</a></li>
+    <li><a href="#s2">しくみ（全体の流れ）と、届くメール</a></li>
+    <li><a href="#s3">はじめの準備（最初に1回だけ）</a></li>
+    <li><a href="#s4">申込みが来たら</a></li>
+    <li><a href="#s5">管理ページを開く</a></li>
+    <li><a href="#s6">申込み一覧を見る・保存する・消す</a></li>
+    <li><a href="#s7">受付組数の上限を決める</a></li>
+    <li><a href="#s8">キャンセル待ち</a></li>
+    <li><a href="#s9">事務局の情報を変える</a></li>
+    <li><a href="#s10">控え（CC）を送る</a></li>
+    <li><a href="#s11">管理キーを変える</a></li>
+    <li><a href="#s12">困ったとき・大会が終わったら</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ 1 -->
+<section id="s1">
+<h2><span class="n">1</span>このフォルダに入っているもの</h2>
+<table class="t">
+  <tr><th>はじめにお読みください_管理ページ取扱説明書.pdf</th><td>この説明書です。</td></tr>
+  <tr><th>申込者向け_申込みのしかた.pdf</th><td>申込者（各クラブの申込責任者）向けの説明書です。大会のご案内と一緒に、メールやLINEで送ったり、印刷して配ったりできます。</td></tr>
+  <tr><th>ショートカットをデスクトップに置く.bat</th><td>ダブルクリックすると、デスクトップにページの入口（ショートカット）が3つできます。<b>最初に1回だけ</b>使います。</td></tr>
+  <tr><th>デスクトップに置くもの（フォルダ）</th><td>上の3つのショートカットの本体です。</td></tr>
+  <tr><th>管理キー.txt</th><td>管理ページを開くための「合いことば」です。<b>協会の役員以外には教えないでください。</b></td></tr>
+  <tr><th>大切な情報まとめ.txt</th><td>ページのアドレス、届くメール、しくみの情報です。</td></tr>
+</table>
+<table class="t">
+  <tr><th>香川県内用の申込みページ</th><td class="url">https://royschannel.com/olive2-kennai</td></tr>
+  <tr><th>香川県外用の申込みページ</th><td class="url">https://royschannel.com/olive2-kengai</td></tr>
+  <tr><th>申込みのしかた（申込者向け）</th><td class="url">https://royschannel.com/olive2-howto</td></tr>
+  <tr><th>管理ページ（協会用）</th><td class="url">https://royschannel.com/olive2-admin</td></tr>
+</table>
+<div class="note">申込者にお知らせするのは、<b>申込みページ（県内用・県外用）と「申込みのしかた」だけ</b>です。管理ページのアドレスと管理キーは、お知らせしないでください。</div>
+</section>
+
+<!-- ================================================================ 2 -->
+<section id="s2">
+<h2><span class="n">2</span>しくみ（全体の流れ）と、届くメール</h2>
+<div class="sys">
+  <div class="col">
+    <div class="fb">申込者<small>スマホ・パソコン</small></div>
+  </div>
+  <div class="arw">→</div>
+  <div class="col">
+    <div class="fb">申込みページ<small>県内用・県外用</small></div>
+    <div class="fb orange">定員のときは<br>キャンセル待ち<small>番号を発行</small></div>
+  </div>
+  <div class="arw">→</div>
+  <div class="col">
+    <div class="fb red">事務局に知らせのメール<small>「事務局の情報」の届け先へ（CCで控えも）</small></div>
+    <div class="fb blue">申込者に受付のメール<small>E-mail を入れた方だけ</small></div>
+    <div class="fb green">管理ページの一覧に保存<small>一覧・Excel用保存・削除・設定</small></div>
+  </div>
+</div>
+<h3>事務局に届くメールの種類（件名の頭）</h3>
+<table class="t">
+  <tr><th>【第2回オリーブ杯 申込み】</th><td>ふつうの申込みが届いた。<b>参加の可否のお返事をお願いします。</b></td></tr>
+  <tr><th>【第2回オリーブ杯 キャンセル待ち登録】</th><td>定員のあとに、キャンセル待ちの登録があった（まだ申込みではありません）。</td></tr>
+  <tr><th>【第2回オリーブ杯 空きの案内】</th><td>空きが出たので、キャンセル待ちの方全員に「空きが出ました」のメールを送った。</td></tr>
+  <tr><th>【第2回オリーブ杯 キャンセル待ちから申込み】</th><td>キャンセル待ちの方が、番号で申し込んだ。<b>参加の可否のお返事をお願いします。</b></td></tr>
+  <tr><th>【第2回オリーブ杯 期限切れ】</th><td>空きのご案内から3日たっても申し込まなかった方を、キャンセル待ちから外した。</td></tr>
+</table>
+</section>
+
+<!-- ================================================================ 3 -->
+<section id="s3">
+<h2><span class="n">3</span>はじめの準備（最初に1回だけ）</h2>
+<p>デスクトップに、3つのページの入口（ショートカット）を置きます。</p>
+<ol class="steps">
+  <li><span class="do">このフォルダの中の「ショートカットをデスクトップに置く.bat」をダブルクリックします。</span>
+    <span class="see">黒い画面が出て「デスクトップに、ショートカットを3つ置きました。」と表示されます。何かキーを押すと閉じます。</span>
+    <span class="ng">青い画面で「Windows によって PC が保護されました」と出たら、「詳細情報」の文字を押し、下に出る「実行」を押してください。それでも出来ないときは、「デスクトップに置くもの」フォルダの中の3つのファイルを、マウスでデスクトップへ引っぱって放します。</span></li>
+  <li><span class="do">デスクトップに、次の3つがあることを確かめます。</span>
+    <span class="see">「オリーブ杯 申込みフォーム（県内用）」「オリーブ杯 申込みフォーム（県外用）」「オリーブ杯 申込み一覧（管理ページ）」</span>
+    <span class="ng">見当たらないときは、デスクトップの何もない所で右クリック →「最新の情報に更新」を押してください。</span></li>
+</ol>
+</section>
+
+<!-- ================================================================ 4 -->
+<section id="s4">
+<h2><span class="n">4</span>申込みが来たら</h2>
+<p>申込みがあるたびに、「事務局の情報」の<b>申込み通知メールの届け先</b>（はじめは西原さんのメール）に、次のようなメールが届きます。</p>
+<div class="mail">
+  <div class="mh"><b>差出人</b>　第2回オリーブ杯 申込みフォーム &lt;olive-uketsuke@royschannel.com&gt;<br>
+    <b>件名</b>　【第2回オリーブ杯 申込み】オリーブクラブA（山田 太郎 様／香川県内）</div>
+<pre>第2回 オリーブ杯バウンドテニス大会（香川県内用）の参加申込みが届きました。
+
+申込日　　　　： 2026年10月2日
+締切　　　　　： 2026年10月23日（金曜日）
+
+【申込責任者】（フリガナ・氏名・郵便番号・住所・TEL・E-mail）
+【申込チーム】（チーム名・申込み人数・チーム監督・選手 No.1〜）
+
+※このメールにそのまま返信すると、申込責任者ご本人（山田 太郎 様）に届きます。
+※申込は先着順です。受付後、参加の可否のお返事をお願いします。</pre>
+</div>
+<div class="note"><b>E-mail を入れた申込者には、自動で「受け付けました」のメールが届きます。</b>その中で「参加の可否は、あらためてお電話・FAX・E-mail にてお返事いたします」とお伝えしています。E-mail の無い方には、お電話か FAX でお返事ください。</div>
+<div class="tip"><b>メールが見当たらないとき</b>は、迷惑メールのフォルダを見てください。入っていたら、会社のメールの担当の方に「olive-uketsuke@royschannel.com からのメールを受け取れるようにしてほしい」とお伝えください。メールが無くても、申込みは管理ページの一覧に残っています。</div>
+</section>
+
+<!-- ================================================================ 5 -->
+<section id="s5">
+<h2><span class="n">5</span>管理ページを開く</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/b01-locked.png" width="930" height="397" alt="管理ページを開いた直後。管理キーの入力欄と表示するボタンだけが出ている">
+  <figcaption>図1　管理ページを開いた直後（キーの欄だけが出ます）</figcaption>
+</figure>
+<ol class="steps">
+  <li><span class="do">デスクトップの「オリーブ杯 申込み一覧（管理ページ）」をダブルクリックします。</span>
+    <span class="see">図1の画面が開きます。はじめは、管理キーの欄と「表示する」だけが出ています。</span>
+    <span class="ng">別のページが開いたときは、画面いちばん上のアドレス欄に <span class="url">royschannel.com/olive2-admin</span> と打って <kbd>Enter</kbd> を押します。</span></li>
+  <li><span class="do">「管理キー.txt」を開き、キーの文字をなぞって選び、<kbd>Ctrl</kbd> を押しながら <kbd>C</kbd>（コピー）。</span></li>
+  <li><span class="do">管理キーの欄を1回押してから、<kbd>Ctrl</kbd> を押しながら <kbd>V</kbd>（貼り付け）→「表示する」を押します。</span>
+    <span class="see">キーが正しいと、その下に、設定の欄と申込み一覧が出ます。</span>
+    <span class="ng">「キーが正しくないか、取得に失敗しました。」と出たら、キーの前後に空白が入っていないか見て、もう一度コピーからやり直してください。</span></li>
+</ol>
+<div class="tip">管理キーはパソコンに記憶されません。<b>ページを開くたびに貼り付けてください。</b>（キーを知らない人に中身を見られないようにするためです）</div>
+</section>
+
+<!-- ================================================================ 6 -->
+<section id="s6">
+<h2><span class="n">6</span>申込み一覧を見る・保存する・消す</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/b06-list.png" width="930" height="498" alt="申込み一覧。区分の切り替え、選択した行を削除、Excel用ファイルを保存のボタン">
+  <figcaption>図2　申込み一覧（写真は見本のデータです）</figcaption>
+</figure>
+<ul>
+  <li>1行が1チームです。表が横に長いので、表の下のつまみを左右に動かすと続きが見えます。</li>
+  <li>どの欄も、1行20文字で折り返して表示します。監督は、選手 No.1 のすぐ左の「チーム監督」の列で分かります。</li>
+  <li>「受付日時」は、申込みを受け付けた日時です。</li>
+</ul>
+<h3>Excel用ファイル（CSV）に保存する</h3>
+<ol class="steps">
+  <li><span class="do">保存したい区分（すべて／香川県内／香川県外）のボタンを押してから、「Excel用ファイルを保存」を押します。</span>
+    <span class="see">保存する場所を選ぶ画面が出ます。ファイル名は「第2回オリーブ杯_申込み一覧_日付.csv」です。</span>
+    <span class="ng">保存する場所の画面が出ないときは、「ダウンロード」フォルダに保存されています。</span></li>
+  <li><span class="do">「デスクトップ」など分かりやすい場所を選んで「保存」を押します。</span>
+    <span class="see">「保存しました。」と出ます。そのファイルをダブルクリックすると Excel で開けます。</span></li>
+</ol>
+<h3>いらない申込みを消す（重複・取り消しなど）</h3>
+<ol class="steps">
+  <li><span class="do">消したい行の、いちばん左の四角を押してチェックを入れます（見出しの四角で、表示中の行をまとめて選べます）。</span>
+    <span class="see">表の上に「1件選択中」と出て、「選択した行を削除」が押せるようになります。</span></li>
+  <li><span class="do">「選択した行を削除」を押し、確認の画面で「OK」を押します。</span>
+    <span class="see">その行が消えます。</span>
+    <span class="ng"><b>消した申込みは元に戻せません。</b>心配なときは、先に Excel用ファイルに保存しておいてください。</span></li>
+</ol>
+<div class="note">申込みを消して空きが出たとき、<b>キャンセル待ちの方がいれば、全員に「空きが出ました」のメールが自動で届きます</b>（<a href="#s8">8 キャンセル待ち</a>）。</div>
+</section>
+
+<!-- ================================================================ 7 -->
+<section id="s7">
+<h2><span class="n">7</span>受付組数の上限を決める</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/b04-limits.png" width="930" height="362" alt="受付組数の上限。香川県内と香川県外の入力欄と保存するボタン">
+  <figcaption>図3　受付組数の上限（県内・県外それぞれ）</figcaption>
+</figure>
+<ol class="steps">
+  <li><span class="do">「香川県内」の欄に、受け付けるチーム数（例：16）を打って「保存する」を押します。</span>
+    <span class="see">「香川県内の上限を 16 組にしました。」と出て、右に「受付済み ○ 組（受付中）」が出ます。</span>
+    <span class="ng">上限をなくすときは、欄を空にして「保存する」を押します。</span></li>
+</ol>
+<ul>
+  <li>受付済みが上限に達すると、その申込みページは「申込みの受付を終了しました」の画面になり、申込者はキャンセル待ちに登録できるようになります。</li>
+  <li>上限を増やして空きが出たときも、キャンセル待ちの方全員に「空きが出ました」のメールが届きます。</li>
+</ul>
+</section>
+
+<!-- ================================================================ 8 -->
+<section id="s8">
+<h2><span class="n">8</span>キャンセル待ち</h2>
+<div class="flow">
+  <div class="fb orange">定員に達したあと、申込者がキャンセル待ちに登録<small>キャンセル待ち番号（例：県内-017）を発行。事務局に【キャンセル待ち登録】</small></div>
+  <div class="fa">↓<small>管理ページで申込みを消した・上限を増やした</small></div>
+  <div class="fb blue">キャンセル待ちの方全員に「空きが出ました」のメール<small>事務局に【空きの案内】。申込みの期限は3日後</small></div>
+  <div class="fa">↓</div>
+  <div class="fb red">申込者が番号と E-mail で呼び出して申し込む<small>先に申し込んだ方から受付（早い者勝ち）</small></div>
+  <div class="side">
+    <div class="fb green">申し込めた<small>申込み一覧に入り、キャンセル待ちから消える。事務局に【キャンセル待ちから申込み】</small></div>
+    <div class="fb orange">3日たっても申し込まない<small>自動でキャンセル待ちから外れる（本人にメール）。事務局に【期限切れ】</small></div>
+  </div>
+</div>
+<div class="tip">キャンセル待ちの方がいるあいだは、空きがあっても、申込みページからの<b>ふつうの申込みは受け付けません</b>（キャンセル待ちの方が優先です）。キャンセル待ちが0件になると、ふつうの受付にもどります。</div>
+<figure class="shot">
+  <img src="image/olive2-howto/b05-wait.png" width="930" height="483" alt="キャンセル待ちの一覧。区分の切り替え、選択した行を削除、Excel用ファイルを保存、番号と状態の列">
+  <figcaption>図4　キャンセル待ちの一覧（写真は見本のデータです）</figcaption>
+</figure>
+<ul>
+  <li>「状態」の列は、<b>待機中</b>（まだ空きのご案内をしていない）か、<b>空きを案内済み（期限 ○月○日）</b>かです。</li>
+  <li>申込み一覧と同じように、区分の切り替え・Excel用ファイルへの保存・「選択した行を削除」ができます。</li>
+  <li>キャンセル待ちが無いときは「キャンセル待ちはありません。」と大きく出ます。</li>
+  <li>キャンセル待ちを削除しても、ご本人にメールは届きません。取り下げの連絡があったときなどに使います。</li>
+</ul>
+</section>
+
+<!-- ================================================================ 9 -->
+<section id="s9">
+<h2><span class="n">9</span>事務局の情報を変える（担当の方が替わったとき）</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/b02-office.png" width="930" height="858" alt="事務局の情報。通知の届け先、返信先、担当者名、TEL、FAX と保存するボタン">
+  <figcaption>図5　事務局の情報</figcaption>
+</figure>
+<table class="t">
+  <tr><th>申込み通知メールの届け先</th><td>申込み・キャンセル待ち登録・空きの案内・期限切れなどの知らせが届くアドレス</td></tr>
+  <tr><th>申込者からの返信先</th><td>申込者がメールに「返信」したときの宛先。メールの最後と、申込みページの連絡先の E-mail にもなります</td></tr>
+  <tr><th>事務局の担当者名</th><td>申込者あてのメールの最後に「香川県バウンドテニス協会 事務局　（名前）」と載ります</td></tr>
+  <tr><th>TEL・FAX</th><td>申込みページとメールの連絡先に載ります</td></tr>
+</table>
+<p>直したい欄を書き換えて「この内容で保存する」を押し、確認の画面で「OK」を押します。<b>欄を空にして保存すると、その項目は最初の設定（西原さんの情報）に戻ります。</b></p>
+</section>
+
+<!-- ================================================================ 10 -->
+<section id="s10">
+<h2><span class="n">10</span>控え（CC）を送る</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/b03-cc.png" width="930" height="276" alt="申込み通知メールのCC宛先。アドレスの入力欄と追加するボタン、登録した宛先の一覧">
+  <figcaption>図6　申込み通知メールのCC宛先</figcaption>
+</figure>
+<p>ほかの役員の方にも、事務局あての知らせの控えを送りたいときに使います。アドレスを入れて「追加する」を押すと、次の知らせから、その方にも届きます。やめるときは「削除」を押します。</p>
+</section>
+
+<!-- ================================================================ 11 -->
+<section id="s11">
+<h2><span class="n">11</span>管理キーを変える（必要なときだけ）</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/b07-keychange.png" width="930" height="269" alt="管理キーを変更する。新しい管理キーを2回入れる欄と変更するボタン">
+  <figcaption>図7　管理キーを変更する</figcaption>
+</figure>
+<p>役員が交代したときなどに変えます。「管理キーを変更する」を押すと入力欄が開きます。新しいキーを2回入れて「変更する」を押してください。<b>変えたら「管理キー.txt」も書き直してください。</b></p>
+<div class="note">「申込みメールの送信元アドレス」は<b>変える必要はありません</b>（触らないでください）。</div>
+</section>
+
+<!-- ================================================================ 12 -->
+<section id="s12">
+<h2><span class="n">12</span>困ったとき・大会が終わったら</h2>
+<table class="qa">
+  <tr><th>申込みのメールが来ない</th><td>迷惑メールのフォルダを見てください。見当たらなくても、管理ページの一覧に残っていれば申込みは届いています。</td></tr>
+  <tr><th>「キーが正しくないか…」と出る</th><td>「管理キー.txt」からもう一度コピーして貼り付けてください。前後に空白が入ると通りません。</td></tr>
+  <tr><th>申込者から「送信できない」と電話があった</th><td>電話か FAX で内容をお聞きください。</td></tr>
+  <tr><th>申込みページが「受付終了」になっている</th><td>受付組数の上限に達しています（<a href="#s7">7</a>）。上限を増やすか、キャンセル待ちでご案内します（<a href="#s8">8</a>）。</td></tr>
+  <tr><th>締切をすぎた</th><td>申込みページは自動では閉じません。閉じたいときは、塩田へご連絡ください。</td></tr>
+  <tr><th>大会が終わった</th><td>Excel用ファイルに保存したあと、一覧の申込みとキャンセル待ちを削除してください（住所・電話番号を残さないため）。</td></tr>
+  <tr><th>それでも分からない</th><td>塩田 竜一郎（ロイ）roy.s1105@gmail.com までご連絡ください。</td></tr>
+</table>
+</section>
+
+<footer>香川県バウンドテニス協会　第2回 オリーブ杯　申込み管理ページ取扱説明書（2026年9月版）<br>画面の写真の名前・住所などは、すべて見本です。</footer>
+</main>
+</body>
+</html>

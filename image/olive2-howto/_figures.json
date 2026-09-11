@@ -1,0 +1,116 @@
+[
+ {
+  "file": "a01-top.png",
+  "w": 720,
+  "h": 745,
+  "ok": true
+ },
+ {
+  "file": "a02-leader.png",
+  "w": 720,
+  "h": 1039,
+  "ok": true
+ },
+ {
+  "file": "a03-team.png",
+  "w": 720,
+  "h": 770,
+  "ok": true
+ },
+ {
+  "file": "a04-player.png",
+  "w": 720,
+  "h": 753,
+  "ok": true
+ },
+ {
+  "file": "a05-manager.png",
+  "w": 720,
+  "h": 793,
+  "ok": true
+ },
+ {
+  "file": "a06-confirm.png",
+  "w": 720,
+  "h": 491,
+  "ok": true
+ },
+ {
+  "file": "a07-done.png",
+  "w": 720,
+  "h": 370,
+  "ok": true
+ },
+ {
+  "file": "a08-closed.png",
+  "w": 720,
+  "h": 775,
+  "ok": true
+ },
+ {
+  "file": "a09-waitmode.png",
+  "w": 720,
+  "h": 1298,
+  "ok": true
+ },
+ {
+  "file": "a10-waitdone.png",
+  "w": 720,
+  "h": 519,
+  "ok": true
+ },
+ {
+  "file": "a11-claim.png",
+  "w": 720,
+  "h": 568,
+  "ok": true
+ },
+ {
+  "file": "a12-claimed.png",
+  "w": 720,
+  "h": 580,
+  "ok": true
+ },
+ {
+  "file": "b01-locked.png",
+  "w": 930,
+  "h": 397,
+  "ok": true
+ },
+ {
+  "file": "b02-office.png",
+  "w": 930,
+  "h": 858,
+  "ok": true
+ },
+ {
+  "file": "b03-cc.png",
+  "w": 930,
+  "h": 276,
+  "ok": true
+ },
+ {
+  "file": "b04-limits.png",
+  "w": 930,
+  "h": 362,
+  "ok": true
+ },
+ {
+  "file": "b05-wait.png",
+  "w": 930,
+  "h": 483,
+  "ok": true
+ },
+ {
+  "file": "b06-list.png",
+  "w": 930,
+  "h": 498,
+  "ok": true
+ },
+ {
+  "file": "b07-keychange.png",
+  "w": 930,
+  "h": 269,
+  "ok": true
+ }
+]

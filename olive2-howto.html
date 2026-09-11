@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<script>
+// 旧アドレスで開かれたときだけ、新しいアドレスへ移動する（新アドレスでは何もしない）
+(function () {
+  try {
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
+      location.replace('https://royschannel.com/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>申込みのしかた（図解）｜第2回 オリーブ杯バウンドテニス大会｜香川県バウンドテニス協会</title>
+<link rel="canonical" href="https://royschannel.com/olive2-howto">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="image/kbta-logo.png">
+<!-- 申込者向けの取説。この1枚から、Webページと印刷用のPDF（A4）の両方を作る。
+     図は image/olive2-howto/ （dev/site/kagawa-bt/howto-src/ の道具で作る。画面写真の名前・住所はすべて架空） -->
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --olive:#5E7A45;--olive-mid:#7E9B5E;--olive-soft:#EEF3E3;--ink:#2F3A32;--ink-soft:#6B7A6B;
+  --cream:#FAF7F0;--line:#DFE3D2;--red:#B4472F;--orange:#E67E22;--blue:#3A6EA5;
+}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','BIZ UDPGothic','Yu Gothic Medium','Yu Gothic','Meiryo',sans-serif;
+  color:var(--ink);background:var(--cream);font-size:17px;line-height:1.9;
+}
+a{color:var(--olive);}
+.top{background:#fff;border-bottom:3px solid var(--olive);}
+.top .bar{max-width:900px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+/* 協会のロゴ（白い丸）。ヘッダーの地も白なので、薄い縁取りで丸を見せる */
+.top .mark{width:44px;height:44px;border-radius:50%;flex:0 0 auto;display:block;background:#fff;box-shadow:0 0 0 1.5px #E6DADA;}
+.top .nm{font-weight:700;color:var(--olive);line-height:1.35;font-size:15px;}
+.top .nm small{display:block;font-size:11.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.04em;}
+.page{max-width:900px;margin:0 auto;padding:24px 20px 60px;}
+
+.cover{background:#fff;border:3px solid var(--olive);border-radius:18px;padding:26px 24px;text-align:center;margin:0 0 22px;}
+.cover .k{display:inline-block;font-size:12px;letter-spacing:.2em;font-weight:700;color:#fff;background:var(--olive-mid);padding:4px 14px;border-radius:999px;}
+.cover h1{margin:12px 0 6px;font-size:clamp(24px,5vw,32px);line-height:1.45;color:var(--olive);}
+.cover p{margin:0;color:var(--ink-soft);font-size:15px;}
+
+.toc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 22px;margin:0 0 26px;}
+.toc b{color:var(--olive);}
+.toc ol{margin:6px 0 0;padding-left:1.4em;}
+.toc li{margin:2px 0;}
+
+section{margin:0 0 34px;}
+h2{margin:0 0 14px;font-size:21px;color:#fff;background:var(--olive);padding:8px 16px;border-radius:10px;line-height:1.5;}
+h2 .n{display:inline-block;background:#fff;color:var(--olive);border-radius:999px;width:1.7em;height:1.7em;line-height:1.7em;text-align:center;margin-right:8px;font-size:16px;}
+h3{margin:22px 0 8px;font-size:18px;color:var(--olive);border-left:6px solid var(--olive-mid);padding-left:10px;line-height:1.5;}
+p{margin:0 0 12px;}
+
+.shot{margin:14px 0 18px;text-align:center;}
+.shot img{max-width:100%;height:auto;border-radius:6px;box-shadow:0 2px 10px rgba(60,70,45,.10);background:#fff;}
+.shot figcaption{font-size:14px;color:var(--ink-soft);margin-top:6px;}
+
+table.t{width:100%;border-collapse:collapse;background:#fff;font-size:16px;margin:8px 0 14px;}
+table.t th,table.t td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;line-height:1.7;}
+table.t th{background:var(--olive-soft);color:#43552F;white-space:nowrap;}
+.url{font-family:'BIZ UDGothic','Consolas',monospace;word-break:break-all;}
+
+.note{background:#FFF8E1;border:1.5px solid #E4C86A;border-radius:12px;padding:12px 16px;margin:10px 0 16px;font-size:16px;}
+.note b{color:#7A5B12;}
+.tip{background:#E8EEF6;border:1.5px solid #9DB4D2;border-radius:12px;padding:12px 16px;margin:10px 0 16px;font-size:16px;}
+.tip b{color:#22456B;}
+
+/* 流れの図（上から下へ） */
+.flow{display:flex;flex-direction:column;align-items:stretch;gap:0;margin:12px auto 18px;max-width:560px;}
+.flow .fb{background:#fff;border:2.5px solid var(--olive-mid);border-radius:14px;padding:10px 16px;text-align:center;font-weight:700;line-height:1.6;}
+.flow .fb small{display:block;font-weight:500;color:var(--ink-soft);font-size:14.5px;}
+.flow .fb.red{border-color:#D9534F;background:#FDECEA;}
+.flow .fb.orange{border-color:var(--orange);background:#FDF0E3;}
+.flow .fb.blue{border-color:var(--blue);background:#E8EEF6;}
+.flow .fb.green{border-color:#3A7D44;background:#E8F3EA;}
+.flow .fa{text-align:center;color:var(--olive);font-size:26px;line-height:1.1;font-weight:700;}
+.flow .fa small{font-size:13.5px;color:var(--ink-soft);font-weight:500;display:block;}
+.flow .side{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* メールの見本 */
+.mail{background:#fff;border:1.5px solid var(--line);border-radius:12px;margin:10px 0 18px;overflow:hidden;}
+.mail .mh{background:#F3F5EE;border-bottom:1px solid var(--line);padding:8px 14px;font-size:14.5px;line-height:1.7;}
+.mail .mh b{color:#43552F;}
+.mail pre{margin:0;padding:12px 14px;font-family:'BIZ UDGothic','MS Gothic',monospace;font-size:14px;line-height:1.75;white-space:pre-wrap;word-break:break-all;}
+.mail .mark{background:#FFF1B8;}
+
+.qa{width:100%;border-collapse:collapse;background:#fff;font-size:16px;}
+.qa th,.qa td{border:1px solid var(--line);padding:10px 12px;vertical-align:top;text-align:left;line-height:1.75;}
+.qa th{background:var(--olive-soft);width:34%;}
+
+footer{margin-top:30px;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);text-align:center;}
+
+@media (max-width:560px){
+  body{font-size:16px;}
+  .flow .side{grid-template-columns:1fr;}
+  .qa th{width:auto;display:block;border-bottom:none;}
+  .qa td{display:block;}
+}
+
+/* 印刷（PDF・A4） */
+@page{size:A4;margin:12mm 12mm 14mm;}
+@media print{
+  body{background:#fff;font-size:11.5pt;line-height:1.75;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .top{border-bottom-width:2px;}
+  .page{max-width:none;padding:10px 0 0;}
+  .toc{break-after:page;}
+  section{break-before:page;margin:0;}
+  section.cont{break-before:auto;margin-top:18px;}
+  h2,h3{break-after:avoid;}
+  .shot,.flow,.mail,.note,.tip,table{break-inside:avoid;}
+  .shot img{box-shadow:none;border:1px solid #ddd;max-height:228mm;width:auto;}
+  a{text-decoration:none;color:inherit;}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <img class="mark" src="image/kbta-logo.png" width="44" height="44" alt="香川県バウンドテニス協会のロゴ">
+    <div class="nm">香川県バウンドテニス協会<small>KAGAWA BOUND TENNIS ASSOCIATION</small></div>
+  </div>
+</header>
+
+<main class="page">
+
+<div class="cover">
+  <span class="k">OLIVE CUP 2026</span>
+  <h1>第2回 オリーブ杯バウンドテニス大会<br>申込みのしかた（図解）</h1>
+  <p>スマホでも、パソコンでも、同じ手順でお申込みいただけます。</p>
+</div>
+
+<nav class="toc">
+  <b>もくじ</b>
+  <ol>
+    <li><a href="#s1">申込みページを開く</a></li>
+    <li><a href="#s2">申込みの流れ（全体）</a></li>
+    <li><a href="#s3">申込責任者を入れる</a></li>
+    <li><a href="#s4">チーム名と申込み人数を選ぶ</a></li>
+    <li><a href="#s5">選手とチーム監督を入れる</a></li>
+    <li><a href="#s6">確認して送信する</a></li>
+    <li><a href="#s7">お申込みの完了と、受付のメール</a></li>
+    <li><a href="#s8">定員に達していたら（キャンセル待ち）</a></li>
+    <li><a href="#s9">「空きが出ました」のメールが届いたら</a></li>
+    <li><a href="#s10">困ったとき</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ 1 -->
+<section id="s1">
+<h2><span class="n">1</span>申込みページを開く</h2>
+<p>香川県内の方と、香川県外の方で、申込みページが分かれています。<b>協会からのご案内（メール・LINE・チラシなど）にあるリンクから開いてください。</b></p>
+<table class="t">
+  <tr><th>香川県内の方</th><td><span class="url">https://royschannel.com/olive2-kennai</span><br>締切：2026年10月23日（金曜日）</td></tr>
+  <tr><th>香川県外の方</th><td><span class="url">https://royschannel.com/olive2-kengai</span><br>締切：2026年11月17日（火曜日）</td></tr>
+</table>
+<p>アドレスを手で打つときは、スマホやパソコンの画面の<b>いちばん上の「アドレス欄」</b>に、上の英数字をそのまま打って、決定（Enter）を押します。</p>
+<figure class="shot">
+  <img src="image/olive2-howto/a01-top.png" width="720" height="745" alt="申込みページのいちばん上。締切の日、協会の連絡先、申込みのしかたへのリンクが並んでいる">
+  <figcaption>図1　申込みページのいちばん上（香川県内用）</figcaption>
+</figure>
+<div class="note"><b>申込は先着順です。</b>協会で申込書を受け付けたあと、参加できるかどうかのお返事が、お電話・FAX・E-mail で届きます。</div>
+</section>
+
+<!-- ================================================================ 2 -->
+<section id="s2">
+<h2><span class="n">2</span>申込みの流れ（全体）</h2>
+<p>申込みは、次の順番で進みます。入力したあと、<b>いったん確認の画面が出てから送信</b>します。</p>
+<div class="flow">
+  <div class="fb">① 申込責任者を入れる<small>フリガナ・氏名・住所・電話（E-mail は任意）</small></div>
+  <div class="fa">↓</div>
+  <div class="fb">② チーム名と申込み人数を選ぶ<small>人数（1〜4名）を選ぶと、その人数ぶんの選手の欄が出ます</small></div>
+  <div class="fa">↓</div>
+  <div class="fb">③ 選手とチーム監督を入れる</div>
+  <div class="fa">↓</div>
+  <div class="fb red">④「この内容を確認する」を押す</div>
+  <div class="fa">↓</div>
+  <div class="fb red">⑤ 確認の画面で「この内容で送信する」を押す</div>
+  <div class="fa">↓</div>
+  <div class="fb green">⑥ 完了！<small>E-mail を入れた方には「受け付けました」のメールが届きます</small></div>
+</div>
+<div class="tip"><b>定員に達しているとき</b>は、申込みページを開くと「申込みの受付を終了しました」の画面になります。そのときは <a href="#s8">8 キャンセル待ち</a> をご覧ください。</div>
+</section>
+
+<!-- ================================================================ 3 -->
+<section id="s3">
+<h2><span class="n">3</span>申込責任者を入れる</h2>
+<p>大会に関するご連絡は、この「申込責任者」の方あてにお送りします。<b>「必須」の欄は、必ず入れてください。</b></p>
+<figure class="shot">
+  <img src="image/olive2-howto/a02-leader.png" width="720" height="1039" alt="申込責任者の入力欄。フリガナ・氏名・郵便番号・住所・電話・E-mail">
+  <figcaption>図2　申込責任者の欄</figcaption>
+</figure>
+<div class="tip"><b>E-mail はできるだけ入れてください。</b>入れると「受け付けました」のメールが届き、あとで内容を確かめられます。キャンセル待ちに登録するときは、E-mail が必須です。</div>
+</section>
+
+<!-- ================================================================ 4 -->
+<section id="s4">
+<h2><span class="n">4</span>チーム名と申込み人数を選ぶ</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/a03-team.png" width="720" height="770" alt="チーム名の欄と、申込み人数（1名〜4名）の選択">
+  <figcaption>図3　チーム名と申込み人数</figcaption>
+</figure>
+<p>申込み人数（1名・2名・3名・4名）の四角を押して選ぶと、<b>その人数ぶんだけ</b>、下に選手の欄が出ます。はじめは「4名」が選ばれています。</p>
+</section>
+
+<!-- ================================================================ 5 -->
+<section id="s5">
+<h2><span class="n">5</span>選手とチーム監督を入れる</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/a04-player.png" width="720" height="753" alt="選手 No.1 の入力欄。フリガナ・氏名・性別・所属クラブ名・備考">
+  <figcaption>図4　選手の欄（No.1）</figcaption>
+</figure>
+<figure class="shot">
+  <img src="image/olive2-howto/a05-manager.png" width="720" height="793" alt="No.3 の性別は女で固定。その下にチーム監督の選択と、この内容を確認するボタン">
+  <figcaption>図5　No.3 の性別と、チーム監督の選択</figcaption>
+</figure>
+<div class="note"><b>注1　男子の代わりに女子の出場を認めますが、その逆は認めません。</b><br>
+そのため、No.1・No.2 は男性・女性のどちらでも出場でき、No.3・No.4 は女性のみです（No.3・No.4 は性別を選ぶ必要はありません）。</div>
+<p>チーム監督は、入れた選手の中から1人を選びます。選択肢には、入れた選手の名前が出ます。</p>
+</section>
+
+<!-- ================================================================ 6 -->
+<section id="s6">
+<h2><span class="n">6</span>確認して送信する</h2>
+<p>「この内容を確認する」を押すと、<b>入力した内容の一覧（確認の画面）</b>が出ます。上から順に見て、まちがいがないか確かめてください。</p>
+<figure class="shot">
+  <img src="image/olive2-howto/a06-confirm.png" width="720" height="491" alt="確認の画面のいちばん下。戻って直すボタンと、この内容で送信するボタン">
+  <figcaption>図6　確認の画面のいちばん下</figcaption>
+</figure>
+<div class="tip"><b>入れ忘れがあるとき</b>は、「この内容を確認する」を押したときに、赤い字で「○○が入力されていません」と出て、その欄に移ります。入れてから、もう一度押してください。</div>
+<div class="note"><b>「送信できませんでした」「通信に失敗しました」と出たとき</b>は、電波の良い所で、もう一度「この内容で送信する」を押してください。何度やってもだめなときは、協会にお電話ください（連絡先は、申込みページのいちばん上の枠に出ています。図1の②）。</div>
+</section>
+
+<!-- ================================================================ 7 -->
+<section id="s7">
+<h2><span class="n">7</span>お申込みの完了と、受付のメール</h2>
+<figure class="shot">
+  <img src="image/olive2-howto/a07-done.png" width="720" height="370" alt="お申込みありがとうございますの画面">
+  <figcaption>図7　完了の画面</figcaption>
+</figure>
+<p>E-mail を入れた方には、すぐに次のようなメールが届きます。<b>届かないときは、迷惑メールのフォルダも見てください。</b></p>
+<div class="mail">
+  <div class="mh"><b>差出人</b>　香川県バウンドテニス協会 事務局 &lt;olive-uketsuke@royschannel.com&gt;<br>
+    <b>件名</b>　【第2回オリーブ杯】参加申込みを受け付けました（オリーブクラブA）</div>
+<pre>山田 太郎 様
+
+第2回 オリーブ杯バウンドテニス大会（香川県内用）への
+参加申込みをいただき、ありがとうございます。
+以下の内容で受け付けました。
+
+（申込みの内容が続きます）
+
+申込は先着順で受け付けております。
+参加の可否は、あらためてお電話・FAX・E-mail にてお返事いたします。
+
+<span class="mark">このメールにそのまま返信すると、協会の事務局に届きます。</span></pre>
+</div>
+</section>
+
+<!-- ================================================================ 8 -->
+<section id="s8">
+<h2><span class="n">8</span>定員に達していたら（キャンセル待ち）</h2>
+<p>申込みが定員に達すると、申込みページを開いたときに「申込みの受付を終了しました」の画面になります。この画面から、<b>キャンセル待ち</b>に登録できます。</p>
+<div class="flow">
+  <div class="fb orange">定員に達している<small>「申込みの受付を終了しました」の画面</small></div>
+  <div class="fa">↓</div>
+  <div class="fb red">「キャンセル待ちに登録する」を押して、入力・送信<small>入れ方は申込みと同じ。E-mail は必須です</small></div>
+  <div class="fa">↓</div>
+  <div class="fb">「キャンセル待ち番号」が出る（例：県内-003）<small>同じ番号が、登録のメールにも書いてあります</small></div>
+  <div class="fa">↓<small>取り消しで空きが出ると…</small></div>
+  <div class="fb blue">キャンセル待ちの方全員に「空きが出ました」のメール</div>
+  <div class="fa">↓</div>
+  <div class="fb red">番号と E-mail で呼び出して申し込む<small>先に申し込んだ方から受付（早い者勝ち）。<a href="#s9">9 をご覧ください</a></small></div>
+  <div class="side">
+    <div class="fb green">申し込めた<small>お申込み完了。キャンセル待ちは終わりです</small></div>
+    <div class="fb orange">先に空きが埋まった<small>番号はそのまま。次の空きで、またご案内します</small></div>
+  </div>
+</div>
+<figure class="shot">
+  <img src="image/olive2-howto/a08-closed.png" width="720" height="775" alt="申込みの受付を終了しましたの画面と、キャンセル待ちに登録するボタン">
+  <figcaption>図8　受付終了の画面</figcaption>
+</figure>
+<p>「キャンセル待ちに登録する」を押すと、入力の画面にもどります。上に黄色い「キャンセル待ちの登録です」の案内が出ます。入れ方は申込みと同じです（<a href="#s3">3</a>〜<a href="#s6">6</a>）。</p>
+<figure class="shot">
+  <img src="image/olive2-howto/a09-waitmode.png" width="720" height="1298" alt="キャンセル待ちの登録の画面。上に黄色の案内、E-mail が必須になっている">
+  <figcaption>図9　キャンセル待ちの登録の画面</figcaption>
+</figure>
+<figure class="shot">
+  <img src="image/olive2-howto/a10-waitdone.png" width="720" height="519" alt="キャンセル待ちに登録しましたの画面。キャンセル待ち番号 県内-003">
+  <figcaption>図10　登録できたときの画面（キャンセル待ち番号）</figcaption>
+</figure>
+<div class="mail">
+  <div class="mh"><b>件名</b>　【第2回オリーブ杯】キャンセル待ちに登録しました（番号 県内-003）</div>
+<pre>山田 太郎 様
+
+第2回 オリーブ杯バウンドテニス大会（香川県内用）は、申込みが定員に達しているため、
+以下の内容で「キャンセル待ち」として登録しました。（まだ参加申込みではありません）
+
+　　<span class="mark">キャンセル待ち番号：県内-003</span>
+
+この番号は、空きが出たときのお申込みに使います。大切に保管してください。</pre>
+</div>
+</section>
+
+<!-- ================================================================ 9 -->
+<section id="s9">
+<h2><span class="n">9</span>「空きが出ました」のメールが届いたら</h2>
+<p>取り消しで空きが出ると、キャンセル待ちの方全員に、次のメールが届きます。<b>空きの数に限りがあるため、先に申し込んだ方から受け付けます。</b>お早めにどうぞ。</p>
+<div class="mail">
+  <div class="mh"><b>件名</b>　【第2回オリーブ杯】空きが出ました（キャンセル待ち番号 県内-003）</div>
+<pre>■ お申込みのしかた
+1. 下のページを開きます。
+   <span class="mark">https://royschannel.com/olive2-kennai?w=003</span>
+2. 「キャンセル待ち番号」と「ご登録の E-mail」を入れて「呼び出す」を押します。
+3. ご登録の内容が表示されます。変更があれば直し、なければそのまま
+   「この内容を確認する」→「この内容で申し込む」を押してください。
+
+■ 期限
+<span class="mark">（ご案内から3日後の日時）までにお申込みください。</span>
+期限を過ぎると、キャンセル待ちから外れますので、ご了承ください。</pre>
+</div>
+<h3>① メールのリンクを開いて、呼び出す</h3>
+<figure class="shot">
+  <img src="image/olive2-howto/a11-claim.png" width="720" height="568" alt="キャンセル待ち番号でのお申込みの画面。番号とE-mailの欄と、呼び出すボタン">
+  <figcaption>図11　キャンセル待ち番号でのお申込み（呼び出し）</figcaption>
+</figure>
+<h3>② 登録した内容を確かめて、申し込む</h3>
+<figure class="shot">
+  <img src="image/olive2-howto/a12-claimed.png" width="720" height="580" alt="呼び出したあとの入力画面。上に番号と期限の案内、登録した内容が入っている">
+  <figcaption>図12　呼び出したあとの画面</figcaption>
+</figure>
+<p>内容に変更があれば直し、なければそのまま「この内容を確認する」を押します。確認の画面のボタンは <b>「この内容で申し込む」</b> になっています。押して「お申込みありがとうございます」が出たら完了です。</p>
+<div class="note"><b>「先にほかの方のお申込みで、空きが埋まりました」と出たとき</b>は、キャンセル待ち番号はそのまま有効です。次に空きが出たときに、あらためてメールでご案内します。</div>
+<div class="note"><b>期限を過ぎると、キャンセル待ちから外れます</b>（「キャンセル待ちの期限が過ぎました」のメールが届きます）。参加を希望される場合は、協会にご連絡ください。</div>
+</section>
+
+<!-- ================================================================ 10 -->
+<section id="s10">
+<h2><span class="n">10</span>困ったとき</h2>
+<table class="qa">
+  <tr><th>「○○が入力されていません」と出る</th><td>その欄が空いています。入れてから、もう一度「この内容を確認する」を押してください。</td></tr>
+  <tr><th>住所が自動で入らない</th><td>郵便番号をハイフン（－）なしの7けたで入れてください。それでも入らないときは、住所を手で入れてください。</td></tr>
+  <tr><th>受付のメールが届かない</th><td>迷惑メールのフォルダを見てください。E-mail を入れなかった場合は、メールは届きません（お申込みは届いています）。</td></tr>
+  <tr><th>送信できない</th><td>電波の良い所で、もう一度お試しください。だめなときは協会にお電話ください。</td></tr>
+  <tr><th>キャンセル待ち番号を忘れた</th><td>「キャンセル待ちに登録しました」のメールに書いてあります。見当たらないときは、協会にご連絡ください。</td></tr>
+  <tr><th>申込みを取り消したい・内容を直したい</th><td>協会にご連絡ください。</td></tr>
+</table>
+<p style="margin-top:14px;"><b>協会の連絡先</b>は、申込みページのいちばん上の枠（図1の②）に出ています。</p>
+</section>
+
+<footer>香川県バウンドテニス協会　第2回 オリーブ杯バウンドテニス大会　申込みのしかた（2026年9月版）<br>画面の写真の名前・住所などは、すべて見本です。</footer>
+</main>
+</body>
+</html>
