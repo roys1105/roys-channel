@@ -323,8 +323,11 @@ td.area-out{color:#8A6A20;font-weight:700;}
     <button type="button" class="tab" data-area="香川県内">香川県内<span class="n" id="wn-in">0</span></button>
     <button type="button" class="tab" data-area="香川県外">香川県外<span class="n" id="wn-out">0</span></button>
   </div>
+  <p class="count" id="wait-count" style="display:none;"></p>
+  <!-- 削除は申込み一覧と同じ：行のチェックを入れて「選択した行を削除」 -->
   <div class="bulkbar" id="wait-bar" style="display:none;">
-    <span id="wait-count"></span>
+    <span id="wait-bulk-count">0件選択中</span>
+    <button type="button" id="wait-del-btn" disabled>選択した行を削除</button>
     <button type="button" id="wait-export-btn" class="export">Excel用ファイルを保存（CSV・すべて）</button>
   </div>
   <p class="msg" id="wait-export-msg" style="display:none;"></p>
@@ -333,6 +336,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
     <table>
       <thead>
         <tr>
+          <th><input type="checkbox" id="wait-check-all"></th>
           <th>番号</th>
           <th>区分</th>
           <th>順番</th>
@@ -343,7 +347,6 @@ td.area-out{color:#8A6A20;font-weight:700;}
           <th>TEL又は携帯</th>
           <th>E-mail</th>
           <th>状態</th>
-          <th></th>
         </tr>
       </thead>
       <tbody id="wait-tbody"></tbody>
@@ -734,6 +737,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
     if (!waitRows.length) {
       waitTabs.style.display = 'none';
+      waitCount.style.display = 'none';
       waitBar.style.display = 'none';
       waitWrap.style.display = 'none';
       waitEmpty.textContent = 'キャンセル待ちはありません。';
@@ -748,6 +752,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
     var rows = waitRowsForView();
     if (!rows.length) {
+      waitCount.style.display = 'none';
       waitBar.style.display = 'none';
       waitWrap.style.display = 'none';
       waitEmpty.textContent = waitFilter + 'のキャンセル待ちはありません。';
@@ -758,10 +763,12 @@ td.area-out{color:#8A6A20;font-weight:700;}
     waitCount.textContent = waitFilter
       ? (waitFilter + ' ' + rows.length + ' 件（全 ' + waitRows.length + ' 件中・登録順）')
       : ('全 ' + rows.length + ' 件（登録順）');
+    waitCount.style.display = 'block';
 
     var order = waitOrderMap();
     waitBody.innerHTML = rows.map(function (row) {
       return '<tr>' +
+        '<td><input type="checkbox" data-wid="' + row.id + '"></td>' +
         cell('', '<b>' + esc(row.number) + '</b>') +
         cell(row.area === '香川県外' ? 'area-out' : 'area-in', esc(row.area)) +
         cell('', order[row.id] + ' 番目') +
@@ -772,12 +779,13 @@ td.area-out{color:#8A6A20;font-weight:700;}
         cell('', esc(row.tel)) +
         cell('', esc(row.email)) +
         cell('', row.offer_expires ? '空きを案内済み<br>（期限 ' + esc(fmtDate(row.offer_expires)) + '）' : '待機中') +
-        '<td><button type="button" class="del" data-id="' + row.id + '" data-team="' + esc(row.team_name) + '">削除</button></td>' +
         '</tr>';
     }).join('');
-    Array.prototype.forEach.call(waitBody.querySelectorAll('.del'), function (btn) {
-      btn.addEventListener('click', function () { removeWait(btn.getAttribute('data-id'), btn.getAttribute('data-team')); });
+    Array.prototype.forEach.call(waitBody.querySelectorAll('input[data-wid]'), function (el) {
+      el.addEventListener('change', updateWaitBulk);
     });
+    waitCheckAll.checked = false;
+    updateWaitBulk();
     waitBar.style.display = 'flex';
     waitWrap.style.display = 'block';
   }
@@ -795,20 +803,55 @@ td.area-out{color:#8A6A20;font-weight:700;}
     });
   });
 
-  function removeWait(id, team) {
+  // ---------- キャンセル待ちの削除（申込み一覧と同じ：行のチェックを入れて「選択した行を削除」） ----------
+  var waitCheckAll  = document.getElementById('wait-check-all');
+  var waitDelBtn    = document.getElementById('wait-del-btn');
+  var waitBulkCount = document.getElementById('wait-bulk-count');
+
+  function waitSelectedIds() {
+    return Array.prototype.map.call(waitBody.querySelectorAll('input[data-wid]:checked'), function (el) {
+      return el.getAttribute('data-wid');
+    });
+  }
+  function updateWaitBulk() {
+    var ids = waitSelectedIds();
+    var all = waitBody.querySelectorAll('input[data-wid]');
+    waitBulkCount.textContent = ids.length + '件選択中';
+    waitDelBtn.disabled = ids.length === 0;
+    waitCheckAll.checked = all.length > 0 && ids.length === all.length;
+  }
+
+  // 見出しのチェックで、いま表に出ている行（＝選んでいる区分）をまとめて選ぶ
+  waitCheckAll.addEventListener('change', function () {
+    Array.prototype.forEach.call(waitBody.querySelectorAll('input[data-wid]'), function (el) {
+      el.checked = waitCheckAll.checked;
+    });
+    updateWaitBulk();
+  });
+
+  waitDelBtn.addEventListener('click', function () {
+    var ids = waitSelectedIds();
+    if (!ids.length) return;
     var key = currentKey();
     if (!key) return;
-    if (!window.confirm('「' + team + '」をキャンセル待ちから削除しますか？（ご本人にはメールは届きません。元に戻せません）')) return;
-    fetch(API + '/olive-waitlist?id=' + encodeURIComponent(id), { method: 'DELETE', headers: adminHeaders(key) })
+    if (!window.confirm(ids.length + '件のキャンセル待ちを削除しますか？（ご本人にはメールは届きません。元に戻せません）')) return;
+    if (!API) {
+      waitRows = waitRows.filter(function (r) { return ids.indexOf(String(r.id)) < 0; });
+      showWaitList();
+      showMsg(waitMsg, ids.length + '件のキャンセル待ちを削除しました（見本）。', true);
+      return;
+    }
+    waitDelBtn.disabled = true;
+    fetch(API + '/olive-waitlist?ids=' + encodeURIComponent(ids.join(',')), { method: 'DELETE', headers: adminHeaders(key) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d || !d.ok) { showMsg(waitMsg, '削除に失敗しました。', false); return; }
-        showMsg(waitMsg, '「' + team + '」をキャンセル待ちから削除しました。', true);
+        if (!d || !d.ok) { showMsg(waitMsg, '削除に失敗しました。', false); updateWaitBulk(); return; }
+        showMsg(waitMsg, ids.length + '件のキャンセル待ちを削除しました。', true);
         loadWaitlist();
         loadLimits();
       })
-      .catch(function () { showMsg(waitMsg, '通信に失敗しました。', false); });
-  }
+      .catch(function () { showMsg(waitMsg, '通信に失敗しました。', false); updateWaitBulk(); });
+  });
 
   function loadCcList() {
     var key = currentKey();
