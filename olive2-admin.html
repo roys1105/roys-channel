@@ -84,7 +84,6 @@ td > .c{width:max-content;max-width:20em;white-space:pre-wrap;overflow-wrap:anyw
 /* 幅の下限を決めないと、折り返し可の列が極端に潰される（教室の管理ページで実際に起きた） */
 td.pl-cell{line-height:1.65;}
 td.pl-cell .sub{color:#6B7A6B;font-size:12px;}
-td.pl-cell .mgr{color:#B4472F;font-weight:700;font-size:12px;}
 td.area-in{color:#43552F;font-weight:700;}
 td.area-out{color:#8A6A20;font-weight:700;}
 .empty{padding:30px;text-align:center;color:#6B7A6B;font-size:14px;}
@@ -708,12 +707,12 @@ td.area-out{color:#8A6A20;font-weight:700;}
     return '<td' + (cls ? ' class="' + cls + '"' : '') + '><div class="c">' + html + '</div></td>';
   }
 
-  function playerCell(p, isMgr) {
+  // 選手の欄。監督は「チーム監督」の列に出すので、ここには印を付けない
+  function playerCell(p) {
     if (!p || (!p.name && !p.kana)) { return cell('pl-cell', ''); }
     var line2 = [p.sex, p.club].filter(function (v) { return v; }).join('・');
     return cell('pl-cell',
       esc(p.name) +
-      (isMgr ? '<br><span class="mgr">★チーム監督</span>' : '') +
       '<br><span class="sub">' + esc(p.kana) + '</span>' +
       (line2 ? '<br><span class="sub">' + esc(line2) + '</span>' : ''));
   }
@@ -728,7 +727,6 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
     tbody.innerHTML = rows.map(function (row) {
       var ps = playersOf(row);
-      var mgrNo = managerNoOf(row);
       var notes = ps
         .filter(function (p) { return p.note; })
         .map(function (p) { return 'No.' + p.no + '：' + p.note; })
@@ -747,10 +745,10 @@ td.area-out{color:#8A6A20;font-weight:700;}
         cell('', esc(row.postal_code)) +
         cell('', esc(row.address)) +
         cell('', esc(managerNameOf(row))) +
-        playerCell(ps[0], String(mgrNo) === '1') +
-        playerCell(ps[1], String(mgrNo) === '2') +
-        playerCell(ps[2], String(mgrNo) === '3') +
-        playerCell(ps[3], String(mgrNo) === '4') +
+        playerCell(ps[0]) +
+        playerCell(ps[1]) +
+        playerCell(ps[2]) +
+        playerCell(ps[3]) +
         cell('', esc(notes)) +
         '</tr>';
     }).join('');
