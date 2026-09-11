@@ -237,6 +237,14 @@ header{
 .done p{margin:0 0 6px;font-size:15px;color:#4E6140;}
 .done .back{margin-top:22px;}
 
+/* キャンセル待ち */
+.waitbox{margin-top:22px;padding:18px 18px 20px;border:1.5px dashed #CFD6BE;border-radius:16px;background:#FCFCF7;}
+.waitbox p{margin:0 0 14px;}
+.waitnote{
+  margin:0;padding:14px 18px;border-radius:14px;
+  background:#FFF6DC;border:1.5px solid #E4C86A;color:#6B4F10;font-size:14.5px;line-height:1.85;
+}
+
 /* 送信先が未設定のときだけ出る、開発中の注意書き */
 .preview-note{
   margin:0 auto 18px;max-width:560px;
@@ -304,6 +312,12 @@ footer .cp{opacity:.72;margin-top:12px;}
 
     <form class="form" id="btform" novalidate>
 
+      <!-- キャンセル待ちの登録のときだけ出す -->
+      <p class="waitnote" id="f-wait-note" style="display:none;">
+        <b>キャンセル待ちの登録です。</b>申込みが定員に達しているため、この内容は「キャンセル待ち」として登録されます。
+        取り消しで空きが出たら、登録された順に自動で繰り上げて受け付け、E-mail でお知らせします。<b>E-mail は必須です。</b>
+      </p>
+
       <!-- ================= 申込責任者 ================= -->
       <h2 class="blockhead">【申込責任者】<small>大会に関するご連絡は、この方あてに差し上げます</small></h2>
 
@@ -337,7 +351,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       </div>
 
       <div class="field">
-        <div class="q"><span>E-mail</span><span class="badge opt">任 意</span></div>
+        <div class="q"><span>E-mail</span><span class="badge opt" id="f-email-badge">任 意</span></div>
         <p class="hint">ご入力いただくと、参加の可否のお返事をメールでもお送りできます。</p>
         <input type="email" id="f-email" name="email" autocomplete="email" inputmode="email">
       </div>
@@ -514,6 +528,27 @@ footer .cp{opacity:.72;margin-top:12px;}
       <div class="back"><button type="button" class="btn btn-ghost" id="f-close">閉じる</button></div>
     </div>
 
+    <!-- 受付組数の上限に達したときの画面（開いたとき、または送信したときにサーバーが「締切」と答えたら出す） -->
+    <div class="done" id="f-closed" style="display:none;">
+      <h2>申込みの受付を終了しました</h2>
+      <p>おかげさまで申込みが定員に達しましたので、受付を終了いたしました。</p>
+      <p>たくさんのお申込みをいただき、ありがとうございました。</p>
+      <p>ご不明な点は、香川県バウンドテニス協会（TEL 0875-73-3458）までお問い合わせください。</p>
+      <div class="waitbox">
+        <p><b>キャンセル待ちの登録ができます。</b><br>
+          取り消しで空きが出た場合は、登録された順に自動で繰り上げて受け付け、E-mail でお知らせします。</p>
+        <button type="button" class="btn btn-primary" id="f-wait-btn">キャンセル待ちに登録する</button>
+      </div>
+    </div>
+
+    <!-- キャンセル待ちに登録できたときの画面 -->
+    <div class="done" id="f-wait-done" style="display:none;">
+      <h2>キャンセル待ちに登録しました</h2>
+      <p id="f-wait-pos"></p>
+      <p>取り消しで空きが出た場合は、登録された順に自動で繰り上げて受け付け、ご入力の E-mail あてにお知らせします。</p>
+      <p>ご入力いただいた E-mail あてに、登録のご連絡をお送りしました。</p>
+    </div>
+
     <p class="alt">
       うまく送れないときは、お手数ですが 香川県バウンドテニス協会（TEL 0875-73-3458）まで
       お電話にてご連絡ください。
@@ -554,6 +589,50 @@ footer .cp{opacity:.72;margin-top:12px;}
   var introEl   = document.getElementById('intro-card');
   var postalEl  = document.getElementById('f-postal');
   var addressEl = document.getElementById('f-address');
+  var closedEl  = document.getElementById('f-closed');
+
+  /* 受付組数の上限に達していたら、フォームの代わりに「受付終了」の画面を出す。
+     開いたときに確かめ、送信したときにサーバーが error:'full' と答えた場合も出す。
+     確かめられないとき（通信の失敗など）はフォームを出したまま（送信のときにサーバーがもう一度確かめる）。 */
+  function showClosed() {
+    introEl.style.display = 'none';
+    form.style.display = 'none';
+    confirmEl.style.display = 'none';
+    doneEl.style.display = 'none';
+    var alt = document.querySelector('.alt');
+    if (alt) { alt.style.display = 'none'; }
+    closedEl.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (API) {
+    fetch(API + '/olive-status?area=' + encodeURIComponent(AREA))
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.ok && d.open === false) { showClosed(); } })
+      .catch(function () {});
+  }
+
+  /* キャンセル待ちの登録。「受付終了」の画面のボタンから入る。入力した内容はそのまま使う。
+     E-mail は必須（空きが出て繰り上げたことを知らせるため）。 */
+  var waitlistMode = false;
+  function sendLabel() { return waitlistMode ? 'この内容でキャンセル待ちに登録する' : 'この内容で送信する'; }
+  function enterWaitlist() {
+    waitlistMode = true;
+    closedEl.style.display = 'none';
+    confirmEl.style.display = 'none';
+    document.getElementById('f-wait-note').style.display = 'block';
+    var badge = document.getElementById('f-email-badge');
+    badge.textContent = '必 須';
+    badge.className = 'badge req';
+    form.style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.getElementById('f-wait-btn').addEventListener('click', enterWaitlist);
+  function showWaitDone(position) {
+    confirmEl.style.display = 'none';
+    document.getElementById('f-wait-pos').textContent = position ? ('現在、キャンセル待ちの ' + position + ' 番目です。') : '';
+    document.getElementById('f-wait-done').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
   function radio(name) { var el = form.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
@@ -689,6 +768,12 @@ footer .cp{opacity:.72;margin-top:12px;}
     if (!/[0-9]{9,}/.test(leader.tel.replace(/[^0-9]/g, ''))) {
       return showErr('「TEL又は携帯」をご確認ください。市外局番から、数字だけで9桁以上ご記入ください。', 'f-tel');
     }
+    if (waitlistMode && !leader.email) {
+      return showErr('キャンセル待ちの登録には「E-mail」が必要です（空きが出たときのお知らせを送るため）。', 'f-email');
+    }
+    if (waitlistMode && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leader.email)) {
+      return showErr('「E-mail」をご確認ください。', 'f-email');
+    }
     if (!teamName)       { return showErr('「チーム名」が入力されていません。ご記入をお願いします。', 'f-team'); }
 
     for (var i = 0; i < players.length; i++) {
@@ -708,6 +793,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       leader: leader,
       teamName: teamName,
       playerCount: count,
+      waitlist: waitlistMode,
       managerNo: Number(managerNo),
       players: players
     };
@@ -738,7 +824,7 @@ footer .cp{opacity:.72;margin-top:12px;}
     });
 
     cErr.style.display = 'none';
-    sendBtn.textContent = 'この内容で送信する';
+    sendBtn.textContent = sendLabel();
     sendBtn.disabled = false;
     backBtn.disabled = false;
 
@@ -750,7 +836,7 @@ footer .cp{opacity:.72;margin-top:12px;}
 
   backBtn.addEventListener('click', function () {
     confirmEl.style.display = 'none';
-    introEl.style.display = '';
+    introEl.style.display = waitlistMode ? 'none' : '';
     form.style.display = 'flex';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -785,16 +871,25 @@ footer .cp{opacity:.72;margin-top:12px;}
     })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.ok) {
+        if (d && d.ok && d.waitlisted) {
+          showWaitDone(d.position);
+        } else if (d && d.ok) {
+          // キャンセル待ちのつもりでも、その間に空きが出ていれば申込みとして受け付けられる
           showDone();
+        } else if (d && d.error === 'full') {
+          showClosed();
+        } else if (d && d.error === 'email_required') {
+          sendBtn.textContent = sendLabel(); sendBtn.disabled = false; backBtn.disabled = false;
+          cErr.textContent = 'キャンセル待ちの登録には E-mail が必要です。「戻って直す」からご入力ください。';
+          cErr.style.display = 'flex';
         } else {
-          sendBtn.textContent = 'この内容で送信する'; sendBtn.disabled = false; backBtn.disabled = false;
+          sendBtn.textContent = sendLabel(); sendBtn.disabled = false; backBtn.disabled = false;
           cErr.textContent = '送信できませんでした。恐れ入りますが、もう一度お試しください。';
           cErr.style.display = 'flex';
         }
       })
       .catch(function () {
-        sendBtn.textContent = 'この内容で送信する'; sendBtn.disabled = false; backBtn.disabled = false;
+        sendBtn.textContent = sendLabel(); sendBtn.disabled = false; backBtn.disabled = false;
         cErr.textContent = '通信に失敗しました。電波の良い場所で、もう一度お試しください。';
         cErr.style.display = 'flex';
       });
