@@ -178,6 +178,9 @@ td.area-out{color:#8A6A20;font-weight:700;}
   </div>
   <p class="msg" id="msg" style="display:none;"></p>
 
+  <!-- 管理キーが通るまでは、キーの欄だけを見せる（キーを知らない人に、設定や一覧の画面を見せないため） -->
+  <div id="admin-area" style="display:none;">
+
   <details class="keychange">
     <summary>管理キーを変更する</summary>
     <div class="keychange-body">
@@ -258,6 +261,8 @@ td.area-out{color:#8A6A20;font-weight:700;}
       <tbody id="tbody"></tbody>
     </table>
   </div>
+
+  </div><!-- /#admin-area -->
 </div>
 
 <script>
@@ -271,6 +276,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
   var keyInput  = document.getElementById('key');
   var loadBtn   = document.getElementById('load');
+  var adminArea = document.getElementById('admin-area');
   var msg       = document.getElementById('msg');
   var countEl   = document.getElementById('count');
   var tablewrap = document.getElementById('tablewrap');
@@ -790,7 +796,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
   function load() {
     var key = currentKey();
-    if (!key) { showMsg(msg, '管理キーを入力してください。', false); return; }
+    if (!key) { adminArea.style.display = 'none'; showMsg(msg, '管理キーを入力してください。', false); return; }
 
     msg.style.display = 'none';
     delMsg.style.display = 'none';
@@ -800,6 +806,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
     // 受付システムが未接続のあいだは、見本のデータで画面を確認できるようにする
     if (!API) {
+      adminArea.style.display = 'block';
       loadCcList();
       loadMailFrom();
       if (!sampleLoaded) { lastRows = sampleRows(); sampleLoaded = true; }
@@ -812,14 +819,17 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
     fetch(API + '/olive-applications', { headers: adminHeaders(key) })
       .then(function (r) {
+        // キーが違うとサーバーは404を返す。通信の失敗ではなく「キー違い」として扱う
+        if (r.status === 404) return { ok: false };
         if (!r.ok) throw new Error('http_' + r.status);
         return r.json();
       })
       .then(function (d) {
         loadBtn.disabled = false;
         loadBtn.textContent = '表示する';
-        if (!d || !d.ok) { showMsg(msg, 'キーが正しくないか、取得に失敗しました。', false); return; }
+        if (!d || !d.ok) { adminArea.style.display = 'none'; showMsg(msg, 'キーが正しくないか、取得に失敗しました。', false); return; }
 
+        adminArea.style.display = 'block';
         loadCcList();
         loadMailFrom();
 
@@ -829,6 +839,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
       .catch(function () {
         loadBtn.disabled = false;
         loadBtn.textContent = '表示する';
+        adminArea.style.display = 'none';
         showMsg(msg, '通信に失敗しました。しばらくしてから、もう一度お試しください。', false);
       });
   }
