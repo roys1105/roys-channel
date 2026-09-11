@@ -343,7 +343,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       </div>
 
       <!-- ================= 申込チーム ================= -->
-      <h2 class="blockhead">【申込チーム】<small>選手は2〜4名でお申込みいただけます</small></h2>
+      <h2 class="blockhead">【申込チーム】<small>選手は1〜4名でお申込みいただけます</small></h2>
 
       <div class="field">
         <div class="q"><span>チーム名</span><span class="badge req">必 須</span></div>
@@ -354,6 +354,7 @@ footer .cp{opacity:.72;margin-top:12px;}
         <div class="q"><span>申込み人数</span><span class="badge req">必 須</span></div>
         <p class="hint">選んだ人数ぶんの記入欄が、下に出ます。</p>
         <div class="choices row" id="f-count">
+          <label class="choice"><input type="radio" name="count" value="1"><span>1名</span></label>
           <label class="choice"><input type="radio" name="count" value="2"><span>2名</span></label>
           <label class="choice"><input type="radio" name="count" value="3"><span>3名</span></label>
           <label class="choice"><input type="radio" name="count" value="4" checked><span>4名</span></label>
@@ -598,7 +599,7 @@ footer .cp{opacity:.72;margin-top:12px;}
   form.addEventListener('change', refreshManagerLabels);
   refreshManagerLabels();
 
-  /* 申込み人数（2〜4名）に合わせて、選手の記入欄と監督の選択肢を出し分ける。
+  /* 申込み人数（1〜4名）に合わせて、選手の記入欄と監督の選択肢を出し分ける。
      隠した欄に書いてあった内容は消さない（人数を戻したときにそのまま使えるように）が、送信はしない。
      隠した番号が監督に選ばれていたら、選び直してもらうために外す。 */
   function playerCount() { return Number(radio('count')) || 4; }
