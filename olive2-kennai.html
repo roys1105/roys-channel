@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<script>
+// 旧アドレスで開かれたときだけ、新しいアドレスへ移動する（新アドレスでは何もしない）
+(function () {
+  try {
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
+      location.replace('https://royschannel.com/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第2回 オリーブ杯バウンドテニス大会 参加申込み（香川県内用）｜香川県バウンドテニス協会</title>
+<link rel="canonical" href="https://royschannel.com/olive2-kennai">
+<meta name="description" content="第2回 オリーブ杯バウンドテニス大会（香川県内用）の参加申込みフォームです。申込は先着順で受け付けております。">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:title" content="第2回 オリーブ杯バウンドテニス大会 参加申込み（香川県内用）">
+<meta property="og:description" content="申込は先着順で受け付けております。締切：2026年10月23日（金曜日）">
+<meta property="og:type" content="website">
+<style>
+/* ============ base ============ */
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic Medium','Yu Gothic','Meiryo',sans-serif;
+  color:#2F3A32;
+  background:#FAF7F0;
+  line-height:1.9;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;height:auto;display:block;}
+a{color:inherit;}
+::selection{background:#DCE7C8;}
+
+:root{
+  --cream:#FAF7F0;
+  --cream-deep:#F1EDE1;
+  --ink:#2F3A32;
+  --ink-soft:#6B7A6B;
+  --olive:#5E7A45;
+  --olive-mid:#7E9B5E;
+  --olive-soft:#EEF3E3;
+  --red:#B4472F;
+  --line:#DFE3D2;
+  --shadow:0 10px 30px rgba(60,70,45,.10);
+}
+
+.narrow{max-width:760px;margin:0 auto;padding:0 20px;}
+
+/* ============ header ============ */
+header{
+  background:#fff;
+  border-bottom:3px solid var(--olive);
+}
+.hbar{max-width:760px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:12px;}
+.hbar .mark{
+  width:40px;height:40px;border-radius:50%;flex:0 0 auto;
+  background:var(--olive);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;line-height:1;letter-spacing:.02em;
+}
+.hbar .nm{font-size:15px;font-weight:700;color:var(--olive);line-height:1.35;}
+.hbar .nm small{display:block;font-size:11.5px;font-weight:500;color:var(--ink-soft);letter-spacing:.04em;}
+/* 管理ページへの入口。目立たせない（申込者に押させるものではないため） */
+.hbar .admin{
+  margin-left:auto;font-size:11.5px;text-decoration:none;color:var(--ink-soft);
+  white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:4px 11px;
+}
+.hbar .admin:hover{background:var(--olive-soft);color:var(--olive);border-color:var(--olive-mid);}
+
+/* ============ hero ============ */
+.hero{padding:26px 0 30px;text-align:center;}
+.hero .kicker{
+  display:inline-block;font-size:12px;letter-spacing:.2em;font-weight:700;
+  color:#fff;background:var(--olive-mid);padding:5px 16px;border-radius:999px;
+}
+.hero h1{
+  margin:16px 0 0;font-size:clamp(22px,5.1vw,31px);font-weight:700;color:var(--olive);
+  line-height:1.55;letter-spacing:.01em;
+}
+.hero h1 .area{
+  display:inline-block;margin-top:6px;font-size:.68em;color:var(--ink);
+}
+
+/* 締切の帯 */
+.deadline{
+  margin:22px auto 0;max-width:520px;
+  background:#FBEDE7;border:2px solid #E5BCAC;border-radius:16px;
+  padding:14px 20px;
+}
+.deadline .lbl{display:block;font-size:13px;font-weight:700;color:var(--red);letter-spacing:.08em;}
+.deadline .day{display:block;margin-top:2px;font-size:clamp(19px,4.4vw,24px);font-weight:700;color:var(--red);line-height:1.4;}
+
+/* 受付についての案内 */
+.notice{
+  margin:20px auto 0;background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:22px 24px;box-shadow:var(--shadow);text-align:left;
+}
+.notice p{margin:0 0 8px;font-size:15.5px;}
+.notice p:last-child{margin-bottom:0;}
+.notice .strong{font-weight:700;color:var(--olive);}
+.notice .contact{
+  margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);
+  font-size:14.5px;color:var(--ink-soft);line-height:1.85;
+}
+.notice .contact b{color:var(--ink);font-weight:700;}
+
+/* ============ form ============ */
+.formsec{padding:30px 0 70px;}
+.form{
+  background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px 26px;
+  display:flex;flex-direction:column;gap:24px;box-shadow:var(--shadow);
+}
+
+/* 大見出し（【申込責任者】【申込チーム】） */
+.blockhead{
+  margin:0;padding:0 0 12px;border-bottom:2px solid var(--olive);
+  font-size:18px;font-weight:700;color:var(--olive);letter-spacing:.02em;
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+}
+.blockhead small{font-size:13px;font-weight:500;color:var(--ink-soft);letter-spacing:0;}
+.form > .blockhead:not(:first-child){margin-top:14px;}
+
+.field{display:flex;flex-direction:column;gap:9px;}
+.field > .q{display:flex;align-items:center;gap:9px;font-size:15.5px;font-weight:700;color:#3E4C3E;}
+.badge{
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;border-radius:999px;
+  padding:3px 9px;line-height:1.6;flex:0 0 auto;
+}
+.badge.req{background:#FBEAE4;color:var(--red);}
+.badge.opt{background:#ECEADF;color:#7A7255;}
+.hint{margin:-3px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.75;}
+
+.form input[type=text],
+.form input[type=tel],
+.form input[type=email],
+.form textarea{
+  width:100%;padding:14px 15px;border-radius:13px;border:1.5px solid #CFD6BE;background:#FDFDF8;
+  font-size:16.5px;font-family:inherit;color:var(--ink);line-height:1.6;
+}
+.form input:focus,.form textarea:focus{
+  outline:none;border-color:var(--olive);box-shadow:0 0 0 3px rgba(94,122,69,.16);
+}
+.form textarea{resize:vertical;min-height:96px;}
+
+/* 選択肢は枠ごと押せるカード */
+.choices{display:flex;flex-direction:column;gap:9px;}
+.choices.row{flex-direction:row;flex-wrap:wrap;}
+.choices.row .choice{flex:1 1 130px;}
+.choice{
+  display:flex;align-items:center;gap:12px;
+  border:1.5px solid #CFD6BE;background:#FDFDF8;border-radius:14px;
+  padding:13px 16px;cursor:pointer;font-size:16.5px;font-weight:500;
+  transition:border-color .15s ease, background .15s ease;
+}
+.choice:hover{border-color:var(--olive-mid);}
+.choice input{width:22px;height:22px;accent-color:var(--olive);margin:0;flex:0 0 auto;cursor:pointer;}
+.choice:has(input:checked){border-color:var(--olive);background:var(--olive-soft);font-weight:700;color:var(--olive);}
+.choice:has(input:focus-visible){box-shadow:0 0 0 3px rgba(94,122,69,.16);}
+
+/* ============ 選手カード ============ */
+.player{
+  border:1.5px solid var(--line);border-radius:18px;background:#FCFCF7;
+  padding:20px 20px 22px;display:flex;flex-direction:column;gap:18px;
+}
+.p-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.p-no{
+  flex:0 0 auto;min-width:62px;text-align:center;
+  background:var(--olive);color:#fff;border-radius:999px;
+  padding:5px 14px;font-size:15px;font-weight:700;line-height:1.5;
+}
+.p-tag{font-size:13px;color:var(--ink-soft);line-height:1.6;}
+.fixedsex{
+  margin:0;padding:13px 16px;border-radius:14px;
+  border:1.5px dashed #CFD6BE;background:#F4F6EC;
+  font-size:16.5px;font-weight:700;color:var(--olive);line-height:1.6;
+}
+.fixedsex small{display:block;font-size:13px;font-weight:500;color:var(--ink-soft);}
+
+.rule{
+  margin:0;padding:14px 18px;border-radius:14px;
+  background:#F4F1E4;border:1px solid #E2DCC6;
+  font-size:14.5px;color:#5C5535;line-height:1.85;
+}
+
+.err{
+  color:var(--red);font-size:16px;margin:0;font-weight:700;line-height:1.7;
+  background:#FBEAE4;border:1.5px solid #E8B9AC;border-radius:14px;
+  padding:14px 18px;display:flex;align-items:flex-start;gap:10px;
+}
+.err::before{content:"⚠";font-size:19px;line-height:1.3;flex:0 0 auto;}
+
+/* ============ 確認画面 ============ */
+.confirm{
+  background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px 26px;
+  box-shadow:var(--shadow);
+}
+.confirm h2{margin:0 0 6px;font-size:19px;font-weight:700;color:var(--olive);}
+.confirm .lead{margin:0 0 22px;font-size:14px;color:var(--ink-soft);line-height:1.85;}
+.c-sec{
+  margin:0 0 8px;padding:0 0 8px;border-bottom:2px solid var(--olive);
+  font-size:15.5px;font-weight:700;color:var(--olive);
+}
+.c-sec.next{margin-top:24px;}
+.c-rows{margin:0 0 8px;display:flex;flex-direction:column;}
+.c-row{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);}
+.c-row:last-child{border-bottom:none;}
+.c-row dt{flex:0 0 10em;font-size:14px;font-weight:700;color:#3E4C3E;}
+.c-row dd{margin:0;flex:1 1 auto;font-size:15.5px;color:var(--ink);white-space:pre-wrap;word-break:break-word;}
+.c-row dd.empty{color:var(--ink-soft);font-weight:400;}
+.c-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;}
+.c-actions .btn{flex:1 1 200px;}
+
+/* ボタン */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:16px 30px;border-radius:999px;text-decoration:none;font-weight:700;font-size:17px;
+  transition:transform .18s ease, box-shadow .18s ease;border:none;cursor:pointer;
+  font-family:inherit;line-height:1.4;
+}
+.btn-primary{background:var(--olive);color:#fff;box-shadow:0 6px 0 #42582F;}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 9px 0 #42582F,0 12px 22px rgba(94,122,69,.28);}
+.btn-primary:disabled{background:#A3AF96;box-shadow:0 6px 0 #85907A;cursor:default;transform:none;}
+.btn-ghost{background:#fff;color:var(--olive);border:2px solid var(--olive);}
+.btn-ghost:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(94,122,69,.18);}
+
+/* 完了画面 */
+.done{
+  background:#E9F0DE;border:1px solid #C9D8B4;border-radius:24px;padding:42px 26px;text-align:center;
+  box-shadow:var(--shadow);
+}
+.done h2{margin:0 0 10px;color:#41562F;font-size:21px;font-weight:700;}
+.done p{margin:0 0 6px;font-size:15px;color:#4E6140;}
+.done .back{margin-top:22px;}
+
+/* 送信先が未設定のときだけ出る、開発中の注意書き */
+.preview-note{
+  margin:0 auto 18px;max-width:560px;
+  background:#FFF6DC;border:2px solid #E4C86A;border-radius:14px;
+  padding:14px 18px;font-size:14.5px;font-weight:700;color:#7A5B12;line-height:1.8;text-align:left;
+}
+
+.alt{text-align:center;margin-top:20px;font-size:13.5px;color:var(--ink-soft);line-height:1.85;}
+
+/* ============ footer ============ */
+footer{background:#3B4733;color:#D6DEC8;padding:30px 0 28px;text-align:center;font-size:13.5px;line-height:1.9;}
+footer .cp{opacity:.72;margin-top:12px;}
+
+/* スマホ */
+@media (max-width:640px){
+  .form{padding:22px 16px;border-radius:20px;}
+  .notice{padding:18px 18px;border-radius:18px;}
+  .player{padding:16px 14px 18px;border-radius:16px;}
+  .btn{width:100%;}
+  .choices.row .choice{flex:1 1 100%;}
+  .confirm{padding:22px 16px;border-radius:20px;}
+  .c-row{flex-direction:column;gap:3px;}
+  .c-row dt{flex:none;}
+}
+@media (prefers-reduced-motion:reduce){
+  .btn{transition:none;}
+  .btn:hover{transform:none;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <div class="mark">BT</div>
+    <div class="nm">香川県バウンドテニス協会<small>KAGAWA BOUND TENNIS ASSOCIATION</small></div>
+    <a class="admin" href="olive2-admin.html">管理用</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="narrow">
+    <span class="kicker">OLIVE CUP 2026</span>
+    <h1>第2回 オリーブ杯<br>バウンドテニス大会 参加申込書<br><span class="area">（香川県内用）</span></h1>
+
+    <div class="deadline">
+      <span class="lbl">締切</span>
+      <span class="day">2026年10月23日（金曜日）</span>
+    </div>
+
+    <div class="notice" id="intro-card">
+      <p class="strong">申込は先着順で受け付けております。</p>
+      <p>こちらで申込書を受付後、参加の可否のお返事を、お電話・FAX・E-mail にて差し上げます。</p>
+      <div class="contact">
+        <b>香川県バウンドテニス協会</b><br>
+        TEL：0875-73-3458　／　FAX：0875-73-3457<br>
+        E-mail：nisihara@kagawa-yakult.co.jp
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="formsec">
+  <div class="narrow">
+
+    <form class="form" id="btform" novalidate>
+
+      <!-- ================= 申込責任者 ================= -->
+      <h2 class="blockhead">【申込責任者】<small>大会に関するご連絡は、この方あてに差し上げます</small></h2>
+
+      <div class="field">
+        <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
+        <p class="hint">ひらがなでも大丈夫です。</p>
+        <input type="text" id="f-kana" name="leaderKana">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>氏名</span><span class="badge req">必 須</span></div>
+        <input type="text" id="f-name" name="leaderName" autocomplete="name">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>郵便番号</span><span class="badge opt">任 意</span></div>
+        <p class="hint">ハイフン（－）無しの7桁で入力すると、下の住所を自動で入力します。</p>
+        <input type="text" id="f-postal" name="postalCode" autocomplete="off" inputmode="numeric" maxlength="8">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>住所</span><span class="badge req">必 須</span></div>
+        <p class="hint">番地・建物名までお書きください。</p>
+        <input type="text" id="f-address" name="address" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>TEL又は携帯</span><span class="badge req">必 須</span></div>
+        <p class="hint">ご連絡がつく番号をお書きください。ハイフン（－）は無くても構いません。</p>
+        <input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="tel">
+      </div>
+
+      <div class="field">
+        <div class="q"><span>E-mail</span><span class="badge opt">任 意</span></div>
+        <p class="hint">ご入力いただくと、参加の可否のお返事をメールでもお送りできます。</p>
+        <input type="email" id="f-email" name="email" autocomplete="email" inputmode="email">
+      </div>
+
+      <!-- ================= 申込チーム ================= -->
+      <h2 class="blockhead">【申込チーム】<small>選手4名をご記入ください</small></h2>
+
+      <div class="field">
+        <div class="q"><span>チーム名</span><span class="badge req">必 須</span></div>
+        <input type="text" id="f-team" name="teamName">
+      </div>
+
+      <p class="rule">注1　男子の代わりに女子の出場を認めますが、その逆は認めません。<br>
+        そのため <b>No.1・No.2 は男性・女性のどちらでも</b>、<b>No.3・No.4 は女性のみ</b> となります。</p>
+
+      <!-- No.1 -->
+      <div class="player">
+        <div class="p-head"><span class="p-no">No.1</span><span class="p-tag">男性・女性のどちらでも出場できます</span></div>
+        <div class="field">
+          <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p1-kana">
+        </div>
+        <div class="field">
+          <div class="q"><span>氏名</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p1-name">
+        </div>
+        <div class="field">
+          <div class="q"><span>性別</span><span class="badge req">必 須</span></div>
+          <div class="choices row">
+            <label class="choice"><input type="radio" name="p1-sex" value="男"><span>男</span></label>
+            <label class="choice"><input type="radio" name="p1-sex" value="女"><span>女</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <div class="q"><span>所属クラブ名</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p1-club">
+        </div>
+        <div class="field">
+          <div class="q"><span>備考</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p1-note">
+        </div>
+      </div>
+
+      <!-- No.2 -->
+      <div class="player">
+        <div class="p-head"><span class="p-no">No.2</span><span class="p-tag">男性・女性のどちらでも出場できます</span></div>
+        <div class="field">
+          <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p2-kana">
+        </div>
+        <div class="field">
+          <div class="q"><span>氏名</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p2-name">
+        </div>
+        <div class="field">
+          <div class="q"><span>性別</span><span class="badge req">必 須</span></div>
+          <div class="choices row">
+            <label class="choice"><input type="radio" name="p2-sex" value="男"><span>男</span></label>
+            <label class="choice"><input type="radio" name="p2-sex" value="女"><span>女</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <div class="q"><span>所属クラブ名</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p2-club">
+        </div>
+        <div class="field">
+          <div class="q"><span>備考</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p2-note">
+        </div>
+      </div>
+
+      <!-- No.3 -->
+      <div class="player">
+        <div class="p-head"><span class="p-no">No.3</span><span class="p-tag">女性のみ出場できます</span></div>
+        <div class="field">
+          <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p3-kana">
+        </div>
+        <div class="field">
+          <div class="q"><span>氏名</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p3-name">
+        </div>
+        <div class="field">
+          <div class="q"><span>性別</span></div>
+          <p class="fixedsex">女<small>この枠は女性のみのため、選択は不要です。</small></p>
+        </div>
+        <div class="field">
+          <div class="q"><span>所属クラブ名</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p3-club">
+        </div>
+        <div class="field">
+          <div class="q"><span>備考</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p3-note">
+        </div>
+      </div>
+
+      <!-- No.4 -->
+      <div class="player">
+        <div class="p-head"><span class="p-no">No.4</span><span class="p-tag">女性のみ出場できます</span></div>
+        <div class="field">
+          <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p4-kana">
+        </div>
+        <div class="field">
+          <div class="q"><span>氏名</span><span class="badge req">必 須</span></div>
+          <input type="text" id="p4-name">
+        </div>
+        <div class="field">
+          <div class="q"><span>性別</span></div>
+          <p class="fixedsex">女<small>この枠は女性のみのため、選択は不要です。</small></p>
+        </div>
+        <div class="field">
+          <div class="q"><span>所属クラブ名</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p4-club">
+        </div>
+        <div class="field">
+          <div class="q"><span>備考</span><span class="badge opt">任 意</span></div>
+          <input type="text" id="p4-note">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="q"><span>チーム監督</span><span class="badge req">必 須</span></div>
+        <p class="hint">上の4名のうち、どなたが監督かをお選びください。（申込書の「チーム監督は番号に〇を記入」にあたります）</p>
+        <div class="choices" id="f-manager">
+          <label class="choice"><input type="radio" name="manager" value="1"><span data-mgr="1">No.1</span></label>
+          <label class="choice"><input type="radio" name="manager" value="2"><span data-mgr="2">No.2</span></label>
+          <label class="choice"><input type="radio" name="manager" value="3"><span data-mgr="3">No.3</span></label>
+          <label class="choice"><input type="radio" name="manager" value="4"><span data-mgr="4">No.4</span></label>
+        </div>
+      </div>
+
+      <!-- 迷惑メール対策。人には見えない欄で、埋まっていたら送らない -->
+      <div style="position:absolute;left:-9999px;" aria-hidden="true">
+        <label>ここは入力しないでください
+          <input type="text" id="f-hp" name="website" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
+
+      <p class="err" id="f-err" style="display:none;"></p>
+      <button type="submit" class="btn btn-primary" id="f-btn">この内容を確認する</button>
+    </form>
+
+    <div class="confirm" id="f-confirm" style="display:none;">
+      <h2>入力内容のご確認</h2>
+      <p class="lead">この内容でよろしければ「この内容で送信する」を押してください。直す場合は「戻って直す」から入力画面にもどれます。</p>
+      <div id="c-body"></div>
+      <p class="err" id="c-err" style="display:none;"></p>
+      <div class="c-actions">
+        <button type="button" class="btn btn-ghost" id="c-back">← 戻って直す</button>
+        <button type="button" class="btn btn-primary" id="c-send">この内容で送信する</button>
+      </div>
+    </div>
+
+    <div class="done" id="f-done" style="display:none;">
+      <p class="preview-note" id="f-preview-note" style="display:none;">
+        ※ これは画面確認用の表示です。<b>まだ送信されていません。</b><br>
+        送信先（協会の受付システム）が決まりしだい接続します。
+      </p>
+      <h2>お申込みありがとうございます</h2>
+      <p>申込書を受付後、参加の可否のお返事を、お電話・FAX・E-mail にて差し上げます。</p>
+      <p id="f-done-mail">ご入力いただいた E-mail あてにも、受付のご連絡をお送りします。</p>
+      <div class="back"><button type="button" class="btn btn-ghost" id="f-close">閉じる</button></div>
+    </div>
+
+    <p class="alt">
+      うまく送れないときは、お手数ですが 香川県バウンドテニス協会（TEL 0875-73-3458）まで
+      お電話にてご連絡ください。
+    </p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="narrow">
+    香川県バウンドテニス協会<br>
+    TEL 0875-73-3458　／　FAX 0875-73-3457
+    <p class="cp">&copy; 香川県バウンドテニス協会</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  /* ================================================================
+     ★送信先（受付API）。ロイさんの Worker（roy-senior-site-api）の /olive-apply に送る。
+       空にすると、送信はせず「画面確認用の表示」になります。
+     ================================================================ */
+  var API      = 'https://roy-senior-site-api.roy-s1105.workers.dev';
+  var ENDPOINT = '/olive-apply';
+
+  var AREA     = '香川県内';
+  var DEADLINE = '2026-10-23';
+
+  var form      = document.getElementById('btform');
+  var err       = document.getElementById('f-err');
+  var confirmEl = document.getElementById('f-confirm');
+  var cBody     = document.getElementById('c-body');
+  var cErr      = document.getElementById('c-err');
+  var backBtn   = document.getElementById('c-back');
+  var sendBtn   = document.getElementById('c-send');
+  var doneEl    = document.getElementById('f-done');
+  var closeBtn  = document.getElementById('f-close');
+  var introEl   = document.getElementById('intro-card');
+  var postalEl  = document.getElementById('f-postal');
+  var addressEl = document.getElementById('f-address');
+
+  function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  function radio(name) { var el = form.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
+
+  function showErr(msg, focusId) {
+    err.textContent = msg;
+    err.style.display = 'flex';
+    err.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (focusId) { var el = document.getElementById(focusId); if (el) { el.focus({ preventScroll: true }); } }
+  }
+
+  /* 郵便番号（7桁そろったら）から住所を自動入力する。住所欄が空のときだけ埋める
+     （すでに書いてある内容を勝手に上書きしないため）。無料の郵便番号API（zipcloud）を使用。 */
+  postalEl.addEventListener('input', function () {
+    var digits = postalEl.value.replace(/[^0-9]/g, '');
+    if (digits.length !== 7) { return; }
+    if (addressEl.value.trim()) { return; }
+    fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode=' + digits)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.results && d.results[0] && !addressEl.value.trim()) {
+          var r = d.results[0];
+          addressEl.value = r.address1 + r.address2 + r.address3;
+        }
+      })
+      .catch(function () {});
+  });
+
+  /* 監督の選択肢の「No.〇」の横に、入力された氏名を出す
+     （「No.1」だけでは、どなたのことか分からないため）。
+     氏名がまだ空なら、フリガナのほうを出す。
+     フォームの中のどの入力でも作り直すので、手で打った場合だけでなく、
+     貼り付け・ブラウザの自動入力・IMEでの確定でも取りこぼさない。 */
+  function refreshManagerLabels() {
+    [1, 2, 3, 4].forEach(function (n) {
+      var label = form.querySelector('[data-mgr="' + n + '"]');
+      if (!label) { return; }
+      var nm = val('p' + n + '-name') || val('p' + n + '-kana');
+      label.textContent = nm ? ('No.' + n + '　' + nm) : ('No.' + n);
+    });
+  }
+  form.addEventListener('input', refreshManagerLabels);
+  form.addEventListener('change', refreshManagerLabels);
+  refreshManagerLabels();
+
+  var pending = null; // 確認画面に出している、検証ずみの申込みデータ
+
+  function todayISO() {
+    var t = new Date();
+    return t.getFullYear() + '-' +
+      String(t.getMonth() + 1).padStart(2, '0') + '-' +
+      String(t.getDate()).padStart(2, '0');
+  }
+  function fmtJP(iso) {
+    var p = iso.split('-');
+    return p[0] + '年' + Number(p[1]) + '月' + Number(p[2]) + '日';
+  }
+
+  function addSec(title, isNext) {
+    var h = document.createElement('p');
+    h.className = isNext ? 'c-sec next' : 'c-sec';
+    h.textContent = title;
+    cBody.appendChild(h);
+    var dl = document.createElement('dl');
+    dl.className = 'c-rows';
+    cBody.appendChild(dl);
+    return dl;
+  }
+  function addRow(dl, label, value, isEmpty) {
+    var row = document.createElement('div');
+    row.className = 'c-row';
+    var dt = document.createElement('dt'); dt.textContent = label;
+    var dd = document.createElement('dd'); dd.textContent = value;
+    if (isEmpty) { dd.className = 'empty'; }
+    row.appendChild(dt); row.appendChild(dd);
+    dl.appendChild(row);
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // 迷惑メール対策の欄が埋まっていたら、何もせず成功したように見せる
+    if (val('f-hp')) { form.style.display = 'none'; doneEl.style.display = 'block'; return; }
+
+    var leader = {
+      kana: val('f-kana'), name: val('f-name'),
+      postalCode: val('f-postal'), address: val('f-address'),
+      tel: val('f-tel'), email: val('f-email')
+    };
+    var teamName  = val('f-team');
+    var managerNo = radio('manager');
+
+    var players = [1, 2, 3, 4].map(function (n) {
+      return {
+        no: n,
+        kana: val('p' + n + '-kana'),
+        name: val('p' + n + '-name'),
+        // No.3・No.4 は申込書のとおり「女」で固定（画面にも選択欄を出していない）
+        sex: (n <= 2) ? radio('p' + n + '-sex') : '女',
+        club: val('p' + n + '-club'),
+        note: val('p' + n + '-note')
+      };
+    });
+
+    /* 入力チェック。E-mail・郵便番号・所属クラブ名・備考は「任意」のため、
+       形式のチェックはしない（「任意なのにエラーになる」を起こさないため）。 */
+    if (!leader.kana)    { return showErr('申込責任者の「フリガナ」が入力されていません。ご記入をお願いします。', 'f-kana'); }
+    if (!leader.name)    { return showErr('申込責任者の「氏名」が入力されていません。ご記入をお願いします。', 'f-name'); }
+    if (!leader.address) { return showErr('申込責任者の「住所」が入力されていません。ご記入をお願いします。', 'f-address'); }
+    if (!leader.tel)     { return showErr('申込責任者の「TEL又は携帯」が入力されていません。ご記入をお願いします。', 'f-tel'); }
+    if (!/[0-9]{9,}/.test(leader.tel.replace(/[^0-9]/g, ''))) {
+      return showErr('「TEL又は携帯」をご確認ください。市外局番から、数字だけで9桁以上ご記入ください。', 'f-tel');
+    }
+    if (!teamName)       { return showErr('「チーム名」が入力されていません。ご記入をお願いします。', 'f-team'); }
+
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i];
+      if (!p.kana) { return showErr('選手 No.' + p.no + ' の「フリガナ」が入力されていません。ご記入をお願いします。', 'p' + p.no + '-kana'); }
+      if (!p.name) { return showErr('選手 No.' + p.no + ' の「氏名」が入力されていません。ご記入をお願いします。', 'p' + p.no + '-name'); }
+      if (!p.sex)  { return showErr('選手 No.' + p.no + ' の「性別」が選ばれていません。男・女のどちらかをお選びください。', 'p' + p.no + '-name'); }
+    }
+    if (!managerNo) { return showErr('「チーム監督」が選ばれていません。4名のうちお一人をお選びください。'); }
+
+    err.style.display = 'none';
+
+    pending = {
+      area: AREA,
+      deadline: DEADLINE,
+      appliedDate: todayISO(),
+      leader: leader,
+      teamName: teamName,
+      managerNo: Number(managerNo),
+      players: players
+    };
+
+    // 確認画面を組み立てる
+    cBody.innerHTML = '';
+    var dl1 = addSec('【申込責任者】', false);
+    addRow(dl1, '申込日', fmtJP(pending.appliedDate));
+    addRow(dl1, 'フリガナ', leader.kana);
+    addRow(dl1, '氏名', leader.name);
+    addRow(dl1, '郵便番号', leader.postalCode || '（未入力）', !leader.postalCode);
+    addRow(dl1, '住所', leader.address);
+    addRow(dl1, 'TEL又は携帯', leader.tel);
+    addRow(dl1, 'E-mail', leader.email || '（未入力）', !leader.email);
+
+    var dl2 = addSec('【申込チーム】', true);
+    addRow(dl2, 'チーム名', teamName);
+    addRow(dl2, 'チーム監督', 'No.' + managerNo + '（' + players[Number(managerNo) - 1].name + '）');
+
+    players.forEach(function (p) {
+      var dl = addSec('選手 No.' + p.no + (String(p.no) === String(managerNo) ? '（監督）' : ''), true);
+      addRow(dl, 'フリガナ', p.kana);
+      addRow(dl, '氏名', p.name);
+      addRow(dl, '性別', p.sex);
+      addRow(dl, '所属クラブ名', p.club || '（未入力）', !p.club);
+      addRow(dl, '備考', p.note || '（記入なし）', !p.note);
+    });
+
+    cErr.style.display = 'none';
+    sendBtn.textContent = 'この内容で送信する';
+    sendBtn.disabled = false;
+    backBtn.disabled = false;
+
+    introEl.style.display = 'none';
+    form.style.display = 'none';
+    confirmEl.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  backBtn.addEventListener('click', function () {
+    confirmEl.style.display = 'none';
+    introEl.style.display = '';
+    form.style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function showDone() {
+    confirmEl.style.display = 'none';
+    document.getElementById('f-done-mail').style.display = pending.leader.email ? 'block' : 'none';
+    document.getElementById('f-preview-note').style.display = API ? 'none' : 'block';
+    doneEl.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  sendBtn.addEventListener('click', function () {
+    if (!pending) { return; }
+
+    // 送信先が未設定のあいだは、送らずに完了画面だけ出す（画面の確認用）
+    if (!API) {
+      console.log('［送信先が未設定です］この内容が送られます：', JSON.parse(JSON.stringify(pending)));
+      showDone();
+      return;
+    }
+
+    cErr.style.display = 'none';
+    sendBtn.textContent = '送信中…';
+    sendBtn.disabled = true;
+    backBtn.disabled = true;
+
+    fetch(API + ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pending)
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) {
+          showDone();
+        } else {
+          sendBtn.textContent = 'この内容で送信する'; sendBtn.disabled = false; backBtn.disabled = false;
+          cErr.textContent = '送信できませんでした。恐れ入りますが、もう一度お試しください。';
+          cErr.style.display = 'flex';
+        }
+      })
+      .catch(function () {
+        sendBtn.textContent = 'この内容で送信する'; sendBtn.disabled = false; backBtn.disabled = false;
+        cErr.textContent = '通信に失敗しました。電波の良い場所で、もう一度お試しください。';
+        cErr.style.display = 'flex';
+      });
+  });
+
+  closeBtn.addEventListener('click', function () {
+    window.close();
+    // ブラウザの仕組み上、スクリプトから開いたタブでない場合は閉じられない。
+    // その場合にそなえて、少し待ってからメッセージに切り替える。
+    setTimeout(function () {
+      doneEl.innerHTML = '<p>このタブを閉じてお進みください。</p>';
+    }, 400);
+  });
+})();
+</script>
+
+</body>
+</html>

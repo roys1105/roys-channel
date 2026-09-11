@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<script>
+// 旧アドレスで開かれたときだけ、新しいアドレスへ移動する（新アドレスでは何もしない）
+(function () {
+  try {
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
+      location.replace('https://royschannel.com/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第2回オリーブ杯 申込み一覧（管理用）｜香川県バウンドテニス協会</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic Medium','Yu Gothic','Meiryo',sans-serif;
+  color:#2F3A32;
+  background:#FAF7F0;
+  line-height:1.7;
+  padding:24px 16px 60px;
+}
+.wrap{max-width:1240px;margin:0 auto;}
+.back{display:inline-block;font-size:13px;color:#6B7A6B;text-decoration:none;margin:0 0 14px;}
+.back:hover{text-decoration:underline;text-underline-offset:3px;}
+h1{font-size:20px;font-weight:700;color:#5E7A45;margin:0 0 6px;}
+.lead{font-size:13.5px;color:#6B7A6B;margin:0 0 18px;}
+h2{font-size:16px;font-weight:700;color:#5E7A45;margin:34px 0 12px;}
+
+/* 送信先が未設定のときだけ出る、開発中の注意書き */
+.preview-note{
+  background:#FFF6DC;border:2px solid #E4C86A;border-radius:12px;
+  padding:14px 18px;margin:0 0 20px;font-size:14px;color:#7A5B12;line-height:1.85;
+}
+.preview-note b{color:#5C4406;}
+
+.keybox{
+  background:#fff;border:1px solid #DFE3D2;border-radius:14px;padding:18px 20px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px;
+}
+.keybox input{
+  flex:1 1 260px;padding:10px 12px;border-radius:10px;border:1.5px solid #CFD6BE;
+  font-size:15px;font-family:inherit;
+}
+.keybox button{
+  padding:10px 20px;border-radius:999px;border:none;background:#5E7A45;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.keybox button:hover{background:#4A6236;}
+.keybox button:disabled{background:#A3AF96;cursor:default;}
+.msg{font-size:13.5px;color:#B4472F;margin:0 0 16px;font-weight:700;}
+.msg.ok{color:#4E6140;}
+.count{font-size:13.5px;color:#6B7A6B;margin:0 0 10px;}
+
+/* 県内・県外の絞り込み */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;}
+.tabs .tab{
+  padding:9px 20px;border-radius:999px;border:1.5px solid #CFD6BE;background:#fff;
+  color:#5A6455;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;
+  display:inline-flex;align-items:center;gap:7px;line-height:1.5;
+}
+.tabs .tab:hover{border-color:#7E9B5E;}
+.tabs .tab.is-on{background:#5E7A45;border-color:#5E7A45;color:#fff;}
+.tabs .tab .n{
+  font-size:12px;font-weight:700;background:#EEF3E3;color:#43552F;
+  border-radius:999px;padding:1px 9px;min-width:2.2em;text-align:center;
+}
+.tabs .tab.is-on .n{background:rgba(255,255,255,.24);color:#fff;}
+
+.tablewrap{overflow-x:auto;background:#fff;border:1px solid #DFE3D2;border-radius:14px;}
+table{border-collapse:collapse;width:100%;min-width:1400px;font-size:13px;}
+th,td{padding:10px 12px;border-bottom:1px solid #EDF0E3;text-align:left;white-space:nowrap;vertical-align:top;}
+th{background:#EEF3E3;color:#43552F;font-weight:700;position:sticky;top:0;}
+tr:hover td{background:#FBFCF7;}
+td.wrap-cell{white-space:pre-wrap;max-width:260px;overflow-wrap:anywhere;}
+/* 幅の下限を決めないと、折り返し可の列が極端に潰される（教室の管理ページで実際に起きた） */
+th.addr-cell,td.addr-cell{width:14em;min-width:14em;max-width:14em;white-space:normal;word-break:break-all;}
+th.pl-cell,td.pl-cell{width:13em;min-width:13em;max-width:13em;white-space:pre-wrap;word-break:break-all;line-height:1.65;}
+td.pl-cell .sub{color:#6B7A6B;font-size:12px;}
+td.pl-cell .mgr{color:#B4472F;font-weight:700;font-size:12px;}
+td.area-in{color:#43552F;font-weight:700;}
+td.area-out{color:#8A6A20;font-weight:700;}
+.empty{padding:30px;text-align:center;color:#6B7A6B;font-size:14px;}
+
+.bulkbar{
+  display:flex;align-items:center;gap:14px;margin-bottom:10px;
+  font-size:13.5px;color:#6B7A6B;flex-wrap:wrap;
+}
+.bulkbar button{
+  padding:8px 18px;border-radius:999px;border:none;background:#B4472F;color:#fff;
+  font-weight:700;font-size:13px;cursor:pointer;
+}
+.bulkbar button:hover{background:#933820;}
+.bulkbar button:disabled{background:#D9C7C0;cursor:default;}
+.bulkbar button.export{background:#2E7D32;margin-left:auto;}
+.bulkbar button.export:hover{background:#256428;}
+
+/* CC宛先の管理 */
+.cc-box{background:#fff;border:1px solid #DFE3D2;border-radius:14px;padding:18px 20px;}
+.cc-add{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+.cc-add input{
+  flex:1 1 260px;padding:10px 12px;border-radius:10px;border:1.5px solid #CFD6BE;
+  font-size:15px;font-family:inherit;
+}
+.cc-add button{
+  padding:10px 20px;border-radius:999px;border:none;background:#5E7A45;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.cc-add button:hover{background:#4A6236;}
+.cc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.cc-list li{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:#FBFCF7;border:1px solid #EDF0E3;border-radius:10px;padding:9px 13px;font-size:14.5px;
+}
+.cc-list .del{
+  border:none;background:#FBEAE4;color:#B4472F;font-weight:700;font-size:12.5px;
+  border-radius:999px;padding:5px 12px;cursor:pointer;flex:0 0 auto;
+}
+.cc-list .del:hover{background:#F3D2C6;}
+.cc-empty{font-size:13.5px;color:#6B7A6B;}
+
+/* 管理キーの変更 */
+.keychange{background:#fff;border:1px solid #DFE3D2;border-radius:14px;padding:18px 20px;margin-bottom:22px;}
+.keychange summary{cursor:pointer;font-size:14.5px;font-weight:700;color:#5E7A45;}
+.keychange-body{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.keychange-body input{
+  flex:1 1 220px;padding:10px 12px;border-radius:10px;border:1.5px solid #CFD6BE;
+  font-size:15px;font-family:inherit;
+}
+.keychange-body button{
+  padding:10px 20px;border-radius:999px;border:none;background:#5E7A45;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.keychange-body button:hover{background:#4A6236;}
+.keychange .hint{font-size:12.5px;color:#6B7A6B;margin:8px 0 0;}
+
+/* 送信元アドレスの変更 */
+.mailfrom{background:#fff;border:1px solid #DFE3D2;border-radius:14px;padding:18px 20px;margin-bottom:22px;}
+.mailfrom .current{font-size:14.5px;margin:0 0 14px;}
+.mailfrom .current b{color:#5E7A45;}
+.mailfrom-body{display:flex;flex-wrap:wrap;gap:10px;}
+.mailfrom-body input{
+  flex:1 1 260px;padding:10px 12px;border-radius:10px;border:1.5px solid #CFD6BE;
+  font-size:15px;font-family:inherit;
+}
+.mailfrom-body button{
+  padding:10px 20px;border-radius:999px;border:none;background:#5E7A45;color:#fff;
+  font-weight:700;font-size:14.5px;cursor:pointer;
+}
+.mailfrom-body button:hover{background:#4A6236;}
+.mailfrom .hint{font-size:12.5px;color:#6B7A6B;margin:12px 0 0;line-height:1.8;}
+.mailfrom .warn{font-size:12.5px;color:#B4472F;margin:8px 0 0;font-weight:700;line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="olive2-kennai.html">← 申込みフォーム（県内用）へ戻る</a>
+  <a class="back" href="olive2-kengai.html" style="margin-left:16px;">← 申込みフォーム（県外用）へ戻る</a>
+  <h1>第2回 オリーブ杯バウンドテニス大会　申込み一覧（管理用）</h1>
+  <p class="lead">香川県バウンドテニス協会　｜　県内用・県外用の両方の申込みが、新しい順に並びます。</p>
+
+  <div class="preview-note" id="preview-note" style="display:none;">
+    <b>送信先（協会の受付システム）が未接続のため、下の一覧は「見本のデータ」です。</b><br>
+    画面の作りと、CSVの中身を確かめるためのものです。受付システムができたら、
+    このページの <b>var API</b> にURLを書くだけで、本物の申込みが並びます。
+    見本の状態でも、CSVの書き出しと行の選択・削除は動きます（削除しても見本が消えるだけです）。
+  </div>
+
+  <div class="keybox">
+    <input type="password" id="key" placeholder="管理キーを入力してください">
+    <button id="load">表示する</button>
+  </div>
+  <p class="msg" id="msg" style="display:none;"></p>
+
+  <details class="keychange">
+    <summary>管理キーを変更する</summary>
+    <div class="keychange-body">
+      <input type="password" id="kc-new" placeholder="新しい管理キー（4文字以上）">
+      <input type="password" id="kc-new2" placeholder="もう一度入力してください">
+      <button id="kc-btn">変更する</button>
+    </div>
+    <p class="hint">上のキー入力欄に、いま使える管理キーを入れた状態で押してください。変更後は、新しいキーがこの画面のキー欄にも自動で入りますが、保存はされません（次に開くときは、あらためて入力が必要です）。</p>
+    <p class="msg" id="kc-msg" style="display:none;"></p>
+  </details>
+
+  <h2>申込みメールの送信元アドレス</h2>
+  <div class="mailfrom">
+    <p class="current">現在の送信元： <b id="mf-current">（読み込み中…）</b></p>
+    <div class="mailfrom-body">
+      <input type="email" id="mf-email" placeholder="○○○@royschannel.com">
+      <button id="mf-btn">変更する</button>
+    </div>
+    <p class="msg" id="mf-msg" style="display:none;"></p>
+    <p class="hint">申込みの通知メールと、申込者ご本人への受付メールは、このアドレスから送られます。<b>ふだんは変更する必要はありません。</b></p>
+    <p class="warn">※ 変更できるのは「@royschannel.com」で終わるアドレスだけです（それ以外にすると、メールが届かなくなるため）。</p>
+  </div>
+
+  <h2>申込み通知メールのCC宛先</h2>
+  <p class="count">ここに登録したメールアドレスには、申込みが入るたびに管理者あてメールのCCとして届きます（件数の上限なし）。</p>
+  <div class="cc-box">
+    <div class="cc-add">
+      <input type="email" id="cc-email" placeholder="yakuin@example.com">
+      <button id="cc-add-btn">追加する</button>
+    </div>
+    <p class="msg" id="cc-msg" style="display:none;"></p>
+    <ul class="cc-list" id="cc-list"></ul>
+    <p class="cc-empty" id="cc-empty" style="display:none;">まだ登録されていません。</p>
+  </div>
+
+  <h2>申込み一覧</h2>
+
+  <!-- 表示とCSV保存の対象を切り替える。押した区分だけが表にもCSVにも入る -->
+  <div class="tabs" id="area-tabs" style="display:none;">
+    <button type="button" class="tab is-on" data-area="">すべて<span class="n" id="n-all">0</span></button>
+    <button type="button" class="tab" data-area="香川県内">香川県内<span class="n" id="n-in">0</span></button>
+    <button type="button" class="tab" data-area="香川県外">香川県外<span class="n" id="n-out">0</span></button>
+  </div>
+
+  <p class="count" id="count" style="display:none;"></p>
+
+  <div class="bulkbar" id="bulkbar" style="display:none;">
+    <span id="bulk-count">0件選択中</span>
+    <button type="button" id="bulk-del-btn" disabled>選択した行を削除</button>
+    <button type="button" id="export-btn" class="export">Excel用ファイルを保存（CSV）</button>
+  </div>
+  <p class="msg" id="del-msg" style="display:none;"></p>
+  <p class="msg" id="export-msg" style="display:none;"></p>
+
+  <div class="tablewrap" id="tablewrap" style="display:none;">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="check-all"></th>
+          <th>受付日時</th>
+          <th>区分</th>
+          <th>チーム名</th>
+          <th>チーム監督</th>
+          <th>責任者 氏名</th>
+          <th>責任者 フリガナ</th>
+          <th>TEL又は携帯</th>
+          <th>E-mail</th>
+          <th>郵便番号</th>
+          <th class="addr-cell">住所</th>
+          <th class="pl-cell">No.1</th>
+          <th class="pl-cell">No.2</th>
+          <th class="pl-cell">No.3</th>
+          <th class="pl-cell">No.4</th>
+          <th>備考</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+(function () {
+  /* ================================================================
+     ★受付API。申込みフォーム（olive2-kennai.html / olive2-kengai.html）の
+       var API と、必ず同じURLにすること。
+       空にすると、見本のデータを表示する「画面確認用」になります。
+     ================================================================ */
+  var API = 'https://roy-senior-site-api.roy-s1105.workers.dev';
+
+  var keyInput  = document.getElementById('key');
+  var loadBtn   = document.getElementById('load');
+  var msg       = document.getElementById('msg');
+  var countEl   = document.getElementById('count');
+  var tablewrap = document.getElementById('tablewrap');
+  var tbody     = document.getElementById('tbody');
+
+  var ccEmailInput = document.getElementById('cc-email');
+  var ccAddBtn     = document.getElementById('cc-add-btn');
+  var ccMsg        = document.getElementById('cc-msg');
+  var ccListEl     = document.getElementById('cc-list');
+  var ccEmptyEl    = document.getElementById('cc-empty');
+
+  var kcNewInput  = document.getElementById('kc-new');
+  var kcNew2Input = document.getElementById('kc-new2');
+  var kcBtn       = document.getElementById('kc-btn');
+  var kcMsg       = document.getElementById('kc-msg');
+
+  var mfCurrentEl  = document.getElementById('mf-current');
+  var mfEmailInput = document.getElementById('mf-email');
+  var mfBtn        = document.getElementById('mf-btn');
+  var mfMsg        = document.getElementById('mf-msg');
+
+  var checkAllEl  = document.getElementById('check-all');
+  var bulkbarEl   = document.getElementById('bulkbar');
+  var bulkCountEl = document.getElementById('bulk-count');
+  var bulkDelBtn  = document.getElementById('bulk-del-btn');
+  var delMsg      = document.getElementById('del-msg');
+  var exportBtn   = document.getElementById('export-btn');
+  var exportMsg   = document.getElementById('export-msg');
+
+  var tabsEl  = document.getElementById('area-tabs');
+  var nAllEl  = document.getElementById('n-all');
+  var nInEl   = document.getElementById('n-in');
+  var nOutEl  = document.getElementById('n-out');
+
+  var lastRows = [];   // 直近に読み込んだ申込み一覧（全件）
+  var areaFilter = ''; // '' = すべて／'香川県内'／'香川県外'。表もCSVもこれに従う
+  var sampleLoaded = false; // 見本データを1度でも入れたか（全部消したあと勝手に戻さないため）
+
+  // いま表に出ている（＝CSVに入る）申込み
+  function rowsForView() {
+    if (!areaFilter) { return lastRows; }
+    return lastRows.filter(function (r) { return r.area === areaFilter; });
+  }
+
+  // 管理キーはブラウザに保存しない。開くたびに必ず入力し、正しい場合だけ以下を表示する
+  // （保存すると、URLを知っているだけの人にも一覧が見えてしまうため）。
+  // 以前のバージョンで保存されていた分があれば、念のため消しておく。
+  try { localStorage.removeItem('olive_admin_key'); } catch (e) {}
+
+  if (!API) { document.getElementById('preview-note').style.display = 'block'; }
+
+  function showMsg(el, text, ok) {
+    el.textContent = text;
+    el.className = 'msg' + (ok ? ' ok' : '');
+    el.style.display = 'block';
+  }
+
+  function fmtDate(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    } catch (e) { return iso; }
+  }
+
+  function esc(s) {
+    return (s || '').toString()
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function currentKey() { return keyInput.value.trim(); }
+
+  // 管理キーはURLに付けず、X-Admin-Key ヘッダーで送る。
+  // ?key= に付けるとサーバーのログにURLごと残り、キーが平文で読めてしまう
+  // （教室の申込みフォームで、2026-09-02に実際に読めることを確認した）。
+  function adminHeaders(key) { return { 'X-Admin-Key': key }; }
+
+  /* 選手4名は、サーバーから players（配列、またはJSONの文字列）で受け取る。
+     万一 p1_name のような平らな列で来た場合にも拾えるようにしておく。 */
+  function playersOf(row) {
+    var ps = row.players;
+    if (typeof ps === 'string') {
+      try { ps = JSON.parse(ps); } catch (e) { ps = null; }
+    }
+    if (Array.isArray(ps) && ps.length) { return ps; }
+    return [1, 2, 3, 4].map(function (n) {
+      return {
+        no: n,
+        name: row['p' + n + '_name'] || '',
+        kana: row['p' + n + '_kana'] || '',
+        sex:  row['p' + n + '_sex']  || '',
+        club: row['p' + n + '_club'] || '',
+        note: row['p' + n + '_note'] || ''
+      };
+    });
+  }
+  function managerNoOf(row) { return row.manager_no != null ? row.manager_no : row.managerNo; }
+  function managerNameOf(row) {
+    var ps = playersOf(row);
+    var no = managerNoOf(row);
+    var p = ps[Number(no) - 1];
+    return p && p.name ? ('No.' + no + '　' + p.name) : (no ? ('No.' + no) : '');
+  }
+
+  // ---------- 見本のデータ（APIが未設定のときだけ使う） ----------
+  function sampleRows() {
+    return [
+      {
+        id: 2, created_at: new Date(Date.now() - 3600 * 1000).toISOString(),
+        area: '香川県内', team_name: 'オリーブクラブA', manager_no: 2,
+        leader_name: '山田 太郎', leader_kana: 'ヤマダ タロウ',
+        tel: '0875-73-3458', email: 'test@example.com',
+        postal_code: '766-0001', address: '香川県仲多度郡琴平町1234-5 オリーブハイツ101',
+        players: [
+          { no: 1, name: '田中 一郎', kana: 'タナカ イチロウ', sex: '男', club: '丸亀BTクラブ', note: '' },
+          { no: 2, name: '佐藤 次郎', kana: 'サトウ ジロウ', sex: '男', club: '丸亀BTクラブ', note: '' },
+          { no: 3, name: '鈴木 花子', kana: 'スズキ ハナコ', sex: '女', club: '琴平BTクラブ', note: '初参加です' },
+          { no: 4, name: '高橋 美咲', kana: 'タカハシ ミサキ', sex: '女', club: '琴平BTクラブ', note: '' }
+        ]
+      },
+      {
+        id: 1, created_at: new Date(Date.now() - 26 * 3600 * 1000).toISOString(),
+        area: '香川県外', team_name: '松山クラブ', manager_no: 1,
+        leader_name: '伊藤 健二', leader_kana: 'イトウ ケンジ',
+        tel: '089-000-0000', email: '',
+        postal_code: '790-0001', address: '愛媛県松山市一番町1-1',
+        players: [
+          { no: 1, name: '伊藤 健二', kana: 'イトウ ケンジ', sex: '男', club: '松山BTクラブ', note: '' },
+          { no: 2, name: '渡辺 三郎', kana: 'ワタナベ サブロウ', sex: '女', club: '松山BTクラブ', note: '女子が男子の枠で出場' },
+          { no: 3, name: '中村 由美', kana: 'ナカムラ ユミ', sex: '女', club: '松山BTクラブ', note: '' },
+          { no: 4, name: '小林 亜紀', kana: 'コバヤシ アキ', sex: '女', club: '今治BTクラブ', note: '' }
+        ]
+      }
+    ];
+  }
+
+  function loadCcList() {
+    var key = currentKey();
+    if (!key) return;
+
+    if (!API) {
+      ccEmptyEl.style.display = 'none';
+      ccListEl.innerHTML = '<li><span>yakuin@example.com（見本）</span></li>';
+      return;
+    }
+
+    fetch(API + '/olive-cc-recipients', { headers: adminHeaders(key) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { return; }
+        var rows = d.results || [];
+        if (!rows.length) {
+          ccListEl.innerHTML = '';
+          ccEmptyEl.style.display = 'block';
+          return;
+        }
+        ccEmptyEl.style.display = 'none';
+        ccListEl.innerHTML = rows.map(function (row) {
+          return '<li><span>' + esc(row.email) + '</span>' +
+            '<button class="del" data-id="' + row.id + '">削除</button></li>';
+        }).join('');
+
+        Array.prototype.forEach.call(ccListEl.querySelectorAll('.del'), function (btn) {
+          btn.addEventListener('click', function () { removeCc(btn.getAttribute('data-id')); });
+        });
+      })
+      .catch(function () {});
+  }
+
+  function addCc() {
+    var key = currentKey();
+    if (!key) { showMsg(ccMsg, '先に管理キーを入力してください。', false); return; }
+    var email = ccEmailInput.value.trim();
+    if (!email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) === false) {
+      showMsg(ccMsg, 'メールアドレスをご確認ください。', false);
+      return;
+    }
+    if (!API) { showMsg(ccMsg, '受付システムが未接続のため、まだ登録できません。', false); return; }
+
+    ccAddBtn.disabled = true;
+    fetch(API + '/olive-cc-recipients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: key, email: email })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        ccAddBtn.disabled = false;
+        if (!d || !d.ok) { showMsg(ccMsg, '追加に失敗しました。キーをご確認ください。', false); return; }
+        ccEmailInput.value = '';
+        ccMsg.style.display = 'none';
+        loadCcList();
+      })
+      .catch(function () {
+        ccAddBtn.disabled = false;
+        showMsg(ccMsg, '通信に失敗しました。もう一度お試しください。', false);
+      });
+  }
+
+  function removeCc(id) {
+    var key = currentKey();
+    if (!key || !id) return;
+    if (!window.confirm('このCC宛先を削除しますか？')) return;
+
+    fetch(API + '/olive-cc-recipients?id=' + encodeURIComponent(id), {
+      method: 'DELETE',
+      headers: adminHeaders(key)
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { showMsg(ccMsg, '削除に失敗しました。', false); return; }
+        loadCcList();
+      })
+      .catch(function () { showMsg(ccMsg, '通信に失敗しました。', false); });
+  }
+
+  function changeKey() {
+    var current = currentKey();
+    if (!current) { showMsg(kcMsg, '上のキー入力欄に、いま使える管理キーを入れてください。', false); return; }
+    var newKey  = kcNewInput.value.trim();
+    var newKey2 = kcNew2Input.value.trim();
+    if (newKey.length < 4) { showMsg(kcMsg, '新しい管理キーは4文字以上にしてください。', false); return; }
+    if (newKey !== newKey2) { showMsg(kcMsg, '新しい管理キーが一致しません。もう一度ご確認ください。', false); return; }
+    if (!API) { showMsg(kcMsg, '受付システムが未接続のため、まだ変更できません。', false); return; }
+
+    kcBtn.disabled = true;
+    fetch(API + '/olive-admin-key', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ currentKey: current, newKey: newKey })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        kcBtn.disabled = false;
+        if (!d || !d.ok) { showMsg(kcMsg, '変更に失敗しました。現在の管理キーをご確認ください。', false); return; }
+
+        keyInput.value = newKey;
+        kcNewInput.value = '';
+        kcNew2Input.value = '';
+        showMsg(kcMsg, '管理キーを変更しました。次回からは新しいキーをお使いください。', true);
+      })
+      .catch(function () {
+        kcBtn.disabled = false;
+        showMsg(kcMsg, '通信に失敗しました。もう一度お試しください。', false);
+      });
+  }
+
+  function loadMailFrom() {
+    var key = currentKey();
+    if (!key) return;
+
+    if (!API) { mfCurrentEl.textContent = '（受付システムが未接続のため、まだ決まっていません）'; return; }
+
+    fetch(API + '/olive-mail-from', { headers: adminHeaders(key) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { return; }
+        mfCurrentEl.textContent = d.email + (d.isDefault ? '（標準）' : '');
+      })
+      .catch(function () {});
+  }
+
+  function changeMailFrom() {
+    var key = currentKey();
+    if (!key) { showMsg(mfMsg, '先に管理キーを入力してください。', false); return; }
+    var email = mfEmailInput.value.trim();
+    if (!email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) === false) {
+      showMsg(mfMsg, 'メールアドレスをご確認ください。', false);
+      return;
+    }
+    if (!API) { showMsg(mfMsg, '受付システムが未接続のため、まだ変更できません。', false); return; }
+
+    mfBtn.disabled = true;
+    fetch(API + '/olive-mail-from', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: key, email: email })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        mfBtn.disabled = false;
+        if (d && d.error === 'domain_not_allowed') { showMsg(mfMsg, '送信元にできるのは「@royschannel.com」で終わるアドレスだけです。', false); return; }
+        if (!d || !d.ok) { showMsg(mfMsg, '変更に失敗しました。キーをご確認ください。', false); return; }
+        mfEmailInput.value = '';
+        showMsg(mfMsg, '送信元アドレスを変更しました。', true);
+        loadMailFrom();
+      })
+      .catch(function () {
+        mfBtn.disabled = false;
+        showMsg(mfMsg, '通信に失敗しました。もう一度お試しください。', false);
+      });
+  }
+
+  function selectedIds() {
+    return Array.prototype.map.call(
+      tbody.querySelectorAll('input[type="checkbox"]:checked'),
+      function (el) { return el.getAttribute('data-id'); }
+    );
+  }
+
+  function updateBulkBar() {
+    var ids = selectedIds();
+    bulkCountEl.textContent = ids.length + '件選択中';
+    bulkDelBtn.disabled = !ids.length;
+
+    var all = tbody.querySelectorAll('input[type="checkbox"]');
+    checkAllEl.checked = all.length > 0 && ids.length === all.length;
+  }
+
+  function deleteApplications(ids) {
+    var key = currentKey();
+    if (!key || !ids.length) return;
+
+    if (!API) {
+      // 見本の状態では、手元の一覧から消すだけ
+      lastRows = lastRows.filter(function (r) { return ids.indexOf(String(r.id)) < 0; });
+      return Promise.resolve({ ok: true });
+    }
+
+    return fetch(API + '/olive-applications?ids=' + encodeURIComponent(ids.join(',')), {
+      method: 'DELETE',
+      headers: adminHeaders(key)
+    }).then(function (r) { return r.json(); });
+  }
+
+  // CSVの1マス分をエスケープする（カンマ・改行・ダブルクォートを含む場合は "" で囲む）
+  function csvCell(v) {
+    var s = (v == null ? '' : v).toString();
+    if (/[",\n\r]/.test(s)) {
+      s = '"' + s.replace(/"/g, '""') + '"';
+    }
+    return s;
+  }
+
+  function buildCsv(rows) {
+    var headers = [
+      '受付日時', '区分', 'チーム名', '監督No', '監督氏名',
+      '責任者氏名', '責任者フリガナ', '郵便番号', '住所', 'TEL又は携帯', 'E-mail'
+    ];
+    [1, 2, 3, 4].forEach(function (n) {
+      headers.push('選手' + n + '氏名', '選手' + n + 'フリガナ', '選手' + n + '性別', '選手' + n + '所属クラブ', '選手' + n + '備考');
+    });
+
+    var lines = [headers.map(csvCell).join(',')];
+    rows.forEach(function (row) {
+      var ps = playersOf(row);
+      var mgrNo = managerNoOf(row);
+      var mgr = ps[Number(mgrNo) - 1];
+      var cells = [
+        fmtDate(row.created_at),
+        row.area,
+        row.team_name,
+        mgrNo,
+        mgr ? mgr.name : '',
+        row.leader_name,
+        row.leader_kana,
+        row.postal_code,
+        row.address,
+        row.tel,
+        row.email
+      ];
+      ps.forEach(function (p) {
+        cells.push(p.name, p.kana, p.sex, p.club, p.note);
+      });
+      lines.push(cells.map(csvCell).join(','));
+    });
+    // 先頭にBOMを付ける（無いとExcelで日本語が文字化けするため）
+    return '﻿' + lines.join('\r\n');
+  }
+
+  function suggestedCsvFilename() {
+    var t = new Date();
+    var y = t.getFullYear();
+    var m = String(t.getMonth() + 1).padStart(2, '0');
+    var d = String(t.getDate()).padStart(2, '0');
+    // 区分で絞っているときは、ファイル名にも入れる（あとで見て取り違えないため）
+    var area = areaFilter ? ('_' + areaFilter) : '';
+    return '第2回オリーブ杯_申込み一覧' + area + '_' + y + m + d + '.csv';
+  }
+
+  async function exportCsv() {
+    // いま表に出ているぶん（＝選んでいる区分）だけを保存する
+    var target = rowsForView();
+    if (!target.length) {
+      showMsg(exportMsg, '書き出せる申込みがありません。先に一覧を表示してください。', false);
+      return;
+    }
+
+    var csv = buildCsv(target);
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    var filename = suggestedCsvFilename();
+
+    // 対応しているブラウザ（Chrome・Edgeなど）では、保存先を選べるダイアログを出す
+    if (window.showSaveFilePicker) {
+      try {
+        var handle = await window.showSaveFilePicker({
+          suggestedName: filename,
+          types: [{ description: 'CSVファイル', accept: { 'text/csv': ['.csv'] } }]
+        });
+        var writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        showMsg(exportMsg, '保存しました。', true);
+      } catch (e) {
+        // キャンセルした場合はエラー表示しない
+        if (e && e.name !== 'AbortError') {
+          showMsg(exportMsg, '保存に失敗しました。もう一度お試しください。', false);
+        }
+      }
+      return;
+    }
+
+    // 保存先を選べないブラウザ（Safari・Firefoxなど）は、ふつうのダウンロードにする
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showMsg(exportMsg, 'ダウンロードフォルダに保存しました（このブラウザは保存先を選べません）。', true);
+  }
+
+  function playerCell(p, isMgr) {
+    if (!p || (!p.name && !p.kana)) { return '<td class="pl-cell"></td>'; }
+    var line2 = [p.sex, p.club].filter(function (v) { return v; }).join('・');
+    return '<td class="pl-cell">' +
+      esc(p.name) +
+      (isMgr ? '<br><span class="mgr">★チーム監督</span>' : '') +
+      '<br><span class="sub">' + esc(p.kana) + '</span>' +
+      (line2 ? '<br><span class="sub">' + esc(line2) + '</span>' : '') +
+      '</td>';
+  }
+
+  function renderRows(rows) {
+    countEl.textContent = areaFilter
+      ? (areaFilter + ' ' + rows.length + ' 件（全 ' + lastRows.length + ' 件中・新しい順）')
+      : ('全 ' + rows.length + ' 件（新しい順）');
+    countEl.style.display = 'block';
+    bulkbarEl.style.display = 'flex';
+    checkAllEl.checked = false;
+
+    tbody.innerHTML = rows.map(function (row) {
+      var ps = playersOf(row);
+      var mgrNo = managerNoOf(row);
+      var notes = ps
+        .filter(function (p) { return p.note; })
+        .map(function (p) { return 'No.' + p.no + '：' + p.note; })
+        .join('\n');
+
+      return '<tr>' +
+        '<td><input type="checkbox" data-id="' + row.id + '"></td>' +
+        '<td>' + esc(fmtDate(row.created_at)) + '</td>' +
+        '<td class="' + (row.area === '香川県外' ? 'area-out' : 'area-in') + '">' + esc(row.area) + '</td>' +
+        '<td>' + esc(row.team_name) + '</td>' +
+        '<td>' + esc(managerNameOf(row)) + '</td>' +
+        '<td>' + esc(row.leader_name) + '</td>' +
+        '<td>' + esc(row.leader_kana) + '</td>' +
+        '<td>' + esc(row.tel) + '</td>' +
+        '<td>' + esc(row.email) + '</td>' +
+        '<td>' + esc(row.postal_code) + '</td>' +
+        '<td class="addr-cell">' + esc(row.address) + '</td>' +
+        playerCell(ps[0], String(mgrNo) === '1') +
+        playerCell(ps[1], String(mgrNo) === '2') +
+        playerCell(ps[2], String(mgrNo) === '3') +
+        playerCell(ps[3], String(mgrNo) === '4') +
+        '<td class="wrap-cell">' + esc(notes) + '</td>' +
+        '</tr>';
+    }).join('');
+
+    Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (el) {
+      el.addEventListener('change', updateBulkBar);
+    });
+
+    updateBulkBar();
+    tablewrap.style.display = 'block';
+  }
+
+  /* 読み込んだ一覧を、いまの絞り込み（すべて／県内／県外）で画面に出す。
+     絞り込みを変えたときも、削除して読み直したときも、ここを通す。 */
+  function showList() {
+    nAllEl.textContent = lastRows.length;
+    nInEl.textContent  = lastRows.filter(function (r) { return r.area === '香川県内'; }).length;
+    nOutEl.textContent = lastRows.filter(function (r) { return r.area === '香川県外'; }).length;
+    tabsEl.style.display = 'flex';
+
+    // 保存ボタンに、いま何が保存されるのかを出す（違う区分を保存する取り違えを防ぐ）
+    exportBtn.textContent = areaFilter
+      ? ('Excel用ファイルを保存（CSV・' + areaFilter + 'のみ）')
+      : 'Excel用ファイルを保存（CSV・すべて）';
+
+    var rows = rowsForView();
+    if (!rows.length) {
+      tablewrap.style.display = 'none';
+      bulkbarEl.style.display = 'none';
+      countEl.style.display = 'none';
+      showMsg(msg, areaFilter
+        ? (areaFilter + 'からの申込みは、まだありません。')
+        : 'まだ申込みはありません。', true);
+      return;
+    }
+    msg.style.display = 'none';
+    renderRows(rows);
+  }
+
+  function load() {
+    var key = currentKey();
+    if (!key) { showMsg(msg, '管理キーを入力してください。', false); return; }
+
+    msg.style.display = 'none';
+    delMsg.style.display = 'none';
+    tablewrap.style.display = 'none';
+    bulkbarEl.style.display = 'none';
+    countEl.style.display = 'none';
+
+    // 受付システムが未接続のあいだは、見本のデータで画面を確認できるようにする
+    if (!API) {
+      loadCcList();
+      loadMailFrom();
+      if (!sampleLoaded) { lastRows = sampleRows(); sampleLoaded = true; }
+      showList();
+      return;
+    }
+
+    loadBtn.disabled = true;
+    loadBtn.textContent = '読み込み中…';
+
+    fetch(API + '/olive-applications', { headers: adminHeaders(key) })
+      .then(function (r) {
+        if (!r.ok) throw new Error('http_' + r.status);
+        return r.json();
+      })
+      .then(function (d) {
+        loadBtn.disabled = false;
+        loadBtn.textContent = '表示する';
+        if (!d || !d.ok) { showMsg(msg, 'キーが正しくないか、取得に失敗しました。', false); return; }
+
+        loadCcList();
+        loadMailFrom();
+
+        lastRows = d.results || [];
+        showList();
+      })
+      .catch(function () {
+        loadBtn.disabled = false;
+        loadBtn.textContent = '表示する';
+        showMsg(msg, '通信に失敗しました。しばらくしてから、もう一度お試しください。', false);
+      });
+  }
+
+  checkAllEl.addEventListener('change', function () {
+    Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (el) {
+      el.checked = checkAllEl.checked;
+    });
+    updateBulkBar();
+  });
+
+  bulkDelBtn.addEventListener('click', function () {
+    var ids = selectedIds();
+    if (!ids.length) return;
+    if (!window.confirm(ids.length + '件の申込みを削除しますか？（元に戻せません）')) return;
+
+    bulkDelBtn.disabled = true;
+    Promise.resolve(deleteApplications(ids))
+      .then(function (d) {
+        if (!d || !d.ok) { showMsg(delMsg, '削除に失敗しました。', false); bulkDelBtn.disabled = false; return; }
+        load();
+      })
+      .catch(function () { showMsg(delMsg, '通信に失敗しました。', false); bulkDelBtn.disabled = false; });
+  });
+
+  // 区分の切り替え。選び直すと選択（チェック）は外れるので、
+  // 見えていない行をうっかり削除してしまうことはない。
+  Array.prototype.forEach.call(tabsEl.querySelectorAll('.tab'), function (btn) {
+    btn.addEventListener('click', function () {
+      areaFilter = btn.getAttribute('data-area');
+      Array.prototype.forEach.call(tabsEl.querySelectorAll('.tab'), function (b) {
+        b.classList.toggle('is-on', b === btn);
+      });
+      delMsg.style.display = 'none';
+      exportMsg.style.display = 'none';
+      showList();
+    });
+  });
+
+  loadBtn.addEventListener('click', load);
+  keyInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
+  ccAddBtn.addEventListener('click', addCc);
+  ccEmailInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') addCc(); });
+  kcBtn.addEventListener('click', changeKey);
+  mfBtn.addEventListener('click', changeMailFrom);
+  exportBtn.addEventListener('click', exportCsv);
+})();
+</script>
+</body>
+</html>
