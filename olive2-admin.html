@@ -231,6 +231,19 @@ td.area-out{color:#8A6A20;font-weight:700;}
     <p class="warn">※ 変更できるのは「@royschannel.com」で終わるアドレスだけです（それ以外にすると、メールが届かなくなるため）。</p>
   </div>
 
+  <h2>申込者からの返信先</h2>
+  <div class="mailfrom">
+    <p class="current">現在の返信先： <b id="rt-current">（読み込み中…）</b></p>
+    <div class="mailfrom-body">
+      <input type="email" id="rt-email" placeholder="例：jimukyoku@example.com">
+      <button id="rt-btn">変更する</button>
+    </div>
+    <p class="msg" id="rt-msg" style="display:none;"></p>
+    <p class="hint">申込者あてのメール（受付・キャンセル待ちの登録・空きのご案内・期限切れのお知らせ）に、申込者が「返信」したときの宛先です。
+      メールの最後の連絡先の E-mail も、このアドレスになります。<b>担当の方が替わったら、ここを変更してください。</b></p>
+    <p class="hint">空欄のまま「変更する」を押すと、最初の設定（nisihara@kagawa-yakult.co.jp）に戻ります。</p>
+  </div>
+
   <h2>申込み通知メールのCC宛先</h2>
   <p class="count">ここに登録したメールアドレスには、申込みが入るたびに管理者あてメールのCCとして届きます（件数の上限なし）。</p>
   <div class="cc-box">
@@ -506,6 +519,60 @@ td.area-out{color:#8A6A20;font-weight:700;}
       }
     ];
   }
+
+  // ---------- 申込者からの返信先 ----------
+  var rtCurrentEl  = document.getElementById('rt-current');
+  var rtEmailInput = document.getElementById('rt-email');
+  var rtBtn        = document.getElementById('rt-btn');
+  var rtMsg        = document.getElementById('rt-msg');
+  var RT_DEFAULT   = 'nisihara@kagawa-yakult.co.jp';
+
+  function loadReplyTo() {
+    var key = currentKey();
+    if (!key) return;
+    if (!API) { rtCurrentEl.textContent = RT_DEFAULT + '（最初の設定）'; return; }
+    fetch(API + '/olive-reply-to', { headers: adminHeaders(key) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { return; }
+        rtCurrentEl.textContent = d.email + (d.isDefault ? '（最初の設定）' : '');
+      })
+      .catch(function () {});
+  }
+
+  function changeReplyTo() {
+    var key = currentKey();
+    if (!key) { showMsg(rtMsg, '先に管理キーを入力してください。', false); return; }
+    var email = rtEmailInput.value.trim();
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showMsg(rtMsg, 'メールアドレスをご確認ください。', false);
+      return;
+    }
+    if (!API) { showMsg(rtMsg, '受付システムが未接続のため、まだ変更できません。', false); return; }
+    if (!window.confirm(email
+      ? ('申込者からの返信先を「' + email + '」に変更しますか？')
+      : ('申込者からの返信先を、最初の設定（' + RT_DEFAULT + '）に戻しますか？'))) { return; }
+
+    rtBtn.disabled = true;
+    fetch(API + '/olive-reply-to', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: key, email: email })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        rtBtn.disabled = false;
+        if (!d || !d.ok) {
+          showMsg(rtMsg, d && d.error === 'invalid_email' ? 'メールアドレスをご確認ください。' : '変更に失敗しました。キーをご確認ください。', false);
+          return;
+        }
+        rtEmailInput.value = '';
+        showMsg(rtMsg, '返信先を「' + d.email + '」にしました。これから送るメールから、このアドレスが返信先になります。', true);
+        loadReplyTo();
+      })
+      .catch(function () { rtBtn.disabled = false; showMsg(rtMsg, '通信に失敗しました。', false); });
+  }
+  rtBtn.addEventListener('click', changeReplyTo);
 
   // ---------- 受付組数の上限（区分ごと） ----------
   var limitRows = Array.prototype.slice.call(document.querySelectorAll('.limit-row'));
@@ -1147,6 +1214,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
       adminArea.style.display = 'block';
       loadCcList();
       loadMailFrom();
+      loadReplyTo();
       loadLimits();
       loadWaitlist();
       if (!sampleLoaded) { lastRows = sampleRows(); sampleLoaded = true; }
@@ -1172,6 +1240,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         adminArea.style.display = 'block';
         loadCcList();
         loadMailFrom();
+        loadReplyTo();
         loadLimits();
         loadWaitlist();
 
