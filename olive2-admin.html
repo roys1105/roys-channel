@@ -172,6 +172,12 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
 /* キャンセル待ちの一覧（列が少ないので、申込み一覧の最小幅は使わない） */
 .wait-wrap{margin-bottom:10px;}
+/* 「キャンセル待ちはありません」は、見落とさないよう大きめ・太字・枠つきで出す */
+.wait-empty{
+  margin:0 0 16px;padding:14px 18px;border-radius:12px;
+  background:#EEF3E3;border:1.5px solid #CFD6BE;
+  font-size:17px;font-weight:700;color:#43552F;
+}
 .wait-wrap table{min-width:0;}
 .wait-wrap .del{
   border:none;background:#FBEAE4;color:#B4472F;font-weight:700;font-size:12.5px;
@@ -263,6 +269,18 @@ td.area-out{color:#8A6A20;font-weight:700;}
     <b>キャンセル待ちの方全員に「空きが出ました」とメールでご案内</b>します（事務局にもお知らせします）。
     ご案内を受けた方が「キャンセル待ち番号」で申し込むと、申込み一覧に入り、ここから消えます（先に申し込んだ方から受付）。
     <b>ご案内から3日たっても申し込まなかった方は、自動でここから外れます</b>（ご本人にメールでお知らせします）。</p>
+  <!-- 表示とCSV保存の対象を切り替える（申込み一覧と同じ形）。押した区分だけが表にもCSVにも入る -->
+  <div class="tabs" id="wait-tabs" style="display:none;">
+    <button type="button" class="tab is-on" data-area="">すべて<span class="n" id="wn-all">0</span></button>
+    <button type="button" class="tab" data-area="香川県内">香川県内<span class="n" id="wn-in">0</span></button>
+    <button type="button" class="tab" data-area="香川県外">香川県外<span class="n" id="wn-out">0</span></button>
+  </div>
+  <div class="bulkbar" id="wait-bar" style="display:none;">
+    <span id="wait-count"></span>
+    <button type="button" id="wait-export-btn" class="export">Excel用ファイルを保存（CSV・すべて）</button>
+  </div>
+  <p class="msg" id="wait-export-msg" style="display:none;"></p>
+
   <div class="tablewrap wait-wrap" id="wait-wrap" style="display:none;">
     <table>
       <thead>
@@ -283,7 +301,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
       <tbody id="wait-tbody"></tbody>
     </table>
   </div>
-  <p class="cc-empty" id="wait-empty" style="display:none;">キャンセル待ちはありません。</p>
+  <p class="wait-empty" id="wait-empty" style="display:none;">キャンセル待ちはありません。</p>
   <p class="msg" id="wait-msg" style="display:none;"></p>
 
   <h2>申込み一覧</h2>
@@ -561,41 +579,112 @@ td.area-out{color:#8A6A20;font-weight:700;}
   var waitEmpty = document.getElementById('wait-empty');
   var waitMsg   = document.getElementById('wait-msg');
 
+  var waitTabs      = document.getElementById('wait-tabs');
+  var waitBar       = document.getElementById('wait-bar');
+  var waitCount     = document.getElementById('wait-count');
+  var waitExportBtn = document.getElementById('wait-export-btn');
+  var waitExportMsg = document.getElementById('wait-export-msg');
+  var waitRows   = []; // 直近に読み込んだキャンセル待ち（全件・区分ごとの登録順）
+  var waitFilter = ''; // '' = すべて／'香川県内'／'香川県外'。表もCSVもこれに従う
+
   function loadWaitlist() {
     var key = currentKey();
     if (!key) return;
-    if (!API) { waitWrap.style.display = 'none'; waitEmpty.style.display = 'block'; return; }
+    if (!API) { waitRows = []; showWaitList(); return; }
     fetch(API + '/olive-waitlist', { headers: adminHeaders(key) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d || !d.ok) { return; }
-        var rows = d.results || [];
-        if (!rows.length) { waitWrap.style.display = 'none'; waitEmpty.style.display = 'block'; return; }
-        var order = {}; // 区分ごとの順番
-        waitBody.innerHTML = rows.map(function (row) {
-          order[row.area] = (order[row.area] || 0) + 1;
-          return '<tr>' +
-            cell('', '<b>' + esc(row.number) + '</b>') +
-            cell(row.area === '香川県外' ? 'area-out' : 'area-in', esc(row.area)) +
-            cell('', order[row.area] + ' 番目') +
-            cell('', esc(fmtDate(row.created_at))) +
-            cell('', esc(row.team_name)) +
-            cell('', countOf(row) + '名') +
-            cell('', esc(row.leader_name)) +
-            cell('', esc(row.tel)) +
-            cell('', esc(row.email)) +
-            cell('', row.offer_expires ? '空きを案内済み<br>（期限 ' + esc(fmtDate(row.offer_expires)) + '）' : '待機中') +
-            '<td><button type="button" class="del" data-id="' + row.id + '" data-team="' + esc(row.team_name) + '">削除</button></td>' +
-            '</tr>';
-        }).join('');
-        Array.prototype.forEach.call(waitBody.querySelectorAll('.del'), function (btn) {
-          btn.addEventListener('click', function () { removeWait(btn.getAttribute('data-id'), btn.getAttribute('data-team')); });
-        });
-        waitEmpty.style.display = 'none';
-        waitWrap.style.display = 'block';
+        waitRows = d.results || [];
+        showWaitList();
       })
       .catch(function () {});
   }
+
+  // 区分ごとの順番（1番目・2番目…）。絞り込んでいても、順番は区分の中での順番のまま
+  function waitOrderMap() {
+    var count = {}, map = {};
+    waitRows.forEach(function (row) {
+      count[row.area] = (count[row.area] || 0) + 1;
+      map[row.id] = count[row.area];
+    });
+    return map;
+  }
+
+  function waitRowsForView() {
+    if (!waitFilter) { return waitRows; }
+    return waitRows.filter(function (r) { return r.area === waitFilter; });
+  }
+
+  /* 読み込んだキャンセル待ちを、いまの絞り込み（すべて／県内／県外）で画面に出す。
+     1件も無いときは「キャンセル待ちはありません。」を大きく出す。 */
+  function showWaitList() {
+    document.getElementById('wn-all').textContent = waitRows.length;
+    document.getElementById('wn-in').textContent  = waitRows.filter(function (r) { return r.area === '香川県内'; }).length;
+    document.getElementById('wn-out').textContent = waitRows.filter(function (r) { return r.area === '香川県外'; }).length;
+
+    if (!waitRows.length) {
+      waitTabs.style.display = 'none';
+      waitBar.style.display = 'none';
+      waitWrap.style.display = 'none';
+      waitEmpty.textContent = 'キャンセル待ちはありません。';
+      waitEmpty.style.display = 'block';
+      return;
+    }
+    waitTabs.style.display = 'flex';
+    // 保存ボタンに、いま何が保存されるのかを出す（違う区分を保存する取り違えを防ぐ）
+    waitExportBtn.textContent = waitFilter
+      ? ('Excel用ファイルを保存（CSV・' + waitFilter + 'のみ）')
+      : 'Excel用ファイルを保存（CSV・すべて）';
+
+    var rows = waitRowsForView();
+    if (!rows.length) {
+      waitBar.style.display = 'none';
+      waitWrap.style.display = 'none';
+      waitEmpty.textContent = waitFilter + 'のキャンセル待ちはありません。';
+      waitEmpty.style.display = 'block';
+      return;
+    }
+    waitEmpty.style.display = 'none';
+    waitCount.textContent = waitFilter
+      ? (waitFilter + ' ' + rows.length + ' 件（全 ' + waitRows.length + ' 件中・登録順）')
+      : ('全 ' + rows.length + ' 件（登録順）');
+
+    var order = waitOrderMap();
+    waitBody.innerHTML = rows.map(function (row) {
+      return '<tr>' +
+        cell('', '<b>' + esc(row.number) + '</b>') +
+        cell(row.area === '香川県外' ? 'area-out' : 'area-in', esc(row.area)) +
+        cell('', order[row.id] + ' 番目') +
+        cell('', esc(fmtDate(row.created_at))) +
+        cell('', esc(row.team_name)) +
+        cell('', countOf(row) + '名') +
+        cell('', esc(row.leader_name)) +
+        cell('', esc(row.tel)) +
+        cell('', esc(row.email)) +
+        cell('', row.offer_expires ? '空きを案内済み<br>（期限 ' + esc(fmtDate(row.offer_expires)) + '）' : '待機中') +
+        '<td><button type="button" class="del" data-id="' + row.id + '" data-team="' + esc(row.team_name) + '">削除</button></td>' +
+        '</tr>';
+    }).join('');
+    Array.prototype.forEach.call(waitBody.querySelectorAll('.del'), function (btn) {
+      btn.addEventListener('click', function () { removeWait(btn.getAttribute('data-id'), btn.getAttribute('data-team')); });
+    });
+    waitBar.style.display = 'flex';
+    waitWrap.style.display = 'block';
+  }
+
+  // 区分の切り替え（申込み一覧と同じ）
+  Array.prototype.forEach.call(waitTabs.querySelectorAll('.tab'), function (btn) {
+    btn.addEventListener('click', function () {
+      waitFilter = btn.getAttribute('data-area');
+      Array.prototype.forEach.call(waitTabs.querySelectorAll('.tab'), function (b) {
+        b.classList.toggle('is-on', b === btn);
+      });
+      waitMsg.style.display = 'none';
+      waitExportMsg.style.display = 'none';
+      showWaitList();
+    });
+  });
 
   function removeWait(id, team) {
     var key = currentKey();
@@ -865,9 +954,12 @@ td.area-out{color:#8A6A20;font-weight:700;}
       return;
     }
 
-    var csv = buildCsv(target);
+    await saveCsvFile(buildCsv(target), suggestedCsvFilename(), exportMsg);
+  }
+
+  // CSV をファイルに保存する（申込み一覧・キャンセル待ちの両方で使う）。msgEl に結果を出す
+  async function saveCsvFile(csv, filename, msgEl) {
     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-    var filename = suggestedCsvFilename();
 
     // 対応しているブラウザ（Chrome・Edgeなど）では、保存先を選べるダイアログを出す
     if (window.showSaveFilePicker) {
@@ -879,11 +971,11 @@ td.area-out{color:#8A6A20;font-weight:700;}
         var writable = await handle.createWritable();
         await writable.write(blob);
         await writable.close();
-        showMsg(exportMsg, '保存しました。', true);
+        showMsg(msgEl, '保存しました。', true);
       } catch (e) {
         // キャンセルした場合はエラー表示しない
         if (e && e.name !== 'AbortError') {
-          showMsg(exportMsg, '保存に失敗しました。もう一度お試しください。', false);
+          showMsg(msgEl, '保存に失敗しました。もう一度お試しください。', false);
         }
       }
       return;
@@ -898,7 +990,60 @@ td.area-out{color:#8A6A20;font-weight:700;}
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showMsg(exportMsg, 'ダウンロードフォルダに保存しました（このブラウザは保存先を選べません）。', true);
+    showMsg(msgEl, 'ダウンロードフォルダに保存しました（このブラウザは保存先を選べません）。', true);
+  }
+
+  // キャンセル待ちの CSV（1行＝1チーム。番号・順番・状態のあとは、申込み一覧の CSV と同じ並び）
+  function buildWaitCsv(rows) {
+    var headers = [
+      'キャンセル待ち番号', '区分', '順番', '登録日時', '状態', '案内の期限',
+      'チーム名', '人数', '監督No', '監督氏名',
+      '責任者氏名', '責任者フリガナ', '郵便番号', '住所', 'TEL又は携帯', 'E-mail'
+    ];
+    [1, 2, 3, 4].forEach(function (n) {
+      headers.push('選手' + n + '氏名', '選手' + n + 'フリガナ', '選手' + n + '性別', '選手' + n + '所属クラブ', '選手' + n + '備考');
+    });
+    var order = waitOrderMap();
+    var lines = [headers.map(csvCell).join(',')];
+    rows.forEach(function (row) {
+      var ps = playersOf(row);
+      var mgrNo = managerNoOf(row);
+      var mgr = ps[Number(mgrNo) - 1];
+      var cells = [
+        row.number,
+        row.area,
+        order[row.id],
+        fmtDate(row.created_at),
+        row.offer_expires ? '空きを案内済み' : '待機中',
+        row.offer_expires ? fmtDate(row.offer_expires) : '',
+        row.team_name,
+        countOf(row),
+        mgrNo,
+        mgr ? mgr.name : '',
+        row.leader_name,
+        row.leader_kana,
+        row.postal_code,
+        row.address,
+        row.tel,
+        row.email
+      ];
+      ps.forEach(function (p) { cells.push(p.name, p.kana, p.sex, p.club, p.note); });
+      lines.push(cells.map(csvCell).join(','));
+    });
+    // 先頭にBOMを付ける（無いとExcelで日本語が文字化けするため）
+    return '\uFEFF' + lines.join('\r\n');
+  }
+
+  async function exportWaitCsv() {
+    var target = waitRowsForView();
+    if (!target.length) {
+      showMsg(waitExportMsg, '書き出せるキャンセル待ちがありません。', false);
+      return;
+    }
+    var t = new Date();
+    var ymd = t.getFullYear() + String(t.getMonth() + 1).padStart(2, '0') + String(t.getDate()).padStart(2, '0');
+    var filename = '第2回オリーブ杯_キャンセル待ち一覧' + (waitFilter ? '_' + waitFilter : '') + '_' + ymd + '.csv';
+    await saveCsvFile(buildWaitCsv(target), filename, waitExportMsg);
   }
 
   // 表の1マス。中身を .c で包み、1行20文字で折り返させる（CSS の td > .c）
@@ -1086,6 +1231,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
   kcBtn.addEventListener('click', changeKey);
   mfBtn.addEventListener('click', changeMailFrom);
   exportBtn.addEventListener('click', exportCsv);
+  waitExportBtn.addEventListener('click', exportWaitCsv);
 })();
 </script>
 </body>
