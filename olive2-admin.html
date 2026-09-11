@@ -260,11 +260,14 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
   <h2>キャンセル待ち</h2>
   <p class="count">定員に達したあとに登録されたチームです（区分ごと・登録順）。申込みの削除や上限の変更で空きが出ると、
-    <b>先頭から自動で申込みに繰り上がり</b>、ここから消えます（本人と事務局にメールでお知らせします）。</p>
+    <b>キャンセル待ちの方全員に「空きが出ました」とメールでご案内</b>します（事務局にもお知らせします）。
+    ご案内を受けた方が「キャンセル待ち番号」で申し込むと、申込み一覧に入り、ここから消えます（先に申し込んだ方から受付）。
+    <b>ご案内から3日たっても申し込まなかった方は、自動でここから外れます</b>（ご本人にメールでお知らせします）。</p>
   <div class="tablewrap wait-wrap" id="wait-wrap" style="display:none;">
     <table>
       <thead>
         <tr>
+          <th>番号</th>
           <th>区分</th>
           <th>順番</th>
           <th>登録日時</th>
@@ -273,6 +276,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
           <th>責任者 氏名</th>
           <th>TEL又は携帯</th>
           <th>E-mail</th>
+          <th>状態</th>
           <th></th>
         </tr>
       </thead>
@@ -504,8 +508,10 @@ td.area-out{color:#8A6A20;font-weight:700;}
           var st = d.limits[row.getAttribute('data-area')] || {};
           row.querySelector('.limit-input').value = st.max ? String(st.max) : '';
           var state = row.querySelector('.limit-state');
-          state.textContent = '受付済み ' + (st.count || 0) + ' 組' +
-            (!st.max ? '（上限なし・受付中）' : (st.open ? '（受付中）' : '（上限に達したため締切中）')) +
+          var label = st.open ? (st.max ? '（受付中）' : '（上限なし・受付中）')
+            : st.vacancy ? '（空きあり・キャンセル待ちの方にご案内中）'
+            : '（上限に達したため締切中）';
+          state.textContent = '受付済み ' + (st.count || 0) + ' 組' + label +
             (st.waiting ? '　キャンセル待ち ' + st.waiting + ' 組' : '');
           state.className = 'limit-state' + (st.open === false ? ' full' : '');
         });
@@ -538,9 +544,9 @@ td.area-out{color:#8A6A20;font-weight:700;}
         btn.disabled = false;
         if (!d || !d.ok) { showMsg(limitMsg, '保存に失敗しました。キーをご確認ください。', false); return; }
         showMsg(limitMsg, area + 'の上限を' + (raw ? raw + ' 組' : '「上限なし」') + 'にしました。' +
-          (d.promoted ? 'キャンセル待ちから ' + d.promoted + ' 組を、自動で申込みに繰り上げました（本人と事務局にメールでお知らせ済み）。' : ''), true);
-        // 繰り上げがあったら申込み一覧も変わるので、全部読み直す
-        if (d.promoted) { load(); } else { loadLimits(); }
+          (d.offered ? '空きが出たため、キャンセル待ち ' + d.offered + ' 組に「空きが出ました」のメールを送りました。' : ''), true);
+        loadLimits();
+        loadWaitlist();
       })
       .catch(function () { btn.disabled = false; showMsg(limitMsg, '通信に失敗しました。', false); });
   }
@@ -569,6 +575,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         waitBody.innerHTML = rows.map(function (row) {
           order[row.area] = (order[row.area] || 0) + 1;
           return '<tr>' +
+            cell('', '<b>' + esc(row.number) + '</b>') +
             cell(row.area === '香川県外' ? 'area-out' : 'area-in', esc(row.area)) +
             cell('', order[row.area] + ' 番目') +
             cell('', esc(fmtDate(row.created_at))) +
@@ -577,6 +584,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
             cell('', esc(row.leader_name)) +
             cell('', esc(row.tel)) +
             cell('', esc(row.email)) +
+            cell('', row.offer_expires ? '空きを案内済み<br>（期限 ' + esc(fmtDate(row.offer_expires)) + '）' : '待機中') +
             '<td><button type="button" class="del" data-id="' + row.id + '" data-team="' + esc(row.team_name) + '">削除</button></td>' +
             '</tr>';
         }).join('');
@@ -1050,8 +1058,8 @@ td.area-out{color:#8A6A20;font-weight:700;}
       .then(function (d) {
         if (!d || !d.ok) { showMsg(delMsg, '削除に失敗しました。', false); bulkDelBtn.disabled = false; return; }
         load();
-        if (d.promoted) {
-          showMsg(delMsg, 'キャンセル待ちから ' + d.promoted + ' 組を、自動で申込みに繰り上げました（本人と事務局にメールでお知らせ済み）。', true);
+        if (d.offered) {
+          showMsg(delMsg, '空きが出たため、キャンセル待ち ' + d.offered + ' 組に「空きが出ました」のメールを送りました。', true);
         }
       })
       .catch(function () { showMsg(delMsg, '通信に失敗しました。', false); bulkDelBtn.disabled = false; });
