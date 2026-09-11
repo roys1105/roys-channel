@@ -315,8 +315,8 @@ footer .cp{opacity:.72;margin-top:12px;}
       <p>こちらで申込書を受付後、参加の可否のお返事を、お電話・FAX・E-mail にて差し上げます。</p>
       <div class="contact">
         <b>香川県バウンドテニス協会</b><br>
-        TEL：0875-73-3458　／　FAX：0875-73-3457<br>
-        E-mail：nisihara@kagawa-yakult.co.jp
+        TEL：<span data-office="tel">0875-73-3458</span>　／　FAX：<span data-office="fax">0875-73-3457</span><br>
+        E-mail：<span data-office="email">nisihara@kagawa-yakult.co.jp</span>
       </div>
     </div>
   </div>
@@ -568,7 +568,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       <p>おかげさまで申込みが定員に達しましたので、受付を終了いたしました。</p>
       <p>たくさんのお申込みをいただき、ありがとうございました。</p>
       <p id="f-closed-wait" style="display:none;">現在の空きは、キャンセル待ちの方にご案内しています。</p>
-      <p>ご不明な点は、香川県バウンドテニス協会（TEL 0875-73-3458）までお問い合わせください。</p>
+      <p>ご不明な点は、香川県バウンドテニス協会（TEL <span data-office="tel">0875-73-3458</span>）までお問い合わせください。</p>
       <div class="waitbox">
         <p><b>キャンセル待ちの登録ができます。</b><br>
           登録すると「キャンセル待ち番号」をお知らせします。取り消しで空きが出た場合は、キャンセル待ちの方全員に
@@ -588,7 +588,7 @@ footer .cp{opacity:.72;margin-top:12px;}
     </div>
 
     <p class="alt">
-      うまく送れないときは、お手数ですが 香川県バウンドテニス協会（TEL 0875-73-3458）まで
+      うまく送れないときは、お手数ですが 香川県バウンドテニス協会（TEL <span data-office="tel">0875-73-3458</span>）まで
       お電話にてご連絡ください。
     </p>
 
@@ -598,7 +598,7 @@ footer .cp{opacity:.72;margin-top:12px;}
 <footer>
   <div class="narrow">
     香川県バウンドテニス協会<br>
-    TEL 0875-73-3458　／　FAX 0875-73-3457
+    TEL <span data-office="tel">0875-73-3458</span>　／　FAX <span data-office="fax">0875-73-3457</span>
     <p class="cp">&copy; 香川県バウンドテニス協会</p>
   </div>
 </footer>
@@ -628,6 +628,23 @@ footer .cp{opacity:.72;margin-top:12px;}
   var postalEl  = document.getElementById('f-postal');
   var addressEl = document.getElementById('f-address');
   var closedEl  = document.getElementById('f-closed');
+
+  /* 協会の連絡先（TEL・FAX・E-mail）は、管理ページの「事務局の情報」で変えられる。
+     ページに書いてあるのは最初の設定で、開いたときに最新の値に置き換える（読めなければ、そのまま）。 */
+  var officeTel = '0875-73-3458';
+  if (API) {
+    fetch(API + '/olive-contact')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { return; }
+        if (d.tel) { officeTel = d.tel; }
+        Array.prototype.forEach.call(document.querySelectorAll('[data-office]'), function (el) {
+          var v = d[el.getAttribute('data-office')];
+          if (v) { el.textContent = v; }
+        });
+      })
+      .catch(function () {});
+  }
 
   /* 受付組数の上限に達していたら、フォームの代わりに「受付終了」の画面を出す。
      開いたときに確かめ、送信したときにサーバーが error:'full' と答えた場合も出す。
@@ -748,7 +765,7 @@ footer .cp{opacity:.72;margin-top:12px;}
         btn.textContent = '呼び出す';
         if (!d || !d.ok) {
           return fail('番号か E-mail が違うか、キャンセル待ちの登録が見つかりません（期限が過ぎて外れた場合も含みます）。' +
-            'ご不明な点は、香川県バウンドテニス協会（TEL 0875-73-3458）までお問い合わせください。');
+            'ご不明な点は、香川県バウンドテニス協会（TEL ' + officeTel + '）までお問い合わせください。');
         }
         if (d.area !== AREA) {
           return fail('この番号は「' + d.area + '用」のキャンセル待ちです。' + d.area + '用の申込みページからお申込みください。');
@@ -1048,7 +1065,7 @@ footer .cp{opacity:.72;margin-top:12px;}
           cErr.textContent = d.error === 'claim_full'
             ? '申し訳ありません。先にほかの方のお申込みで、空きが埋まりました。キャンセル待ち番号 ' + claim.number +
               ' はそのまま有効です（次に空きが出たときに、あらためてご案内します）。'
-            : 'キャンセル待ちの登録が見つかりません（期限が過ぎて外れた場合も含みます）。ご不明な点は、香川県バウンドテニス協会（TEL 0875-73-3458）までお問い合わせください。';
+            : 'キャンセル待ちの登録が見つかりません（期限が過ぎて外れた場合も含みます）。ご不明な点は、香川県バウンドテニス協会（TEL ' + officeTel + '）までお問い合わせください。';
           cErr.style.display = 'flex';
         } else {
           sendBtn.textContent = sendLabel(); sendBtn.disabled = false; backBtn.disabled = false;

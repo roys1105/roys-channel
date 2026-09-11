@@ -171,6 +171,20 @@ td.area-out{color:#8A6A20;font-weight:700;}
 .limit-row .limit-state.full{color:#B4472F;font-weight:700;}
 
 /* キャンセル待ちの一覧（列が少ないので、申込み一覧の最小幅は使わない） */
+/* 事務局の情報 */
+.office .office-lead{margin:0 0 16px;}
+.office-row{display:grid;grid-template-columns:13em 1fr;gap:6px 14px;align-items:center;margin-bottom:14px;}
+.office-row label{font-weight:700;font-size:14px;color:#43552F;line-height:1.5;}
+.office-row input{
+  width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #CFD6BE;
+  font-size:15px;font-family:inherit;
+}
+.office-row .office-note{grid-column:2;font-size:12.5px;color:#6B7A6B;line-height:1.6;}
+@media (max-width:640px){
+  .office-row{grid-template-columns:1fr;}
+  .office-row .office-note{grid-column:1;}
+}
+
 .wait-wrap{margin-bottom:10px;}
 /* 「キャンセル待ちはありません」は、見落とさないよう大きめ・太字・枠つきで出す */
 .wait-empty{
@@ -231,17 +245,38 @@ td.area-out{color:#8A6A20;font-weight:700;}
     <p class="warn">※ 変更できるのは「@royschannel.com」で終わるアドレスだけです（それ以外にすると、メールが届かなくなるため）。</p>
   </div>
 
-  <h2>申込者からの返信先</h2>
-  <div class="mailfrom">
-    <p class="current">現在の返信先： <b id="rt-current">（読み込み中…）</b></p>
-    <div class="mailfrom-body">
-      <input type="email" id="rt-email" placeholder="例：jimukyoku@example.com">
-      <button id="rt-btn">変更する</button>
+  <h2>事務局の情報</h2>
+  <div class="mailfrom office">
+    <p class="hint office-lead">申込みの知らせの届け先と、申込者あてのメール・申込みページに載る連絡先です。
+      <b>担当の方が替わったら、ここを変更してください。</b></p>
+    <div class="office-row">
+      <label for="of-notify_to">申込み通知メールの届け先</label>
+      <input type="email" id="of-notify_to">
+      <span class="office-note">申込み・キャンセル待ち・空きのご案内などの知らせが届きます（ほかの方への控えは、下の「CC宛先」で）。</span>
     </div>
-    <p class="msg" id="rt-msg" style="display:none;"></p>
-    <p class="hint">申込者あてのメール（受付・キャンセル待ちの登録・空きのご案内・期限切れのお知らせ）に、申込者が「返信」したときの宛先です。
-      メールの最後の連絡先の E-mail も、このアドレスになります。<b>担当の方が替わったら、ここを変更してください。</b></p>
-    <p class="hint">空欄のまま「変更する」を押すと、最初の設定（nisihara@kagawa-yakult.co.jp）に戻ります。</p>
+    <div class="office-row">
+      <label for="of-reply_to">申込者からの返信先<br>（連絡先の E-mail）</label>
+      <input type="email" id="of-reply_to">
+      <span class="office-note">申込者がメールに「返信」したときの宛先です。メールの最後と、申込みページの連絡先の E-mail にもなります。</span>
+    </div>
+    <div class="office-row">
+      <label for="of-person">事務局の担当者名</label>
+      <input type="text" id="of-person">
+      <span class="office-note">申込者あてのメールの最後に「香川県バウンドテニス協会 事務局　（この名前）」と載ります。</span>
+    </div>
+    <div class="office-row">
+      <label for="of-tel">TEL</label>
+      <input type="text" id="of-tel" inputmode="tel">
+      <span class="office-note">申込みページとメールの連絡先に載ります。</span>
+    </div>
+    <div class="office-row">
+      <label for="of-fax">FAX</label>
+      <input type="text" id="of-fax" inputmode="tel">
+      <span class="office-note">申込みページとメールの連絡先に載ります。</span>
+    </div>
+    <div class="mailfrom-body"><button type="button" id="of-btn">この内容で保存する</button></div>
+    <p class="msg" id="of-msg" style="display:none;"></p>
+    <p class="hint">欄を空にして保存すると、その項目は最初の設定（西原さんの情報）に戻ります。</p>
   </div>
 
   <h2>申込み通知メールのCC宛先</h2>
@@ -520,59 +555,66 @@ td.area-out{color:#8A6A20;font-weight:700;}
     ];
   }
 
-  // ---------- 申込者からの返信先 ----------
-  var rtCurrentEl  = document.getElementById('rt-current');
-  var rtEmailInput = document.getElementById('rt-email');
-  var rtBtn        = document.getElementById('rt-btn');
-  var rtMsg        = document.getElementById('rt-msg');
-  var RT_DEFAULT   = 'nisihara@kagawa-yakult.co.jp';
+  // ---------- 事務局の情報（担当の方が替わったら変更） ----------
+  var OFFICE_KEYS = ['notify_to', 'reply_to', 'person', 'tel', 'fax'];
+  var OFFICE_LABELS = {
+    notify_to: '申込み通知メールの届け先', reply_to: '申込者からの返信先',
+    person: '事務局の担当者名', tel: 'TEL', fax: 'FAX'
+  };
+  var OFFICE_SAMPLE = {
+    notify_to: 'nisihara@kagawa-yakult.co.jp', reply_to: 'nisihara@kagawa-yakult.co.jp',
+    person: '西原 敏夫', tel: '0875-73-3458', fax: '0875-73-3457'
+  };
+  var ofBtn = document.getElementById('of-btn');
+  var ofMsg = document.getElementById('of-msg');
+  function ofInput(k) { return document.getElementById('of-' + k); }
+  function fillOffice(o) {
+    OFFICE_KEYS.forEach(function (k) { ofInput(k).value = (o && o[k]) || ''; });
+  }
 
-  function loadReplyTo() {
+  function loadOffice() {
     var key = currentKey();
     if (!key) return;
-    if (!API) { rtCurrentEl.textContent = RT_DEFAULT + '（最初の設定）'; return; }
-    fetch(API + '/olive-reply-to', { headers: adminHeaders(key) })
+    if (!API) { fillOffice(OFFICE_SAMPLE); return; }
+    fetch(API + '/olive-office', { headers: adminHeaders(key) })
       .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (!d || !d.ok) { return; }
-        rtCurrentEl.textContent = d.email + (d.isDefault ? '（最初の設定）' : '');
-      })
+      .then(function (d) { if (d && d.ok) { fillOffice(d.office); } })
       .catch(function () {});
   }
 
-  function changeReplyTo() {
+  function saveOffice() {
     var key = currentKey();
-    if (!key) { showMsg(rtMsg, '先に管理キーを入力してください。', false); return; }
-    var email = rtEmailInput.value.trim();
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showMsg(rtMsg, 'メールアドレスをご確認ください。', false);
-      return;
-    }
-    if (!API) { showMsg(rtMsg, '受付システムが未接続のため、まだ変更できません。', false); return; }
-    if (!window.confirm(email
-      ? ('申込者からの返信先を「' + email + '」に変更しますか？')
-      : ('申込者からの返信先を、最初の設定（' + RT_DEFAULT + '）に戻しますか？'))) { return; }
+    if (!key) { showMsg(ofMsg, '先に管理キーを入力してください。', false); return; }
+    var office = {};
+    OFFICE_KEYS.forEach(function (k) { office[k] = ofInput(k).value.trim(); });
+    var bad = '';
+    ['notify_to', 'reply_to'].forEach(function (k) {
+      if (!bad && office[k] && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(office[k])) { bad = OFFICE_LABELS[k]; }
+    });
+    if (bad) { showMsg(ofMsg, '「' + bad + '」のメールアドレスをご確認ください。', false); return; }
+    if (!API) { showMsg(ofMsg, '受付システムが未接続のため、まだ保存できません。', false); return; }
+    if (!window.confirm('事務局の情報を、この内容で保存しますか？\n（空の欄は、最初の設定に戻ります）')) { return; }
 
-    rtBtn.disabled = true;
-    fetch(API + '/olive-reply-to', {
+    ofBtn.disabled = true;
+    fetch(API + '/olive-office', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ key: key, email: email })
+      body: JSON.stringify({ key: key, office: office })
     })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        rtBtn.disabled = false;
+        ofBtn.disabled = false;
         if (!d || !d.ok) {
-          showMsg(rtMsg, d && d.error === 'invalid_email' ? 'メールアドレスをご確認ください。' : '変更に失敗しました。キーをご確認ください。', false);
+          var k = d && d.error && d.error.indexOf('invalid_') === 0 ? d.error.slice(8) : '';
+          showMsg(ofMsg, OFFICE_LABELS[k] ? ('「' + OFFICE_LABELS[k] + '」をご確認ください。') : '保存に失敗しました。キーをご確認ください。', false);
           return;
         }
-        rtEmailInput.value = '';
-        showMsg(rtMsg, '返信先を「' + d.email + '」にしました。これから送るメールから、このアドレスが返信先になります。', true);
-        loadReplyTo();
+        fillOffice(d.office);
+        showMsg(ofMsg, '保存しました。これから送るメールと、申込みページの連絡先に使われます。', true);
       })
-      .catch(function () { rtBtn.disabled = false; showMsg(rtMsg, '通信に失敗しました。', false); });
+      .catch(function () { ofBtn.disabled = false; showMsg(ofMsg, '通信に失敗しました。', false); });
   }
-  rtBtn.addEventListener('click', changeReplyTo);
+  ofBtn.addEventListener('click', saveOffice);
 
   // ---------- 受付組数の上限（区分ごと） ----------
   var limitRows = Array.prototype.slice.call(document.querySelectorAll('.limit-row'));
@@ -1214,7 +1256,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
       adminArea.style.display = 'block';
       loadCcList();
       loadMailFrom();
-      loadReplyTo();
+      loadOffice();
       loadLimits();
       loadWaitlist();
       if (!sampleLoaded) { lastRows = sampleRows(); sampleLoaded = true; }
@@ -1240,7 +1282,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         adminArea.style.display = 'block';
         loadCcList();
         loadMailFrom();
-        loadReplyTo();
+        loadOffice();
         loadLimits();
         loadWaitlist();
 
