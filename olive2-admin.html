@@ -240,6 +240,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
           <th>受付日時</th>
           <th>区分</th>
           <th>チーム名</th>
+          <th>人数</th>
           <th>チーム監督</th>
           <th>責任者 氏名</th>
           <th>責任者 フリガナ</th>
@@ -353,7 +354,12 @@ td.area-out{color:#8A6A20;font-weight:700;}
     if (typeof ps === 'string') {
       try { ps = JSON.parse(ps); } catch (e) { ps = null; }
     }
-    if (Array.isArray(ps) && ps.length) { return ps; }
+    if (Array.isArray(ps) && ps.length) {
+      // 申込み人数が2〜3名のときも、表とCSVの列がずれないよう、いつも4枠にそろえる
+      ps = ps.slice(0, 4);
+      while (ps.length < 4) { ps.push({ no: ps.length + 1, name: '', kana: '', sex: '', club: '', note: '' }); }
+      return ps;
+    }
     return [1, 2, 3, 4].map(function (n) {
       return {
         no: n,
@@ -366,6 +372,8 @@ td.area-out{color:#8A6A20;font-weight:700;}
     });
   }
   function managerNoOf(row) { return row.manager_no != null ? row.manager_no : row.managerNo; }
+  // 申込み人数＝名前かフリガナが入っている選手の数
+  function countOf(row) { return playersOf(row).filter(function (p) { return p.name || p.kana; }).length; }
   function managerNameOf(row) {
     var ps = playersOf(row);
     var no = managerNoOf(row);
@@ -605,7 +613,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
   function buildCsv(rows) {
     var headers = [
-      '受付日時', '区分', 'チーム名', '監督No', '監督氏名',
+      '受付日時', '区分', 'チーム名', '人数', '監督No', '監督氏名',
       '責任者氏名', '責任者フリガナ', '郵便番号', '住所', 'TEL又は携帯', 'E-mail'
     ];
     [1, 2, 3, 4].forEach(function (n) {
@@ -621,6 +629,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         fmtDate(row.created_at),
         row.area,
         row.team_name,
+        countOf(row),
         mgrNo,
         mgr ? mgr.name : '',
         row.leader_name,
@@ -725,6 +734,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         '<td>' + esc(fmtDate(row.created_at)) + '</td>' +
         '<td class="' + (row.area === '香川県外' ? 'area-out' : 'area-in') + '">' + esc(row.area) + '</td>' +
         '<td>' + esc(row.team_name) + '</td>' +
+        '<td>' + countOf(row) + '名</td>' +
         '<td>' + esc(managerNameOf(row)) + '</td>' +
         '<td>' + esc(row.leader_name) + '</td>' +
         '<td>' + esc(row.leader_kana) + '</td>' +

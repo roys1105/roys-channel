@@ -343,18 +343,28 @@ footer .cp{opacity:.72;margin-top:12px;}
       </div>
 
       <!-- ================= 申込チーム ================= -->
-      <h2 class="blockhead">【申込チーム】<small>選手4名をご記入ください</small></h2>
+      <h2 class="blockhead">【申込チーム】<small>選手は2〜4名でお申込みいただけます</small></h2>
 
       <div class="field">
         <div class="q"><span>チーム名</span><span class="badge req">必 須</span></div>
         <input type="text" id="f-team" name="teamName">
       </div>
 
+      <div class="field">
+        <div class="q"><span>申込み人数</span><span class="badge req">必 須</span></div>
+        <p class="hint">選んだ人数ぶんの記入欄が、下に出ます。</p>
+        <div class="choices row" id="f-count">
+          <label class="choice"><input type="radio" name="count" value="2"><span>2名</span></label>
+          <label class="choice"><input type="radio" name="count" value="3"><span>3名</span></label>
+          <label class="choice"><input type="radio" name="count" value="4" checked><span>4名</span></label>
+        </div>
+      </div>
+
       <p class="rule">注1　男子の代わりに女子の出場を認めますが、その逆は認めません。<br>
         そのため <b>No.1・No.2 は男性・女性のどちらでも</b>、<b>No.3・No.4 は女性のみ</b> となります。</p>
 
       <!-- No.1 -->
-      <div class="player">
+      <div class="player" data-player="1">
         <div class="p-head"><span class="p-no">No.1</span><span class="p-tag">男性・女性のどちらでも出場できます</span></div>
         <div class="field">
           <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
@@ -382,7 +392,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       </div>
 
       <!-- No.2 -->
-      <div class="player">
+      <div class="player" data-player="2">
         <div class="p-head"><span class="p-no">No.2</span><span class="p-tag">男性・女性のどちらでも出場できます</span></div>
         <div class="field">
           <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
@@ -410,7 +420,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       </div>
 
       <!-- No.3 -->
-      <div class="player">
+      <div class="player" data-player="3">
         <div class="p-head"><span class="p-no">No.3</span><span class="p-tag">女性のみ出場できます</span></div>
         <div class="field">
           <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
@@ -435,7 +445,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       </div>
 
       <!-- No.4 -->
-      <div class="player">
+      <div class="player" data-player="4">
         <div class="p-head"><span class="p-no">No.4</span><span class="p-tag">女性のみ出場できます</span></div>
         <div class="field">
           <div class="q"><span>フリガナ</span><span class="badge req">必 須</span></div>
@@ -461,12 +471,12 @@ footer .cp{opacity:.72;margin-top:12px;}
 
       <div class="field">
         <div class="q"><span>チーム監督</span><span class="badge req">必 須</span></div>
-        <p class="hint">上の4名のうち、どなたが監督かをお選びください。（申込書の「チーム監督は番号に〇を記入」にあたります）</p>
+        <p class="hint">上の選手のうち、どなたが監督かをお選びください。（申込書の「チーム監督は番号に〇を記入」にあたります）</p>
         <div class="choices" id="f-manager">
-          <label class="choice"><input type="radio" name="manager" value="1"><span data-mgr="1">No.1</span></label>
-          <label class="choice"><input type="radio" name="manager" value="2"><span data-mgr="2">No.2</span></label>
-          <label class="choice"><input type="radio" name="manager" value="3"><span data-mgr="3">No.3</span></label>
-          <label class="choice"><input type="radio" name="manager" value="4"><span data-mgr="4">No.4</span></label>
+          <label class="choice" data-mgr-opt="1"><input type="radio" name="manager" value="1"><span data-mgr="1">No.1</span></label>
+          <label class="choice" data-mgr-opt="2"><input type="radio" name="manager" value="2"><span data-mgr="2">No.2</span></label>
+          <label class="choice" data-mgr-opt="3"><input type="radio" name="manager" value="3"><span data-mgr="3">No.3</span></label>
+          <label class="choice" data-mgr-opt="4"><input type="radio" name="manager" value="4"><span data-mgr="4">No.4</span></label>
         </div>
       </div>
 
@@ -588,6 +598,27 @@ footer .cp{opacity:.72;margin-top:12px;}
   form.addEventListener('change', refreshManagerLabels);
   refreshManagerLabels();
 
+  /* 申込み人数（2〜4名）に合わせて、選手の記入欄と監督の選択肢を出し分ける。
+     隠した欄に書いてあった内容は消さない（人数を戻したときにそのまま使えるように）が、送信はしない。
+     隠した番号が監督に選ばれていたら、選び直してもらうために外す。 */
+  function playerCount() { return Number(radio('count')) || 4; }
+  function applyCount() {
+    var n = playerCount();
+    [1, 2, 3, 4].forEach(function (i) {
+      var on = i <= n;
+      var card = form.querySelector('.player[data-player="' + i + '"]');
+      if (card) { card.style.display = on ? '' : 'none'; }
+      var opt = form.querySelector('[data-mgr-opt="' + i + '"]');
+      if (opt) {
+        opt.style.display = on ? '' : 'none';
+        var r = opt.querySelector('input');
+        if (!on && r.checked) { r.checked = false; }
+      }
+    });
+  }
+  form.addEventListener('change', function (e) { if (e.target.name === 'count') { applyCount(); } });
+  applyCount();
+
   var pending = null; // 確認画面に出している、検証ずみの申込みデータ
 
   function todayISO() {
@@ -635,7 +666,8 @@ footer .cp{opacity:.72;margin-top:12px;}
     var teamName  = val('f-team');
     var managerNo = radio('manager');
 
-    var players = [1, 2, 3, 4].map(function (n) {
+    var count = playerCount();
+    var players = [1, 2, 3, 4].slice(0, count).map(function (n) {
       return {
         no: n,
         kana: val('p' + n + '-kana'),
@@ -664,7 +696,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       if (!p.name) { return showErr('選手 No.' + p.no + ' の「氏名」が入力されていません。ご記入をお願いします。', 'p' + p.no + '-name'); }
       if (!p.sex)  { return showErr('選手 No.' + p.no + ' の「性別」が選ばれていません。男・女のどちらかをお選びください。', 'p' + p.no + '-name'); }
     }
-    if (!managerNo) { return showErr('「チーム監督」が選ばれていません。4名のうちお一人をお選びください。'); }
+    if (!managerNo || Number(managerNo) > count) { return showErr('「チーム監督」が選ばれていません。選手のうちお一人をお選びください。'); }
 
     err.style.display = 'none';
 
@@ -674,6 +706,7 @@ footer .cp{opacity:.72;margin-top:12px;}
       appliedDate: todayISO(),
       leader: leader,
       teamName: teamName,
+      playerCount: count,
       managerNo: Number(managerNo),
       players: players
     };
@@ -691,6 +724,7 @@ footer .cp{opacity:.72;margin-top:12px;}
 
     var dl2 = addSec('【申込チーム】', true);
     addRow(dl2, 'チーム名', teamName);
+    addRow(dl2, '申込み人数', count + '名');
     addRow(dl2, 'チーム監督', 'No.' + managerNo + '（' + players[Number(managerNo) - 1].name + '）');
 
     players.forEach(function (p) {
