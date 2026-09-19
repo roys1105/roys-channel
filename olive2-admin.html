@@ -1050,8 +1050,18 @@ td.area-out{color:#8A6A20;font-weight:700;}
     }).then(function (r) { return r.json(); });
   }
 
+  // Excelで文字として読ませたいマス（TEL）の目印。csvCell が ="09012345678" の形で書く
+  // （"" で囲むだけだと、Excelで開いたときに数字として読まれ、先頭の0が消えるため）
+  function excelText(v) { return { excelText: v }; }
+
   // CSVの1マス分をエスケープする（カンマ・改行・ダブルクォートを含む場合は "" で囲む）
   function csvCell(v) {
+    if (v != null && typeof v === 'object') {
+      var t = (v.excelText == null ? '' : v.excelText).toString();
+      // 空のときと、" ・カンマ・改行が入っていて式にできないときは、ふつうのマスとして書く
+      if (t && !/[",\n\r]/.test(t)) return '="' + t + '"';
+      v = t;
+    }
     var s = (v == null ? '' : v).toString();
     if (/[",\n\r]/.test(s)) {
       s = '"' + s.replace(/"/g, '""') + '"';
@@ -1084,7 +1094,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         row.leader_kana,
         row.postal_code,
         row.address,
-        row.tel,
+        excelText(row.tel),
         row.email
       ];
       ps.forEach(function (p) {
@@ -1184,7 +1194,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         row.leader_kana,
         row.postal_code,
         row.address,
-        row.tel,
+        excelText(row.tel),
         row.email
       ];
       ps.forEach(function (p) { cells.push(p.name, p.kana, p.sex, p.club, p.note); });
