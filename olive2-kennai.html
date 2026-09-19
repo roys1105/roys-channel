@@ -927,7 +927,10 @@ footer .cp{opacity:.72;margin-top:12px;}
     var leader = {
       kana: val('f-kana'), name: val('f-name'),
       postalCode: val('f-postal'), address: val('f-address'),
-      tel: val('f-tel'), email: val('f-email')
+      // TELは「－」や「()」を取り除き、全角の数字は半角にする（受付APIと同じ。確認画面にもこの形で出す）
+      tel: val('f-tel').replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xfee0); })
+                       .replace(/[-‐‑‒–—―−ー－ｰ()（）]/g, ''),
+      email: val('f-email')
     };
     var teamName  = val('f-team');
     var managerNo = radio('manager');

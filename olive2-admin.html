@@ -1054,6 +1054,13 @@ td.area-out{color:#8A6A20;font-weight:700;}
   // （"" で囲むだけだと、Excelで開いたときに数字として読まれ、先頭の0が消えるため）
   function excelText(v) { return { excelText: v }; }
 
+  // TELから「－」や「()」を取り除き、全角の数字は半角にする（受付APIと同じ。前から登録されていた申込みもCSVではこの形にそろう）
+  function cleanTel(v) {
+    return (v == null ? '' : v).toString()
+      .replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xfee0); })
+      .replace(/[-‐‑‒–—―−ー－ｰ()（）]/g, '');
+  }
+
   // CSVの1マス分をエスケープする（カンマ・改行・ダブルクォートを含む場合は "" で囲む）
   function csvCell(v) {
     if (v != null && typeof v === 'object') {
@@ -1094,7 +1101,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         row.leader_kana,
         row.postal_code,
         row.address,
-        excelText(row.tel),
+        excelText(cleanTel(row.tel)),
         row.email
       ];
       ps.forEach(function (p) {
@@ -1194,7 +1201,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
         row.leader_kana,
         row.postal_code,
         row.address,
-        excelText(row.tel),
+        excelText(cleanTel(row.tel)),
         row.email
       ];
       ps.forEach(function (p) { cells.push(p.name, p.kana, p.sex, p.club, p.note); });
