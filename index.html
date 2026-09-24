@@ -295,6 +295,16 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
   display:inline-block;font-size:12px;letter-spacing:.14em;font-weight:800;
   color:#fff;background:var(--red);padding:6px 16px;border-radius:999px;margin-bottom:14px;
 }
+.line-stamp{padding:52px 0 56px;background:#E9F6EC;border-bottom:1px solid #CFE8D5;}
+.ls-grid{display:grid;grid-template-columns:200px 1fr;gap:32px;align-items:center;}
+.ls-img{background:#fff;border-radius:24px;padding:16px;box-shadow:0 6px 18px rgba(31,90,114,.10);text-align:center;}
+.ls-img img{width:100%;max-width:168px;height:auto;display:block;margin:0 auto;}
+.ls-badge{display:inline-block;background:#06C755;color:#fff;font-weight:900;font-size:13px;padding:4px 14px;border-radius:999px;margin-bottom:10px;}
+.ls-title{margin:0 0 10px;font-size:clamp(20px,3.6vw,26px);font-weight:900;color:var(--navy);line-height:1.5;}
+.ls-lead{margin:0 0 18px;font-size:15.5px;color:#3C525C;}
+.ls-lead strong{color:#04913d;}
+.btn-line{background:#06C755;color:#fff;box-shadow:0 6px 0 #04913d;}
+.btn-line:hover{box-shadow:0 9px 0 #04913d,0 12px 22px rgba(6,199,85,.28);}
 .nt-grid{display:grid;grid-template-columns:280px 1fr;gap:36px;align-items:start;margin-top:8px;}
 .nt-poster img{
   width:100%;border-radius:16px;border:1px solid var(--line);
@@ -444,6 +454,8 @@ footer .cp .en{font-size:14px;}
   .kz-grid{grid-template-columns:1fr;gap:30px;}
   .kz-cover{max-width:320px;margin:0 auto;}
   .nt-grid{grid-template-columns:1fr;gap:24px;}
+  .ls-grid{grid-template-columns:1fr;gap:20px;}
+  .ls-img{max-width:200px;margin:0 auto;}
   .nt-poster{max-width:280px;margin:0 auto;}
   .pf-grid{grid-template-columns:1fr;gap:34px;}
   .pf-photo{max-width:320px;margin:0 auto;}
@@ -491,6 +503,7 @@ footer .cp .en{font-size:14px;}
     </a>
     <nav class="pc">
       <a href="#notice">お知らせ</a>
+      <a href="#line-stamp">スタンプ</a>
       <a href="#faces">3つの顔</a>
       <a href="#senior">シニア相談室</a>
       <a href="#kouza">講座</a>
@@ -504,6 +517,7 @@ footer .cp .en{font-size:14px;}
   </div>
   <nav class="sp" id="spnav">
     <a href="#notice">お知らせ</a>
+    <a href="#line-stamp">スタンプ</a>
     <a href="#faces">3つの顔</a>
     <a href="#senior">シニア相談室</a>
     <a href="#kouza">講座</a>
@@ -570,6 +584,29 @@ footer .cp .en{font-size:14px;}
           </a>
           <p class="note">開催日・入力項目など、詳しくは申込みフォームのページでご確認ください</p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LINEスタンプ ============ -->
+<section class="line-stamp" id="line-stamp">
+  <div class="wrap">
+    <div class="ls-grid">
+      <div class="ls-img">
+        <img src="image/line-stamp-kuro.png" alt="LINEスタンプ「ゆるっと黒猫クロの日常」のメイン画像" width="240" height="240">
+      </div>
+      <div>
+        <span class="ls-badge">🐾 LINEスタンプ 販売中</span>
+        <h2 class="ls-title">「ゆるっと黒猫クロの日常」<br>LINEスタンプを発売しました</h2>
+        <p class="ls-lead">
+          このサイトでおなじみの黒猫「クロ」が、LINEスタンプになりました。
+          日常の会話で使いやすい表情やセリフをそろえています。
+          <strong>友だちや家族とのトークに、ぜひ使ってみてください。</strong>
+        </p>
+        <a class="btn btn-line" href="https://line.me/S/sticker/36834372" target="_blank" rel="noopener">
+          LINEスタンプを見る・買う →
+        </a>
       </div>
     </div>
   </div>
