@@ -154,25 +154,25 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
 .hero-figure{position:relative;text-align:center;align-self:end;z-index:3;}
 .hero-figure img{width:100%;max-width:440px;height:auto;aspect-ratio:760/990;margin:0 auto -8px;filter:drop-shadow(0 16px 20px rgba(53,43,30,.14));}
 .hero-bubble{
-  position:absolute;top:13%;left:0;z-index:4;
-  display:inline-block;padding:12px 22px 13px;
+  position:absolute;top:4%;left:-2%;z-index:4;
+  display:inline-block;padding:20px 34px 21px;
   background:#fff;border:2.5px solid var(--ink);
   /* 手描きっぽく、四隅の丸みをわざと不ぞろいにする */
-  border-radius:30px 26px 32px 24px / 26px 32px 24px 30px;
+  border-radius:50%;
   box-shadow:5px 6px 0 rgba(35,50,60,.16),0 14px 24px rgba(53,43,30,.10);
   transform:rotate(-2deg);
   animation:bubble-bob 4.2s ease-in-out infinite;
 }
-/* しっぽ：キャラクターの口のほう（右）へ向ける。外側（線の色）と内側（白）の三角を重ねて“フチ付き”にする */
+/* しっぽ：斜め右下（キャラクターの顔のほう）へ。外側（線の色）と内側（白）の三角を重ねて“フチ付き”にする */
 .hero-bubble::before,
-.hero-bubble::after{content:"";position:absolute;width:0;height:0;border-style:solid;}
+.hero-bubble::after{content:"";position:absolute;}
 .hero-bubble::before{
-  right:-21px;top:14px;
-  border-width:7px 0 13px 21px;border-color:transparent transparent transparent var(--ink);
+  right:12px;bottom:-20px;width:30px;height:26px;background:var(--ink);
+  clip-path:polygon(0 0,100% 0,100% 100%);
 }
 .hero-bubble::after{
-  right:-14px;top:17px;
-  border-width:4px 0 9px 15px;border-color:transparent transparent transparent #fff;
+  right:15px;bottom:-14px;width:22px;height:18px;background:#fff;
+  clip-path:polygon(0 0,100% 0,100% 100%);
 }
 @keyframes bubble-bob{
   0%,100%{transform:rotate(-2deg) translateY(0);}
@@ -469,7 +469,7 @@ footer .cp .en{font-size:14px;}
   .hero-figure{max-width:380px;margin:14px auto 0;}
   .hl-list{grid-template-columns:1fr;gap:10px;}
   .hl-item img{width:72px;height:56px;flex:0 0 72px;}
-  .hero-bubble{left:0;top:10%;}
+  .hero-bubble{left:0;top:2%;}
   .face-grid{grid-template-columns:1fr;}
   .face .ph{height:200px;}
   .s-cards{grid-template-columns:1fr;max-width:520px;}
