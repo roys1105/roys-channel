@@ -136,17 +136,18 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
 .hero h1 .red{color:var(--red);}
 .hero-lead{margin:20px 0 0;font-size:16.5px;color:#3F535D;max-width:30em;}
 .hero-cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:28px;}
-.hero-learn{margin-top:26px;max-width:34em;}
+.hero-learn-wrap{position:relative;z-index:4;max-width:1060px;margin:0 auto;padding:40px 22px 34px;}
+.hero-learn{width:100%;}
 .hl-head{margin:0 0 10px;font-size:14px;font-weight:900;color:var(--navy);letter-spacing:.06em;display:flex;align-items:center;gap:8px;}
 .hl-head::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,rgba(31,90,114,.35),rgba(31,90,114,0));border-radius:2px;}
-.hl-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.hl-item{display:flex;flex-direction:column;align-items:flex-start;gap:8px;position:relative;padding:10px;background:rgba(255,255,255,.72);border:1px solid rgba(31,90,114,.16);border-radius:16px;text-decoration:none;color:var(--ink);box-shadow:0 4px 12px rgba(31,90,114,.08);backdrop-filter:blur(4px);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;}
+.hl-list{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.hl-item{display:flex;flex-direction:row;align-items:center;gap:14px;position:relative;padding:12px 40px 12px 12px;background:rgba(255,255,255,.72);border:1px solid rgba(31,90,114,.16);border-radius:16px;text-decoration:none;color:var(--ink);box-shadow:0 4px 12px rgba(31,90,114,.08);backdrop-filter:blur(4px);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;}
 .hl-item:hover{transform:translateY(-4px);border-color:var(--navy);box-shadow:0 10px 20px rgba(31,90,114,.18);}
-.hl-item img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:10px;display:block;}
-.hl-txt{display:flex;flex-direction:column;gap:1px;line-height:1.35;padding-right:18px;}
+.hl-item img{width:104px;height:66px;flex:0 0 104px;object-fit:cover;border-radius:10px;display:block;}
+.hl-txt{display:flex;flex-direction:column;gap:1px;line-height:1.35;flex:1;min-width:0;}
 .hl-txt small{font-size:11px;font-weight:700;color:var(--red);letter-spacing:.05em;}
-.hl-txt b{font-size:13.5px;font-weight:700;color:var(--navy);}
-.hl-go{position:absolute;right:10px;bottom:10px;font-weight:900;color:var(--navy);transition:transform .18s ease;}
+.hl-txt b{font-size:15px;font-weight:700;color:var(--navy);}
+.hl-go{position:absolute;right:14px;top:50%;margin-top:-11px;font-weight:900;color:var(--navy);transition:transform .18s ease;}
 .hl-item:hover .hl-go{transform:translateX(3px);}
 .hero-figure{position:relative;text-align:center;align-self:end;z-index:3;}
 .hero-figure img{width:100%;max-width:440px;height:auto;aspect-ratio:760/990;margin:0 auto -28px;filter:drop-shadow(0 16px 20px rgba(53,43,30,.14));}
@@ -464,12 +465,8 @@ footer .cp .en{font-size:14px;}
   .hero-grid{grid-template-columns:1fr;gap:0;}
   .hero-copy{padding-bottom:8px;}
   .hero-figure{max-width:380px;margin:14px auto 0;}
-  .hl-list{grid-template-columns:1fr;}
-  .hl-item{flex-direction:row;align-items:center;}
-  .hl-item img{width:56px;height:56px;max-height:56px;aspect-ratio:1;flex:0 0 56px;}
-  .hl-txt{flex:1;}
-  .hl-go{bottom:auto;top:50%;transform:translateY(-50%);}
-  .hl-item:hover .hl-go{transform:translate(3px,-50%);}
+  .hl-list{grid-template-columns:1fr;gap:10px;}
+  .hl-item img{width:72px;height:56px;flex:0 0 72px;}
   .hero-bubble{left:2%;}
   .face-grid{grid-template-columns:1fr;}
   .face .ph{height:200px;}
@@ -567,31 +564,33 @@ footer .cp .en{font-size:14px;}
         <a class="btn btn-primary" href="#senior">シニア向けサイトを見る →</a>
         <a class="btn btn-primary" href="#profile">ロイってどんな人？</a>
       </div>
-      <div class="hero-learn" aria-label="講座・教材へ移動">
-        <p class="hl-head"><span>📚</span>講座・教材をさがす</p>
-        <div class="hl-list">
-          <a class="hl-item" href="#senior">
-            <img src="image/cover-sumaho.jpg" alt="" width="56" height="56">
-            <span class="hl-txt"><small>教材</small><b>はじめてのスマホ教室</b></span>
-            <span class="hl-go">→</span>
-          </a>
-          <a class="hl-item" href="#kouza">
-            <img src="image/cover-inaka.jpg" alt="" width="56" height="56">
-            <span class="hl-txt"><small>動画講座</small><b>独りで稼ぐ教科書</b></span>
-            <span class="hl-go">→</span>
-          </a>
-          <a class="hl-item" href="#kouza-claude">
-            <img src="image/cover-claude.jpg" alt="" width="56" height="56">
-            <span class="hl-txt"><small>動画講座</small><b>Claude 入門</b></span>
-            <span class="hl-go">→</span>
-          </a>
-        </div>
-      </div>
     </div>
     <div class="hero-figure">
       <span class="hero-bubble"><span class="bb-text">やあ、<em>ようこそ</em><b>！</b></span></span>
       <img src="image/roy-chara.png" alt="愛車のバイクの横に立つロイのキャラクター" width="760" height="990">
     </div>
+  </div>
+  <div class="hero-learn-wrap">
+  <div class="hero-learn" aria-label="講座・教材へ移動">
+    <p class="hl-head"><span>📚</span>講座・教材をさがす</p>
+    <div class="hl-list">
+      <a class="hl-item" href="#senior">
+        <img src="image/cover-sumaho.jpg" alt="" width="56" height="56">
+        <span class="hl-txt"><small>教材</small><b>はじめてのスマホ教室</b></span>
+        <span class="hl-go">→</span>
+      </a>
+      <a class="hl-item" href="#kouza">
+        <img src="image/cover-inaka.jpg" alt="" width="56" height="56">
+        <span class="hl-txt"><small>動画講座</small><b>独りで稼ぐ教科書</b></span>
+        <span class="hl-go">→</span>
+      </a>
+      <a class="hl-item" href="#kouza-claude">
+        <img src="image/cover-claude.jpg" alt="" width="56" height="56">
+        <span class="hl-txt"><small>動画講座</small><b>Claude 入門</b></span>
+        <span class="hl-go">→</span>
+      </a>
+    </div>
+  </div>
   </div>
   <div class="hero-strip">
     <span class="strip-cap">📍 瀬戸内海の夕日（香川県三豊市）</span>
