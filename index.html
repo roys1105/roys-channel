@@ -122,7 +122,9 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
   position:relative;z-index:2;max-width:1060px;margin:0 auto;padding:0 22px;
   display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center;
 }
-.hero-copy{padding-bottom:34px;}
+.hero-copy{padding-bottom:8px;}
+.hero-cta .btn-primary{background:#4A8AA3;box-shadow:0 6px 0 #356E85;}
+.hero-cta .btn-primary:hover{box-shadow:0 9px 0 #356E85,0 12px 22px rgba(53,110,133,.24);}
 .hero-badge{
   display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--navy);
   background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 15px;box-shadow:var(--shadow);
@@ -136,7 +138,7 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
 .hero h1 .red{color:var(--red);}
 .hero-lead{margin:20px 0 0;font-size:16.5px;color:#3F535D;max-width:30em;}
 .hero-cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:28px;}
-.hero-learn-wrap{position:relative;z-index:4;max-width:1060px;margin:0 auto;padding:40px 22px 34px;}
+.hero-learn-wrap{position:relative;z-index:4;max-width:1060px;margin:0 auto;padding:26px 22px 30px;}
 .hero-learn{width:100%;}
 .hl-head{margin:0 0 10px;font-size:14px;font-weight:900;color:var(--navy);letter-spacing:.06em;display:flex;align-items:center;gap:8px;}
 .hl-head::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,rgba(31,90,114,.35),rgba(31,90,114,0));border-radius:2px;}
@@ -150,31 +152,31 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
 .hl-go{position:absolute;right:14px;top:50%;margin-top:-11px;font-weight:900;color:var(--navy);transition:transform .18s ease;}
 .hl-item:hover .hl-go{transform:translateX(3px);}
 .hero-figure{position:relative;text-align:center;align-self:end;z-index:3;}
-.hero-figure img{width:100%;max-width:440px;height:auto;aspect-ratio:760/990;margin:0 auto -28px;filter:drop-shadow(0 16px 20px rgba(53,43,30,.14));}
+.hero-figure img{width:100%;max-width:440px;height:auto;aspect-ratio:760/990;margin:0 auto -8px;filter:drop-shadow(0 16px 20px rgba(53,43,30,.14));}
 .hero-bubble{
-  position:absolute;top:4%;left:-3%;z-index:4;
+  position:absolute;top:13%;left:0;z-index:4;
   display:inline-block;padding:12px 22px 13px;
   background:#fff;border:2.5px solid var(--ink);
   /* 手描きっぽく、四隅の丸みをわざと不ぞろいにする */
   border-radius:30px 26px 32px 24px / 26px 32px 24px 30px;
   box-shadow:5px 6px 0 rgba(35,50,60,.16),0 14px 24px rgba(53,43,30,.10);
-  transform:rotate(-4deg);
+  transform:rotate(-2deg);
   animation:bubble-bob 4.2s ease-in-out infinite;
 }
-/* しっぽ：外側（線の色）と内側（白）の三角を重ねて“フチ付き”にする */
+/* しっぽ：キャラクターの口のほう（右）へ向ける。外側（線の色）と内側（白）の三角を重ねて“フチ付き”にする */
 .hero-bubble::before,
 .hero-bubble::after{content:"";position:absolute;width:0;height:0;border-style:solid;}
 .hero-bubble::before{
-  bottom:-17px;left:25px;
-  border-width:17px 14px 0 5px;border-color:var(--ink) transparent transparent transparent;
+  right:-21px;top:14px;
+  border-width:7px 0 13px 21px;border-color:transparent transparent transparent var(--ink);
 }
 .hero-bubble::after{
-  bottom:-12px;left:28px;
-  border-width:12px 10px 0 4px;border-color:#fff transparent transparent transparent;
+  right:-14px;top:17px;
+  border-width:4px 0 9px 15px;border-color:transparent transparent transparent #fff;
 }
 @keyframes bubble-bob{
-  0%,100%{transform:rotate(-4deg) translateY(0);}
-  50%    {transform:rotate(-2.5deg) translateY(-5px);}
+  0%,100%{transform:rotate(-2deg) translateY(0);}
+  50%    {transform:rotate(-1deg) translateY(-4px);}
 }
 /* 吹き出しの中の文字 */
 .bb-text{
@@ -467,7 +469,7 @@ footer .cp .en{font-size:14px;}
   .hero-figure{max-width:380px;margin:14px auto 0;}
   .hl-list{grid-template-columns:1fr;gap:10px;}
   .hl-item img{width:72px;height:56px;flex:0 0 72px;}
-  .hero-bubble{left:2%;}
+  .hero-bubble{left:0;top:10%;}
   .face-grid{grid-template-columns:1fr;}
   .face .ph{height:200px;}
   .s-cards{grid-template-columns:1fr;max-width:520px;}
