@@ -154,8 +154,8 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
 .hero-figure{position:relative;text-align:center;align-self:end;z-index:3;}
 .hero-figure img{width:100%;max-width:440px;height:auto;aspect-ratio:760/990;margin:0 auto -8px;filter:drop-shadow(0 16px 20px rgba(53,43,30,.14));}
 .hero-bubble{
-  position:absolute;top:4%;left:-2%;z-index:4;
-  display:inline-block;padding:20px 34px 21px;
+  position:absolute;top:2%;left:0;z-index:4;
+  display:inline-block;padding:15px 26px 16px;
   background:#fff;border:2.5px solid var(--ink);
   /* 手描きっぽく、四隅の丸みをわざと不ぞろいにする */
   border-radius:50%;
@@ -163,16 +163,16 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
   transform:rotate(-2deg);
   animation:bubble-bob 4.2s ease-in-out infinite;
 }
-/* しっぽ：斜め右下（キャラクターの顔のほう）へ。外側（線の色）と内側（白）の三角を重ねて“フチ付き”にする */
+/* しっぽ：長めに斜め右下へのばし、先を顔（サングラスの左）に向ける。外側（線の色）と内側（白）の三角を重ねて“フチ付き”にする */
 .hero-bubble::before,
 .hero-bubble::after{content:"";position:absolute;}
 .hero-bubble::before{
-  right:12px;bottom:-20px;width:30px;height:26px;background:var(--ink);
-  clip-path:polygon(0 0,100% 0,100% 100%);
+  right:-8px;bottom:-50px;width:56px;height:54px;background:var(--ink);
+  clip-path:polygon(0 0,55% 0,100% 100%);
 }
 .hero-bubble::after{
-  right:15px;bottom:-14px;width:22px;height:18px;background:#fff;
-  clip-path:polygon(0 0,100% 0,100% 100%);
+  right:-5px;bottom:-41px;width:47px;height:44px;background:#fff;
+  clip-path:polygon(0 0,55% 0,100% 100%);
 }
 @keyframes bubble-bob{
   0%,100%{transform:rotate(-2deg) translateY(0);}
