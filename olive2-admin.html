@@ -107,6 +107,38 @@ td.area-out{color:#8A6A20;font-weight:700;}
 .bulkbar button:disabled{background:#D9C7C0;cursor:default;}
 .bulkbar button.export{background:#2E7D32;margin-left:auto;}
 .bulkbar button.export:hover{background:#256428;}
+.bulkbar button.pdf{background:#5E7A45;margin-left:0;}
+.bulkbar button.pdf:hover{background:#4A6236;}
+.bulkbar button.pdf:disabled{background:#A3AF96;}
+@media (max-width:640px){
+  .bulkbar button.export{margin-left:0;}
+}
+
+/* PDF用の一覧表（画面の外で組み立てて画像にし、PDFに貼る。A4横＝1123×794px） */
+#pdf-stage{position:fixed;left:-99999px;top:0;}
+.pdf-page{
+  width:1123px;height:794px;padding:32px 38px 24px;background:#fff;color:#1A1A1A;
+  font-family:'Yu Gothic','YuGothic','Meiryo','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;
+  display:flex;flex-direction:column;line-height:1.45;
+}
+.pdf-head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2.5px solid #5E7A45;padding-bottom:8px;margin-bottom:10px;}
+.pdf-title{font-size:21px;font-weight:700;color:#43552F;}
+.pdf-meta{font-size:12px;color:#444;text-align:right;}
+.pdf-summary{font-size:11.5px;color:#333;margin:0 0 8px;}
+.pdf-summary b{color:#43552F;}
+.pdf-body{flex:1 1 auto;overflow:hidden;min-height:0;}
+/* 画面用の table{min-width:1400px} と th,td{white-space:nowrap} がPDFの表にも効いてしまうので、戻す */
+.pdf-table{border-collapse:collapse;width:100%;min-width:0;table-layout:fixed;font-size:11px;}
+.pdf-table > thead > tr > th,.pdf-table > tbody > tr > td{border:1px solid #A7B19A;padding:5px 6px;vertical-align:top;text-align:left;white-space:normal;word-break:break-all;background:#fff;}
+.pdf-table > thead > tr > th{background:#EEF3E3;color:#43552F;font-weight:700;font-size:10.5px;}
+.pdf-table td.c{text-align:center;}
+.pdf-table .sub{display:block;font-size:9.5px;color:#555;}
+.pdf-table td.pl{padding:0;}
+.pdf-pl{border-collapse:collapse;width:100%;min-width:0;table-layout:fixed;font-size:10.5px;}
+.pdf-pl td{border:none;border-bottom:1px solid #E1E6D6;padding:3px 6px;vertical-align:top;white-space:normal;word-break:break-all;}
+.pdf-pl tr:last-child td{border-bottom:none;}
+.pdf-pl .mgr{display:block;color:#8A6A20;font-weight:700;font-size:9.5px;}
+.pdf-foot{font-size:10.5px;color:#666;text-align:center;margin-top:6px;}
 
 /* CC宛先の管理 */
 .cc-box{background:#fff;border:1px solid #DFE3D2;border-radius:14px;padding:18px 20px;}
@@ -378,9 +410,11 @@ td.area-out{color:#8A6A20;font-weight:700;}
     <span id="bulk-count">0件選択中</span>
     <button type="button" id="bulk-del-btn" disabled>選択した行を削除</button>
     <button type="button" id="export-btn" class="export">Excel用ファイルを保存（CSV）</button>
+    <button type="button" id="pdf-btn" class="export pdf">一覧表をPDFで保存</button>
   </div>
   <p class="msg" id="del-msg" style="display:none;"></p>
   <p class="msg" id="export-msg" style="display:none;"></p>
+  <p class="msg" id="pdf-msg" style="display:none;"></p>
 
   <div class="tablewrap" id="tablewrap" style="display:none;">
     <table>
@@ -411,6 +445,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
 
   </div><!-- /#admin-area -->
 </div>
+<div id="pdf-stage" aria-hidden="true"></div>
 
 <script>
 (function () {
@@ -452,6 +487,9 @@ td.area-out{color:#8A6A20;font-weight:700;}
   var delMsg      = document.getElementById('del-msg');
   var exportBtn   = document.getElementById('export-btn');
   var exportMsg   = document.getElementById('export-msg');
+  var pdfBtn      = document.getElementById('pdf-btn');
+  var pdfMsg      = document.getElementById('pdf-msg');
+  var pdfStage    = document.getElementById('pdf-stage');
 
   var tabsEl  = document.getElementById('area-tabs');
   var nAllEl  = document.getElementById('n-all');
@@ -1137,13 +1175,19 @@ td.area-out{color:#8A6A20;font-weight:700;}
   // CSV をファイルに保存する（申込み一覧・キャンセル待ちの両方で使う）。msgEl に結果を出す
   async function saveCsvFile(csv, filename, msgEl) {
     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    await saveBlob(blob, filename, 'CSVファイル', 'text/csv', '.csv', msgEl);
+  }
 
+  // ファイルを保存する（CSV・PDF共通）
+  async function saveBlob(blob, filename, desc, mime, ext, msgEl) {
     // 対応しているブラウザ（Chrome・Edgeなど）では、保存先を選べるダイアログを出す
     if (window.showSaveFilePicker) {
       try {
+        var accept = {};
+        accept[mime] = [ext];
         var handle = await window.showSaveFilePicker({
           suggestedName: filename,
-          types: [{ description: 'CSVファイル', accept: { 'text/csv': ['.csv'] } }]
+          types: [{ description: desc, accept: accept }]
         });
         var writable = await handle.createWritable();
         await writable.write(blob);
@@ -1166,8 +1210,170 @@ td.area-out{color:#8A6A20;font-weight:700;}
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
     showMsg(msgEl, 'ダウンロードフォルダに保存しました（このブラウザは保存先を選べません）。', true);
+  }
+
+  // ---------- 一覧表をPDFで保存（いま選んでいる区分＝すべて／香川県内／香川県外） ----------
+  // 日本語フォントをPDFに埋め込むと数MBになるため、画面の外で表を組み立てて
+  // html2canvas で画像にし、jsPDF でA4横のページに貼る。ライブラリは押したときだけ読み込む。
+  // （バウンドテニス教室の管理ページと同じ作り。スキル apply-form-api の references/03-admin-pdf.md）
+  var PDF_LIBS = [
+    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+  ];
+
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      if (document.querySelector('script[src="' + src + '"]')) { resolve(); return; }
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = function () { s.remove(); reject(new Error('load_failed')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function suggestedPdfFilename() {
+    return suggestedCsvFilename().replace(/\.csv$/, '.pdf');
+  }
+
+  function fmtDay(iso) {
+    try {
+      return new Date(iso).toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', month: 'numeric', day: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  // 見出しの下の集計（チーム数・選手数。すべてのときは県内・県外の内訳も）
+  function pdfSummary(rows) {
+    var players = 0, male = 0, female = 0;
+    rows.forEach(function (row) {
+      playersOf(row).forEach(function (p) {
+        if (!p.name && !p.kana) return;
+        players++;
+        if (p.sex === '男') male++;
+        if (p.sex === '女') female++;
+      });
+    });
+    var s = 'チーム数 <b>' + rows.length + '組</b>';
+    if (!areaFilter) {
+      s += '（香川県内 ' + rows.filter(function (r) { return r.area === '香川県内'; }).length + '組・' +
+           '香川県外 ' + rows.filter(function (r) { return r.area === '香川県外'; }).length + '組）';
+    }
+    s += '　選手 <b>' + players + '名</b>（男 ' + male + '名・女 ' + female + '名）';
+    return s;
+  }
+
+  var PDF_TABLE_HEAD = '<colgroup>' +
+    '<col style="width:36px"><col style="width:50px"><col style="width:46px"><col style="width:116px">' +
+    '<col style="width:120px"><col style="width:170px"><col>' +
+    '</colgroup>' +
+    '<thead><tr><th>No.</th><th>受付日</th><th>区分</th><th>チーム名</th><th>責任者・TEL</th>' +
+    '<th>住所・E-mail</th><th>選手（No.／氏名・フリガナ／性別／所属クラブ／備考）</th></tr></thead>';
+
+  // 選手4名は、行の中の小さな表で並べる。監督には「監督」の印を付ける
+  function pdfPlayersHtml(row) {
+    var mgrNo = Number(managerNoOf(row));
+    var lines = playersOf(row).filter(function (p) { return p.name || p.kana; }).map(function (p) {
+      return '<tr>' +
+        '<td style="width:46px">No.' + esc(p.no) + (Number(p.no) === mgrNo ? '<span class="mgr">監督</span>' : '') + '</td>' +
+        '<td style="width:130px">' + esc(p.name) + '<span class="sub">' + esc(p.kana) + '</span></td>' +
+        '<td style="width:30px">' + esc(p.sex) + '</td>' +
+        '<td style="width:150px">' + esc(p.club) + '</td>' +
+        '<td>' + esc(p.note) + '</td>' +
+        '</tr>';
+    });
+    return '<table class="pdf-pl">' + lines.join('') + '</table>';
+  }
+
+  function pdfRowHtml(row, no) {
+    return '<tr>' +
+      '<td class="c">' + no + '</td>' +
+      '<td class="c">' + esc(fmtDay(row.created_at)) + '</td>' +
+      '<td class="c">' + esc((row.area || '').replace('香川', '')) + '</td>' +
+      '<td>' + esc(row.team_name) + '<span class="sub">' + countOf(row) + '名</span></td>' +
+      '<td>' + esc(row.leader_name) + '<span class="sub">' + esc(row.leader_kana) + '</span>' + esc(row.tel) + '</td>' +
+      '<td>' + (row.postal_code ? '〒' + esc(row.postal_code) + '<br>' : '') + esc(row.address) +
+        (row.email ? '<span class="sub">' + esc(row.email) + '</span>' : '') + '</td>' +
+      '<td class="pl">' + pdfPlayersHtml(row) + '</td>' +
+      '</tr>';
+  }
+
+  function newPdfPage(title, meta, summary) {
+    var page = document.createElement('div');
+    page.className = 'pdf-page';
+    page.innerHTML =
+      '<div class="pdf-head"><div class="pdf-title">' + title + '</div>' +
+      '<div class="pdf-meta">' + meta + '</div></div>' +
+      (summary ? '<p class="pdf-summary">' + summary + '</p>' : '') +
+      '<div class="pdf-body"><table class="pdf-table">' + PDF_TABLE_HEAD + '<tbody></tbody></table></div>' +
+      '<div class="pdf-foot"></div>';
+    pdfStage.appendChild(page);
+    return page;
+  }
+
+  // 行を1ページずつ詰めていき、はみ出したら次のページへ送る（1チームがページをまたがない）
+  function buildPdfPages(rows) {
+    pdfStage.innerHTML = '';
+    var title = '第2回オリーブ杯 申込み一覧（' + (areaFilter || 'すべて') + '）';
+    var today = new Date().toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
+    var meta = '作成日：' + today + '<br>全 ' + rows.length + ' 組（受付順）';
+    var pages = [newPdfPage(title, meta, pdfSummary(rows))];
+    rows.forEach(function (row, i) {
+      var page = pages[pages.length - 1];
+      var tb = page.querySelector('.pdf-table > tbody');
+      tb.insertAdjacentHTML('beforeend', pdfRowHtml(row, i + 1));
+      var body = page.querySelector('.pdf-body');
+      if (tb.rows.length > 1 && body.scrollHeight > body.clientHeight) {
+        var tr = tb.lastElementChild;
+        tb.removeChild(tr);
+        page = newPdfPage(title, meta, '');
+        pages.push(page);
+        page.querySelector('.pdf-table > tbody').appendChild(tr);
+      }
+    });
+    pages.forEach(function (p, i) {
+      p.querySelector('.pdf-foot').textContent = (i + 1) + ' / ' + pages.length;
+    });
+    return pages;
+  }
+
+  async function exportPdf() {
+    // いま表に出ているぶん（＝選んでいる区分）だけを保存する
+    var target = rowsForView();
+    if (!target.length) {
+      showMsg(pdfMsg, '書き出せる申込みがありません。先に一覧を表示してください。', false);
+      return;
+    }
+    var label = pdfBtn.textContent;
+    pdfBtn.disabled = true;
+    pdfBtn.textContent = 'PDFを作成中…';
+    pdfMsg.style.display = 'none';
+    var blob;
+    try {
+      for (var i = 0; i < PDF_LIBS.length; i++) await loadScript(PDF_LIBS[i]);
+
+      // 画面は新しい順だが、名簿は受付順（古い順）に並べる
+      var rows = target.slice().sort(function (a, b) {
+        return String(a.created_at).localeCompare(String(b.created_at));
+      });
+      var pages = buildPdfPages(rows);
+
+      var pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      for (var p = 0; p < pages.length; p++) {
+        var canvas = await window.html2canvas(pages[p], { scale: 2, backgroundColor: '#ffffff', logging: false });
+        if (p > 0) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 297, 210);
+      }
+      blob = pdf.output('blob');
+    } catch (e) {
+      showMsg(pdfMsg, 'PDFの作成に失敗しました。通信状態をご確認のうえ、もう一度お試しください。', false);
+    } finally {
+      pdfStage.innerHTML = '';
+      pdfBtn.disabled = false;
+      pdfBtn.textContent = label;
+    }
+    if (blob) await saveBlob(blob, suggestedPdfFilename(), 'PDFファイル', 'application/pdf', '.pdf', pdfMsg);
   }
 
   // キャンセル待ちの CSV（1行＝1チーム。番号・順番・状態のあとは、申込み一覧の CSV と同じ並び）
@@ -1294,6 +1500,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
     exportBtn.textContent = areaFilter
       ? ('Excel用ファイルを保存（CSV・' + areaFilter + 'のみ）')
       : 'Excel用ファイルを保存（CSV・すべて）';
+    pdfBtn.textContent = '一覧表をPDFで保存（' + (areaFilter ? areaFilter + 'のみ' : 'すべて') + '）';
 
     var rows = rowsForView();
     if (!rows.length) {
@@ -1399,6 +1606,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
       });
       delMsg.style.display = 'none';
       exportMsg.style.display = 'none';
+      pdfMsg.style.display = 'none';
       showList();
     });
   });
@@ -1410,6 +1618,7 @@ td.area-out{color:#8A6A20;font-weight:700;}
   kcBtn.addEventListener('click', changeKey);
   mfBtn.addEventListener('click', changeMailFrom);
   exportBtn.addEventListener('click', exportCsv);
+  pdfBtn.addEventListener('click', exportPdf);
   waitExportBtn.addEventListener('click', exportWaitCsv);
 })();
 </script>
