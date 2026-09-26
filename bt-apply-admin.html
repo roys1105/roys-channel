@@ -309,6 +309,12 @@ tr:hover td{background:#FBF8F0;}
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  // 年齢はD1に「13.0」の形で入っていることがある（数値を小数として保存するため）。整数で表示する
+  function fmtAge(v) {
+    var n = parseFloat(v);
+    return isNaN(n) ? '' : Math.floor(n) + '歳';
+  }
+
   function currentKey() { return keyInput.value.trim(); }
 
   // 管理キーはURLに付けず、X-Admin-Key ヘッダーで送る。
@@ -506,7 +512,7 @@ tr:hover td{background:#FBF8F0;}
         row.name,
         row.kana,
         row.birthdate,
-        row.age != null ? row.age + '歳' : '',
+        fmtAge(row.age),
         row.tel,
         row.email,
         row.postal_code,
@@ -638,7 +644,7 @@ tr:hover td{background:#FBF8F0;}
       '<td class="c">' + no + '</td>' +
       '<td class="c">' + esc(fmtDay(row.created_at)) + '</td>' +
       '<td>' + esc(row.name) + '<span class="sub">' + esc(row.kana) + '</span></td>' +
-      '<td>' + esc(row.birthdate) + '<span class="sub">' + esc(row.age != null ? row.age + '歳' : '') + '</span></td>' +
+      '<td>' + esc(row.birthdate) + '<span class="sub">' + esc(fmtAge(row.age)) + '</span></td>' +
       '<td>' + esc(row.tel) + '</td>' +
       '<td>' + esc(row.email) + '</td>' +
       '<td>' + (row.postal_code ? '〒' + esc(row.postal_code) + '<br>' : '') + esc(row.address) + '</td>' +
@@ -768,7 +774,7 @@ tr:hover td{background:#FBF8F0;}
             '<td>' + esc(row.name) + '</td>' +
             '<td>' + esc(row.kana) + '</td>' +
             '<td>' + esc(row.birthdate) + '</td>' +
-            '<td>' + esc(row.age != null ? row.age + '歳' : '') + '</td>' +
+            '<td>' + esc(fmtAge(row.age)) + '</td>' +
             '<td>' + esc(row.tel) + '</td>' +
             '<td>' + esc(row.email) + '</td>' +
             '<td>' + esc(row.postal_code) + '</td>' +
