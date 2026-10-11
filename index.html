@@ -501,6 +501,8 @@ footer .cp .en{font-size:14px;}
   .hero-bubble{animation:none;}
 }
 </style>
+<!-- アクセス計測（2サイト共通・中身は Worker の /t.js。本番のホストだけ数える／?roy=1 の端末は数えない） -->
+<script src="https://roy-senior-site-api.roy-s1105.workers.dev/t.js" async></script>
 </head>
 <body>
 
@@ -1034,6 +1036,8 @@ footer .cp .en{font-size:14px;}
       <a href="https://it.royschannel.com/tokushoho?src=main">特定商取引法に基づく表記</a>
     </div>
     <div class="cp">© 2026 <span class="en">Roy's Channel</span> ／ 香川県三豊市</div>
+    <!-- アクセス解析の管理画面（パスワード付き）への入口。入口はこのサイトにだけ置く（ロイさんの指示 2026-10-11） -->
+    <div class="cp" style="margin-top:6px;"><a href="access-admin.html" rel="nofollow" style="color:inherit;opacity:.55;font-size:11px;text-decoration:none;">管理用</a></div>
   </div>
 </footer>
 

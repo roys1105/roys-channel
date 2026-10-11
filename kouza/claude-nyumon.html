@@ -25,21 +25,8 @@
   } catch (e) {}
 })();
 </script>
-<script>
-(function(){
-  try{
-    // 数えるのは本物のライブサイトだけ（手元での動作確認は数えない）。
-    var LIVE_HOSTS = ["royschannel.com", "www.royschannel.com", "roys-channel.pages.dev"];
-    if (LIVE_HOSTS.indexOf(location.hostname) < 0) return;
-    // page の名前は、トップページの「見られた回数」の集計キーと必ずそろえること。
-    fetch("https://roy-senior-site-api.roy-s1105.workers.dev/track-page",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({type:"material",page:"/materials/claude-nyumon.html",from:(function(){try{return new URLSearchParams(location.search).get("from")||""}catch(e){return ""}})()})
-    }).catch(function(){});
-  }catch(e){}
-})();
-</script>
+<!-- アクセス計測（2サイト共通・中身は Worker の /t.js。本番のホストだけ数える／?roy=1 の端末は数えない） -->
+<script src="https://roy-senior-site-api.roy-s1105.workers.dev/t.js" data-type="material" data-page="/materials/claude-nyumon.html" async></script>
 <style>
   :root{
     --navy:#1F5A72;

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<script>
+/* --- 旧住所（GitHub Pages・旧 pages.dev）で開かれたら、新しい住所へ送る --- */
+(function () {
+  try {
+    if (['roys1105.github.io', 'roys-channel.pages.dev'].indexOf(location.hostname) >= 0) {
+      var rest = location.pathname.replace(/^\/roys-channel\/?/, '').replace(/^\//, '');
+      location.replace('https://royschannel.com/' + rest + location.search + location.hash);
+    }
+  } catch (e) {}
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アクセス解析（管理用）｜Roy's Channel</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="image/roy-avatar.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --navy:#1F5A72; --navy-dark:#164152; --ink:#23323C; --sub:#5E7079;
+  --bg:#FAF5EC; --card:#fff; --line:#E3D8C4; --line2:#EFE7D6; --head:#EAF2F5;
+  --green:#4B8B5E; --red:#B23B3B; --up:#2E7D32; --down:#B23B3B;
+}
+body{
+  margin:0;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP','Yu Gothic',sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.7;padding:24px 16px 60px;
+}
+.wrap{max-width:1180px;margin:0 auto;}
+.back{display:inline-block;font-size:13px;color:var(--sub);text-decoration:none;margin:0 0 14px;}
+.back:hover{text-decoration:underline;text-underline-offset:3px;}
+h1{font-size:21px;font-weight:900;color:var(--navy);margin:0 0 16px;}
+h2{font-size:16px;font-weight:900;color:var(--navy);margin:0 0 12px;}
+h3{font-size:14.5px;font-weight:900;color:var(--navy);margin:0 0 10px;}
+button{font-family:inherit;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:18px;}
+.msg{font-size:14px;color:var(--red);margin:10px 0 0;font-weight:700;min-height:1em;}
+.msg.ok{color:var(--up);}
+.note{font-size:13px;color:var(--sub);margin:6px 0 0;}
+
+/* ログイン */
+#login{max-width:460px;margin:40px auto;}
+#login form{display:flex;flex-wrap:wrap;gap:10px;}
+#login input{flex:1 1 220px;padding:12px 14px;border-radius:10px;border:1.5px solid #DDD0B8;font-size:16px;font-family:inherit;}
+.btn{padding:10px 20px;border-radius:999px;border:none;background:var(--navy);color:#fff;font-weight:700;font-size:14.5px;cursor:pointer;}
+.btn:hover{background:var(--navy-dark);}
+.btn:disabled{background:#8FA7B1;cursor:default;}
+.btn.sub{background:#fff;color:var(--navy);border:1.5px solid var(--navy);}
+.btn.sub:hover{background:var(--head);}
+.btn.green{background:#2E7D32;}
+.btn.green:hover{background:#256428;}
+
+/* 絞り込み */
+.filters{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{padding:6px 13px;border-radius:999px;border:1.5px solid #CFDDE2;background:#fff;color:var(--navy);font-size:13.5px;font-weight:700;cursor:pointer;}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.filters label{font-size:13.5px;color:var(--sub);display:flex;align-items:center;gap:6px;}
+.filters input[type=date],.filters select{padding:6px 8px;border-radius:8px;border:1.5px solid #DDD0B8;font-size:14px;font-family:inherit;background:#fff;}
+.rangeinfo{font-size:13px;color:var(--sub);margin:10px 0 0;}
+
+/* タブ */
+.tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px solid var(--line);margin:0 0 18px;}
+.tab{padding:10px 16px;border:none;background:none;font-size:14.5px;font-weight:700;color:var(--sub);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.tab.on{color:var(--navy);border-bottom-color:var(--navy);}
+.panel{display:none;}
+.panel.on{display:block;}
+
+/* 数字のカード */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px;}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;}
+.kpi .lb{font-size:13px;color:var(--sub);font-weight:700;}
+.kpi .v{font-size:30px;font-weight:900;color:var(--navy);line-height:1.3;font-variant-numeric:tabular-nums;}
+.kpi .d{font-size:12.5px;font-weight:700;}
+.d.up{color:var(--up);} .d.down{color:var(--down);} .d.flat{color:var(--sub);}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px;}
+.grid2 .card{margin-bottom:0;}
+.chartbox{position:relative;height:300px;}
+.chartbox.tall{height:420px;}
+.chartbox.short{height:240px;}
+.seg{display:inline-flex;gap:4px;margin-left:10px;vertical-align:middle;}
+.seg .chip{padding:3px 10px;font-size:12.5px;}
+.cardhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+.cardhead h3{margin:0;}
+
+/* 表 */
+.tablewrap{overflow-x:auto;}
+table{border-collapse:collapse;width:100%;font-size:13.5px;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:top;}
+th{background:var(--head);color:var(--navy);font-weight:900;white-space:nowrap;position:sticky;top:0;cursor:pointer;user-select:none;}
+th.nosort{cursor:default;}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+tr:hover td{background:#FBF8F0;}
+.empty{padding:24px;text-align:center;color:var(--sub);font-size:14px;}
+.pg-t{font-weight:700;}
+.pg-p{font-size:12px;color:var(--sub);word-break:break-all;}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px;white-space:nowrap;}
+.tag.main{background:#E3EEF3;color:var(--navy);}
+.tag.senior{background:#E6F1E8;color:#2F6A40;}
+.bar{height:8px;border-radius:4px;background:#8FB5C4;min-width:2px;}
+.scroll{max-height:560px;overflow:auto;}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;font-size:13.5px;color:var(--sub);}
+.toolbar input,.toolbar select{padding:7px 10px;border-radius:8px;border:1.5px solid #DDD0B8;font-size:14px;font-family:inherit;}
+.toolbar .btn{margin-left:auto;}
+
+/* 曜日×時間の表 */
+.heat td,.heat th{padding:4px 0;text-align:center;font-size:11.5px;min-width:26px;border-bottom:none;}
+.heat th{position:static;cursor:default;background:none;color:var(--sub);}
+.heat td{border:2px solid #fff;border-radius:4px;font-variant-numeric:tabular-nums;}
+
+#dash{display:none;}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.loading{opacity:.55;pointer-events:none;}
+ul.help{margin:0;padding-left:1.3em;font-size:14px;}
+ul.help li{margin:4px 0;}
+code{background:#F2ECE0;padding:1px 6px;border-radius:5px;font-size:13px;}
+@media (max-width:640px){
+  .kpi .v{font-size:25px;}
+  .chartbox{height:260px;} .chartbox.tall{height:360px;}
+  .grid2{grid-template-columns:1fr;}
+  .toolbar .btn{margin-left:0;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./">← Roy's Channel トップへ</a>
+
+  <!-- ===== ログイン ===== -->
+  <div id="login" class="card">
+    <h1>アクセス解析（管理用）</h1>
+    <p class="note" style="margin:0 0 12px;">パスワードを入れて「開く」を押してください。パスワードはこの画面を閉じると消えます（保存しません）。</p>
+    <form id="loginForm" autocomplete="off">
+      <input type="password" id="pw" placeholder="パスワード" aria-label="パスワード" autocomplete="current-password">
+      <button class="btn" id="loginBtn" type="submit">開く</button>
+    </form>
+    <p class="msg" id="loginMsg"></p>
+  </div>
+
+  <!-- ===== 管理画面 ===== -->
+  <div id="dash">
+    <div class="topline">
+      <h1>アクセス解析 <span style="font-size:14px;color:var(--sub);font-weight:700;">Roy's Channel ＋ ITシニアなんでも相談室</span></h1>
+      <button class="btn sub" id="logoutBtn" type="button">閉じる（ログアウト）</button>
+    </div>
+
+    <div class="card">
+      <div class="filters">
+        <div class="chips" id="periodChips">
+          <button class="chip" data-p="today">今日</button>
+          <button class="chip" data-p="yesterday">昨日</button>
+          <button class="chip" data-p="7">7日間</button>
+          <button class="chip on" data-p="30">30日間</button>
+          <button class="chip" data-p="90">90日間</button>
+          <button class="chip" data-p="thismonth">今月</button>
+          <button class="chip" data-p="lastmonth">先月</button>
+          <button class="chip" data-p="all">全期間</button>
+        </div>
+        <label>期間 <input type="date" id="fFrom"> 〜 <input type="date" id="fTo"></label>
+        <label>サイト
+          <select id="fSite">
+            <option value="">両方</option>
+            <option value="main">Roy's Channel</option>
+            <option value="senior">ITシニア相談室</option>
+          </select>
+        </label>
+        <button class="btn" id="reloadBtn" type="button">更新</button>
+      </div>
+      <p class="rangeinfo" id="rangeInfo"></p>
+      <p class="msg" id="dashMsg"></p>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-t="overview">概要</button>
+      <button class="tab" data-t="pages">ページ別</button>
+      <button class="tab" data-t="sources">どこから来たか</button>
+      <button class="tab" data-t="time">時間帯・曜日</button>
+      <button class="tab" data-t="device">端末・地域</button>
+      <button class="tab" data-t="log">アクセス一覧</button>
+      <button class="tab" data-t="settings">設定</button>
+    </div>
+
+    <!-- 概要 -->
+    <section class="panel on" id="p-overview">
+      <div class="kpis" id="kpis"></div>
+      <div class="card">
+        <div class="cardhead">
+          <h3>日ごとの推移</h3>
+          <span class="seg" id="dailyMetric">
+            <button class="chip on" data-m="views">閲覧数</button>
+            <button class="chip" data-m="visits">訪問数</button>
+          </span>
+        </div>
+        <div class="chartbox"><canvas id="cDaily"></canvas></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h3>よく見られたページ（上位10）</h3><div class="chartbox tall"><canvas id="cTopPages"></canvas></div></div>
+        <div class="card"><h3>どこから来たか（訪問数）</h3><div class="chartbox tall"><canvas id="cSourcesMini"></canvas></div></div>
+      </div>
+    </section>
+
+    <!-- ページ別 -->
+    <section class="panel" id="p-pages">
+      <div class="card">
+        <div class="toolbar">
+          <input type="search" id="pageSearch" placeholder="ページ名・住所で絞り込み">
+          <span id="pageCount"></span>
+        </div>
+        <div class="tablewrap scroll"><table id="tPages"></table></div>
+        <p class="note">「閲覧数」はページが開かれた回数。「訪問数」はそのページが訪問の入口（最初に開かれたページ）になった回数。</p>
+      </div>
+      <div class="card">
+        <h3>入口になったページ（訪問の最初に開かれたページ）</h3>
+        <div class="tablewrap scroll"><table id="tEntries"></table></div>
+      </div>
+    </section>
+
+    <!-- どこから来たか -->
+    <section class="panel" id="p-sources">
+      <div class="grid2">
+        <div class="card"><h3>流入元の種類（訪問数）</h3><div class="chartbox"><canvas id="cSources"></canvas></div></div>
+        <div class="card"><h3>流入元の種類（表）</h3><div class="tablewrap"><table id="tSources"></table></div></div>
+      </div>
+      <div style="height:18px"></div>
+      <div class="grid2">
+        <div class="card"><h3>前にいたサイト（ホスト名）</h3><div class="tablewrap scroll"><table id="tRefHosts"></table></div></div>
+        <div class="card"><h3>印つきリンク（?from= の値）</h3><div class="tablewrap scroll"><table id="tFrom"></table></div>
+          <p class="note">note や YouTube の説明欄のリンクに <code>?from=note-xxx</code> のような印を付けると、ここに出ます。</p></div>
+      </div>
+    </section>
+
+    <!-- 時間帯・曜日 -->
+    <section class="panel" id="p-time">
+      <div class="grid2">
+        <div class="card"><h3>時間帯ごと（閲覧数）</h3><div class="chartbox"><canvas id="cHours"></canvas></div></div>
+        <div class="card"><h3>曜日ごと（閲覧数）</h3><div class="chartbox"><canvas id="cDows"></canvas></div></div>
+      </div>
+      <div style="height:18px"></div>
+      <div class="card">
+        <h3>曜日 × 時間帯（閲覧数・色が濃いほど多い）</h3>
+        <div class="tablewrap"><table class="heat" id="tHeat"></table></div>
+      </div>
+    </section>
+
+    <!-- 端末・地域 -->
+    <section class="panel" id="p-device">
+      <div class="grid2">
+        <div class="card"><h3>端末の種類（閲覧数）</h3><div class="chartbox short"><canvas id="cDevices"></canvas></div></div>
+        <div class="card"><h3>OS（閲覧数）</h3><div class="chartbox short"><canvas id="cOs"></canvas></div></div>
+        <div class="card"><h3>ブラウザ（閲覧数）</h3><div class="chartbox short"><canvas id="cBrowsers"></canvas></div></div>
+        <div class="card"><h3>地域（訪問数）</h3><div class="tablewrap scroll" style="max-height:300px"><table id="tRegions"></table></div>
+          <p class="note">地域は通信会社の情報からの推定です。目安として見てください。</p></div>
+      </div>
+    </section>
+
+    <!-- アクセス一覧 -->
+    <section class="panel" id="p-log">
+      <div class="card">
+        <div class="toolbar">
+          <label>件数
+            <select id="logLimit">
+              <option value="200">新しい200件</option>
+              <option value="1000" selected>新しい1000件</option>
+              <option value="5000">新しい5000件</option>
+            </select>
+          </label>
+          <input type="search" id="logSearch" placeholder="ページ・流入元などで絞り込み">
+          <label><input type="checkbox" id="logEntryOnly"> 訪問の入口だけ</label>
+          <span id="logCount"></span>
+          <button class="btn green" id="csvBtn" type="button">CSVで保存</button>
+        </div>
+        <div class="tablewrap scroll"><table id="tLog"></table></div>
+      </div>
+    </section>
+
+    <!-- 設定 -->
+    <section class="panel" id="p-settings">
+      <div class="card">
+        <h2>パスワードの変更</h2>
+        <form id="pwForm" autocomplete="off" style="display:grid;gap:10px;max-width:420px;">
+          <input type="password" id="pwNew" placeholder="新しいパスワード（8文字以上）" autocomplete="new-password" style="padding:10px 12px;border-radius:10px;border:1.5px solid #DDD0B8;font-size:15px;">
+          <input type="password" id="pwNew2" placeholder="もう一度（確認）" autocomplete="new-password" style="padding:10px 12px;border-radius:10px;border:1.5px solid #DDD0B8;font-size:15px;">
+          <div><button class="btn" type="submit">変更する</button></div>
+        </form>
+        <p class="msg" id="pwMsg"></p>
+      </div>
+      <div class="card">
+        <h2>数え方のきまり</h2>
+        <ul class="help">
+          <li><b>閲覧数</b>：ページが開かれた回数。再読み込みでも1回増えます。</li>
+          <li><b>訪問数</b>：ブラウザのタブでサイトに入ってきた回数。同じタブで続けて見たページは数えません（タブを閉じて開き直すと、また1回）。2つのサイトは別々に数えます。</li>
+          <li><b>ご自分のアクセスを除く</b>：URLの最後に <code>?roy=1</code> を付けて一度開くと、その端末・そのブラウザでは以後ずっと数えません（戻すときは <code>?roy=0</code>）。2つのサイトそれぞれで1回ずつ必要です。<br>
+            <code>https://royschannel.com/?roy=1</code>　<code>https://it.royschannel.com/?roy=1</code></li>
+          <li>検索エンジンなどのロボットは数えません。手元のパソコンでの動作確認（localhost）も数えません。</li>
+          <li>IPアドレスなど、個人を特定できる情報は保存していません。</li>
+          <li>脳いきいき手帳（アプリ本体）は数えていません。</li>
+        </ul>
+        <p class="note" id="firstInfo"></p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // 手元で試すときだけ ?api=http://localhost:8787 で向き先を変えられる（本番では無視）
+  var API = 'https://roy-senior-site-api.roy-s1105.workers.dev';
+  try {
+    var isLocal = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    var apiParam = new URLSearchParams(location.search).get('api');
+    if (isLocal && apiParam) API = apiParam.replace(/\/+$/, '');
+  } catch (e) {}
+
+  var SITE_NAME = { main: "Roy's Channel", senior: 'ITシニア相談室' };
+  var SITE_COLOR = { main: '#1F5A72', senior: '#4B8B5E' };
+  var PALETTE = ['#1F5A72', '#D9822B', '#4B8B5E', '#C0392B', '#7A5BA6', '#2A9D8F', '#C9A227', '#8A8F94', '#5B8FB9', '#B5651D'];
+  var SOURCE_COLOR = {
+    '検索': '#1F5A72', 'note': '#2A9D8F', 'YouTube': '#C0392B', 'SNS': '#7A5BA6',
+    '直接・ブックマーク': '#8A8F94', 'もう一方のサイト': '#4B8B5E', 'ほかのサイト': '#D9822B',
+    '印つきリンク': '#C9A227', 'サイト内の移動': '#B9C4C9'
+  };
+  var DOW = ['日', '月', '火', '水', '木', '金', '土'];
+  var PREF = {
+    Hokkaido:'北海道',Aomori:'青森県',Iwate:'岩手県',Miyagi:'宮城県',Akita:'秋田県',Yamagata:'山形県',Fukushima:'福島県',
+    Ibaraki:'茨城県',Tochigi:'栃木県',Gunma:'群馬県',Saitama:'埼玉県',Chiba:'千葉県',Tokyo:'東京都',Kanagawa:'神奈川県',
+    Niigata:'新潟県',Toyama:'富山県',Ishikawa:'石川県',Fukui:'福井県',Yamanashi:'山梨県',Nagano:'長野県',Gifu:'岐阜県',
+    Shizuoka:'静岡県',Aichi:'愛知県',Mie:'三重県',Shiga:'滋賀県',Kyoto:'京都府',Osaka:'大阪府',Hyogo:'兵庫県',Nara:'奈良県',
+    Wakayama:'和歌山県',Tottori:'鳥取県',Shimane:'島根県',Okayama:'岡山県',Hiroshima:'広島県',Yamaguchi:'山口県',
+    Tokushima:'徳島県',Kagawa:'香川県',Ehime:'愛媛県',Kochi:'高知県',Fukuoka:'福岡県',Saga:'佐賀県',Nagasaki:'長崎県',
+    Kumamoto:'熊本県',Oita:'大分県',Miyazaki:'宮崎県',Kagoshima:'鹿児島県',Okinawa:'沖縄県'
+  };
+
+  var password = '';           // メモリの中だけ。保存しない
+  var data = null, logRows = [];
+  var charts = {};
+  var dailyMetric = 'views';
+  var period = '30';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function n(v) { return Number(v || 0); }
+  function fmt(v) { return n(v).toLocaleString('ja-JP'); }
+  function pct(a, b) { return b ? (Math.round(a / b * 1000) / 10) + '%' : '—'; }
+
+  // ---- 日付 ----
+  function ymd(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function todayJst() {
+    var now = new Date(Date.now() + (new Date().getTimezoneOffset() + 540) * 60000);
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+  function addDays(d, k) { var x = new Date(d); x.setDate(x.getDate() + k); return x; }
+  function parseYmd(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function setPeriod(p) {
+    period = p;
+    var t = todayJst(), from = t, to = t;
+    if (p === 'yesterday') { from = to = addDays(t, -1); }
+    else if (/^\d+$/.test(p)) { from = addDays(t, -(+p - 1)); }
+    else if (p === 'thismonth') { from = new Date(t.getFullYear(), t.getMonth(), 1); }
+    else if (p === 'lastmonth') { from = new Date(t.getFullYear(), t.getMonth() - 1, 1); to = new Date(t.getFullYear(), t.getMonth(), 0); }
+    else if (p === 'all') { from = null; }
+    $('fFrom').value = from ? ymd(from) : '';
+    $('fTo').value = ymd(to);
+    Array.prototype.forEach.call(document.querySelectorAll('#periodChips .chip'), function (c) {
+      c.classList.toggle('on', c.getAttribute('data-p') === p);
+    });
+  }
+
+  // ---- 通信 ----
+  function api(path, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({ 'X-Admin-Key': password }, opts.headers || {});
+    return fetch(API + path, opts).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) { j._status = r.status; return j; });
+    });
+  }
+  function query() {
+    var qs = new URLSearchParams();
+    if ($('fFrom').value) qs.set('from', $('fFrom').value);
+    if ($('fTo').value) qs.set('to', $('fTo').value);
+    if ($('fSite').value) qs.set('site', $('fSite').value);
+    return qs.toString();
+  }
+  function failText(j) {
+    if (j._status === 429) return 'パスワードを続けてまちがえたため、15分ほど受け付けを止めています。時間をおいてから試してください。';
+    if (j._status === 404) return 'パスワードが違います。';
+    return '読み込みに失敗しました。通信状態を確かめて、もう一度お試しください。';
+  }
+
+  // ---- ログイン ----
+  $('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = $('pw').value;
+    if (!v) { $('loginMsg').textContent = 'パスワードを入れてください。'; return; }
+    password = v;
+    $('loginBtn').disabled = true;
+    $('loginMsg').className = 'msg';
+    $('loginMsg').textContent = '確認しています…';
+    setPeriod(period);
+    loadAll().then(function (ok) {
+      $('loginBtn').disabled = false;
+      if (ok) {
+        $('pw').value = '';
+        $('loginMsg').textContent = '';
+        $('login').style.display = 'none';
+        $('dash').style.display = 'block';
+        renderAll();
+      } else {
+        password = '';
+      }
+    });
+  });
+  $('logoutBtn').addEventListener('click', function () {
+    password = ''; data = null; logRows = [];
+    Object.keys(charts).forEach(function (k) { charts[k].destroy(); });
+    charts = {};
+    $('dash').style.display = 'none';
+    $('login').style.display = 'block';
+    $('pw').focus();
+  });
+
+  function loadAll() {
+    var qs = query();
+    document.body.classList.add('loading');
+    // パスワードの確認を兼ねて集計を先に読み、通ったときだけ一覧を読む（まちがいを2回と数えないため）
+    var d;
+    return api('/analytics-data?' + qs).then(function (res) {
+      d = res;
+      return d.ok ? api('/analytics-log?' + qs + '&limit=' + $('logLimit').value) : {};
+    }).then(function (l) {
+      document.body.classList.remove('loading');
+      if (!d.ok) {
+        var target = $('dash').style.display === 'block' ? $('dashMsg') : $('loginMsg');
+        target.className = 'msg';
+        target.textContent = failText(d);
+        return false;
+      }
+      $('dashMsg').textContent = '';
+      data = d;
+      logRows = l.ok ? l.rows : [];
+      data._logTotal = l.ok ? l.total : 0;
+      return true;
+    }).catch(function () {
+      document.body.classList.remove('loading');
+      var target = $('dash').style.display === 'block' ? $('dashMsg') : $('loginMsg');
+      target.textContent = '読み込みに失敗しました。通信状態を確かめて、もう一度お試しください。';
+      return false;
+    });
+  }
+  function reload() { loadAll().then(function (ok) { if (ok) renderAll(); }); }
+
+  // ---- 絞り込みの操作 ----
+  document.querySelectorAll('#periodChips .chip').forEach(function (c) {
+    c.addEventListener('click', function () { setPeriod(c.getAttribute('data-p')); reload(); });
+  });
+  ['fFrom', 'fTo'].forEach(function (id) {
+    $(id).addEventListener('change', function () {
+      document.querySelectorAll('#periodChips .chip').forEach(function (c) { c.classList.remove('on'); });
+      period = 'custom';
+    });
+  });
+  $('fSite').addEventListener('change', reload);
+  $('reloadBtn').addEventListener('click', reload);
+  $('logLimit').addEventListener('change', reload);
+
+  document.querySelectorAll('#tabs .tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      document.querySelectorAll('#tabs .tab').forEach(function (x) { x.classList.toggle('on', x === t); });
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('on', p.id === 'p-' + t.getAttribute('data-t')); });
+      // 隠れていた図は大きさが0で作られるので、表示したときに合わせ直す
+      Object.keys(charts).forEach(function (k) { charts[k].resize(); });
+    });
+  });
+  document.querySelectorAll('#dailyMetric .chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      dailyMetric = c.getAttribute('data-m');
+      document.querySelectorAll('#dailyMetric .chip').forEach(function (x) { x.classList.toggle('on', x === c); });
+      drawDaily();
+    });
+  });
+
+  // ---- 描画 ----
+  function renderAll() {
+    var r = data.range, from = r.from === '2000-01-01' ? (data.firstDate || r.to) : r.from;
+    $('rangeInfo').textContent = '表示中：' + from + ' 〜 ' + r.to + '　／　' + ($('fSite').value ? SITE_NAME[$('fSite').value] : '2つのサイトの合計');
+    $('firstInfo').textContent = data.firstDate ? '記録は ' + data.firstDate + ' から始まっています。' : 'まだ記録がありません。';
+    drawKpis();
+    drawDaily();
+    drawTopPages();
+    drawSources();
+    drawPages();
+    drawTime();
+    drawDevice();
+    drawLog();
+  }
+
+  function chart(id, cfg) {
+    if (charts[id]) charts[id].destroy();
+    cfg.options = Object.assign({ responsive: true, maintainAspectRatio: false, animation: false }, cfg.options || {});
+    charts[id] = new Chart($(id), cfg);
+    return charts[id];
+  }
+  Chart.defaults.font.family = "'Hiragino Kaku Gothic ProN','Noto Sans JP','Yu Gothic',sans-serif";
+  Chart.defaults.font.size = 12.5;
+  Chart.defaults.color = '#5E7079';
+
+  function delta(cur, prev) {
+    if (!data.range || data.range.from === '2000-01-01') return '<span class="d flat">全期間</span>';
+    if (!prev) return '<span class="d flat">前の期間：0</span>';
+    var r = Math.round((cur - prev) / prev * 100);
+    var cls = r > 0 ? 'up' : r < 0 ? 'down' : 'flat';
+    return '<span class="d ' + cls + '">前の期間より ' + (r > 0 ? '+' : '') + r + '%（' + fmt(prev) + '）</span>';
+  }
+  function drawKpis() {
+    var t = data.totals || {}, p = data.prevTotals || {};
+    var v = n(t.views), s = n(t.visits);
+    var bySite = {};
+    (data.sites || []).forEach(function (x) { bySite[x.site] = x; });
+    var siteLine = ['main', 'senior'].map(function (k) {
+      var x = bySite[k] || {};
+      return '<div style="font-size:13px;margin-top:2px;"><span class="tag ' + k + '">' + SITE_NAME[k] + '</span> 閲覧 ' + fmt(x.views) + '・訪問 ' + fmt(x.visits) + '</div>';
+    }).join('');
+    $('kpis').innerHTML =
+      '<div class="kpi"><div class="lb">閲覧数（ページが開かれた回数）</div><div class="v">' + fmt(v) + '</div>' + delta(v, n(p.views)) + '</div>' +
+      '<div class="kpi"><div class="lb">訪問数（サイトに来た回数）</div><div class="v">' + fmt(s) + '</div>' + delta(s, n(p.visits)) + '</div>' +
+      '<div class="kpi"><div class="lb">1回の訪問で見たページ数</div><div class="v">' + (s ? (Math.round(v / s * 10) / 10) : '—') + '</div><span class="d flat">閲覧数 ÷ 訪問数</span></div>' +
+      '<div class="kpi"><div class="lb">サイト別</div>' + siteLine + '</div>';
+  }
+
+  // 期間の全日付（長い期間は月ごとにまとめる）
+  function buckets() {
+    var r = data.range;
+    var from = r.from === '2000-01-01' ? (data.firstDate || r.to) : r.from;
+    var a = parseYmd(from), b = parseYmd(r.to);
+    var days = Math.round((b - a) / 86400000) + 1;
+    var monthly = days > 180;
+    var keys = [], seen = {};
+    for (var d = a; d <= b; d = addDays(d, 1)) {
+      var k = monthly ? ymd(d).slice(0, 7) : ymd(d);
+      if (!seen[k]) { seen[k] = 1; keys.push(k); }
+    }
+    return { keys: keys, monthly: monthly };
+  }
+  function drawDaily() {
+    var bk = buckets(), idx = {};
+    bk.keys.forEach(function (k, i) { idx[k] = i; });
+    var series = { main: bk.keys.map(function () { return 0; }), senior: bk.keys.map(function () { return 0; }) };
+    (data.daily || []).forEach(function (r) {
+      var k = bk.monthly ? r.date.slice(0, 7) : r.date;
+      if (idx[k] != null && series[r.site]) series[r.site][idx[k]] += n(r[dailyMetric]);
+    });
+    var labels = bk.keys.map(function (k) {
+      if (bk.monthly) return k.replace('-', '年') + '月';
+      var d = parseYmd(k); return (d.getMonth() + 1) + '/' + d.getDate() + '(' + DOW[d.getDay()] + ')';
+    });
+    var sites = $('fSite').value ? [$('fSite').value] : ['main', 'senior'];
+    chart('cDaily', {
+      type: 'bar',
+      data: { labels: labels, datasets: sites.map(function (s) {
+        return { label: SITE_NAME[s], data: series[s], backgroundColor: SITE_COLOR[s], borderRadius: 3, maxBarThickness: 36 };
+      }) },
+      options: {
+        scales: { x: { stacked: true, grid: { display: false }, ticks: { autoSkip: true, maxRotation: 0 } },
+                  y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } },
+        plugins: { legend: { position: 'top', align: 'end' },
+                   tooltip: { callbacks: { footer: function (items) {
+                     var s = items.reduce(function (a, i) { return a + i.parsed.y; }, 0); return '合計 ' + fmt(s);
+                   } } } }
+      }
+    });
+  }
+
+  function pageLabel(p) {
+    if (p.page === '/') return (SITE_NAME[p.site] || '') + ' のトップ';
+    return (p.title ? p.title.replace(/[｜|].*$/, '').trim() : '') || p.page;
+  }
+  function drawTopPages() {
+    var top = (data.pages || []).slice(0, 10);
+    chart('cTopPages', {
+      type: 'bar',
+      data: { labels: top.map(function (p) { var l = pageLabel(p); return l.length > 22 ? l.slice(0, 21) + '…' : l; }),
+              datasets: [{ label: '閲覧数', data: top.map(function (p) { return n(p.views); }),
+                           backgroundColor: top.map(function (p) { return SITE_COLOR[p.site]; }), borderRadius: 3 }] },
+      options: { indexAxis: 'y', plugins: { legend: { display: false },
+                 tooltip: { callbacks: { title: function (i) { var p = top[i[0].dataIndex]; return pageLabel(p) + '（' + SITE_NAME[p.site] + p.page + '）'; } } } },
+                 scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { grid: { display: false } } } }
+    });
+  }
+
+  function drawSources() {
+    var src = (data.sources || []).filter(function (s) { return n(s.visits) > 0; });
+    var total = src.reduce(function (a, s) { return a + n(s.visits); }, 0);
+    var cfg = function () {
+      return {
+        type: 'doughnut',
+        data: { labels: src.map(function (s) { return s.source; }),
+                datasets: [{ data: src.map(function (s) { return n(s.visits); }),
+                             backgroundColor: src.map(function (s, i) { return SOURCE_COLOR[s.source] || PALETTE[i % PALETTE.length]; }),
+                             borderColor: '#fff', borderWidth: 2 }] },
+        options: { cutout: '55%', plugins: { legend: { position: 'right' },
+                   tooltip: { callbacks: { label: function (i) { return i.label + '：' + fmt(i.parsed) + '（' + pct(i.parsed, total) + '）'; } } } } }
+      };
+    };
+    chart('cSourcesMini', cfg());
+    chart('cSources', cfg());
+    setTable('tSources', 
+      [{ k: 'source', t: '流入元' }, { k: 'visits', t: '訪問数', num: 1 }, { k: '_p', t: '割合', num: 1, nosort: 1 }],
+      src.map(function (s) { return { source: s.source, visits: n(s.visits), _p: pct(n(s.visits), total) }; }),
+      { empty: 'まだ記録がありません' }
+    );
+    setTable('tRefHosts', 
+      [{ k: 'ref_host', t: 'ホスト名' }, { k: 'source', t: '種類' }, { k: 'visits', t: '訪問数', num: 1 }],
+      (data.refHosts || []).map(function (r) { return { ref_host: r.ref_host, source: r.source, visits: n(r.visits) }; }),
+      { empty: '前にいたサイトの記録はまだありません（ブックマーク・アプリ内からは出ません）' }
+    );
+    setTable('tFrom', 
+      [{ k: 'from_tag', t: '印（?from=）' }, { k: '_site', t: 'サイト', html: 1 }, { k: 'visits', t: '回数', num: 1 }],
+      (data.fromTags || []).map(function (r) { return { from_tag: r.from_tag, _site: siteTag(r.site), visits: n(r.visits) }; }),
+      { empty: '印つきリンクからの訪問はまだありません' }
+    );
+  }
+
+  function siteTag(s) { return '<span class="tag ' + esc(s) + '">' + esc(SITE_NAME[s] || s) + '</span>'; }
+  function siteUrl(s, p) { return (s === 'senior' ? 'https://it.royschannel.com' : 'https://royschannel.com') + p; }
+  function pageCell(r) {
+    return '<div class="pg-t">' + esc(pageLabel(r)) + '</div><div class="pg-p"><a href="' + esc(siteUrl(r.site, r.page)) + '" target="_blank" rel="noopener">' + esc(r.page) + '</a></div>';
+  }
+
+  function drawPages() {
+    var entryMap = {};
+    (data.entries || []).forEach(function (e) { entryMap[e.site + e.page] = n(e.visits); });
+    var total = n((data.totals || {}).views);
+    var max = Math.max.apply(null, (data.pages || []).map(function (p) { return n(p.views); }).concat([1]));
+    var rows = (data.pages || []).map(function (p) {
+      return { _site: siteTag(p.site), site: p.site, _page: pageCell(p), _text: pageLabel(p) + ' ' + p.page,
+               views: n(p.views), entries: entryMap[p.site + p.page] || 0, _p: pct(n(p.views), total),
+               _bar: '<div class="bar" style="width:' + Math.round(n(p.views) / max * 120) + 'px"></div>' };
+    });
+    var cols = [{ k: '_site', t: 'サイト', html: 1, sortKey: 'site' }, { k: '_page', t: 'ページ', html: 1, sortKey: '_text' },
+                { k: 'views', t: '閲覧数', num: 1 }, { k: '_bar', t: '', html: 1, nosort: 1 },
+                { k: '_p', t: '割合', num: 1, nosort: 1 }, { k: 'entries', t: '訪問数（入口）', num: 1 }];
+    function redraw() {
+      var q = $('pageSearch').value.trim().toLowerCase();
+      var f = q ? rows.filter(function (r) { return r._text.toLowerCase().indexOf(q) >= 0; }) : rows;
+      $('pageCount').textContent = f.length + 'ページ';
+      setTable('tPages', cols, f, { empty: '該当するページはありません', id: 'tPages', redraw: redraw });
+    }
+    $('pageSearch').oninput = redraw;
+    redraw();
+
+    setTable('tEntries', 
+      [{ k: '_site', t: 'サイト', html: 1, sortKey: 'site' }, { k: '_page', t: 'ページ', html: 1, sortKey: '_text' }, { k: 'visits', t: '訪問数', num: 1 }],
+      (data.entries || []).map(function (e) { return { _site: siteTag(e.site), site: e.site, _page: pageCell(e), _text: pageLabel(e), visits: n(e.visits) }; }),
+      { empty: 'まだ記録がありません' }
+    );
+  }
+
+  function drawTime() {
+    var h = new Array(24).fill(0), d = new Array(7).fill(0);
+    (data.hours || []).forEach(function (r) { h[r.hour] = n(r.views); });
+    (data.dows || []).forEach(function (r) { d[r.dow] = n(r.views); });
+    var barOpt = { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true } }, y: { beginAtZero: true, ticks: { precision: 0 } } } };
+    chart('cHours', { type: 'bar', data: { labels: h.map(function (_, i) { return i + '時'; }),
+      datasets: [{ label: '閲覧数', data: h, backgroundColor: '#1F5A72', borderRadius: 3 }] }, options: barOpt });
+    chart('cDows', { type: 'bar', data: { labels: DOW.map(function (x) { return x + '曜'; }),
+      datasets: [{ label: '閲覧数', data: d, backgroundColor: DOW.map(function (_, i) { return i === 0 ? '#C0392B' : i === 6 ? '#5B8FB9' : '#1F5A72'; }), borderRadius: 3 }] }, options: barOpt });
+
+    var grid = {}, max = 0;
+    (data.heat || []).forEach(function (r) { grid[r.dow + '-' + r.hour] = n(r.views); max = Math.max(max, n(r.views)); });
+    var html = '<tr><th></th>' + h.map(function (_, i) { return '<th>' + i + '</th>'; }).join('') + '</tr>';
+    [1, 2, 3, 4, 5, 6, 0].forEach(function (w) {
+      html += '<tr><th>' + DOW[w] + '</th>';
+      for (var i = 0; i < 24; i++) {
+        var v = grid[w + '-' + i] || 0, a = max ? v / max : 0;
+        var bg = v ? 'rgba(31,90,114,' + (0.12 + a * 0.88).toFixed(2) + ')' : '#F5F1E8';
+        html += '<td title="' + DOW[w] + '曜 ' + i + '時台：' + v + '回" style="background:' + bg + ';color:' + (a > 0.5 ? '#fff' : '#23323C') + '">' + (v || '') + '</td>';
+      }
+      html += '</tr>';
+    });
+    $('tHeat').innerHTML = html;
+  }
+
+  function drawDevice() {
+    function dough(id, rows, key) {
+      chart(id, { type: 'doughnut',
+        data: { labels: rows.map(function (r) { return r[key]; }),
+                datasets: [{ data: rows.map(function (r) { return n(r.views); }), backgroundColor: rows.map(function (_, i) { return PALETTE[i % PALETTE.length]; }), borderColor: '#fff', borderWidth: 2 }] },
+        options: { cutout: '55%', plugins: { legend: { position: 'right' } } } });
+    }
+    dough('cDevices', data.devices || [], 'device');
+    var hbar = function (id, rows, key) {
+      chart(id, { type: 'bar', data: { labels: rows.map(function (r) { return r[key]; }),
+        datasets: [{ label: '閲覧数', data: rows.map(function (r) { return n(r.views); }), backgroundColor: '#1F5A72', borderRadius: 3 }] },
+        options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { grid: { display: false } } } } });
+    };
+    hbar('cOs', data.oses || [], 'os');
+    hbar('cBrowsers', data.browsers || [], 'browser');
+    var total = (data.regions || []).reduce(function (a, r) { return a + n(r.visits); }, 0);
+    setTable('tRegions', 
+      [{ k: 'place', t: '地域' }, { k: 'visits', t: '訪問数', num: 1 }, { k: '_p', t: '割合', num: 1, nosort: 1 }],
+      (data.regions || []).map(function (r) {
+        var place = r.country === 'JP' ? (PREF[r.region] || r.region || '日本（地域不明）') : ((r.country || '不明') + (r.region ? '・' + r.region : ''));
+        return { place: place, visits: n(r.visits), _p: pct(n(r.visits), total) };
+      }),
+      { empty: 'まだ記録がありません' }
+    );
+  }
+
+  // ---- アクセス一覧 ----
+  function logView() {
+    var q = $('logSearch').value.trim().toLowerCase();
+    var only = $('logEntryOnly').checked;
+    return logRows.filter(function (r) {
+      if (only && !r.new_session) return false;
+      if (!q) return true;
+      return [r.page, r.title, r.source, r.ref_host, r.from_tag, r.device, r.os, r.browser, r.region, SITE_NAME[r.site]].join(' ').toLowerCase().indexOf(q) >= 0;
+    });
+  }
+  function drawLog() {
+    var rows = logView().map(function (r) {
+      return { ts: r.ts, _site: siteTag(r.site), site: r.site, _page: pageCell(r), _text: pageLabel(r),
+               entry: r.new_session ? '入口' : '', source: r.source, ref_host: r.ref_host || '', from_tag: r.from_tag || '',
+               device: r.device + '・' + r.os + '・' + r.browser,
+               place: r.country === 'JP' ? (PREF[r.region] || r.region || '') : [r.country, r.region].filter(Boolean).join('・') };
+    });
+    $('logCount').textContent = rows.length + '件表示（この期間の記録は全部で ' + fmt(data._logTotal) + '件）';
+    setTable('tLog', [
+      { k: 'ts', t: '日時' }, { k: '_site', t: 'サイト', html: 1, sortKey: 'site' }, { k: '_page', t: 'ページ', html: 1, sortKey: '_text' },
+      { k: 'entry', t: '入口' }, { k: 'source', t: '流入元' }, { k: 'ref_host', t: '前にいたサイト' }, { k: 'from_tag', t: '印' },
+      { k: 'device', t: '端末' }, { k: 'place', t: '地域' }
+    ], rows, { empty: '記録がありません' });
+  }
+  $('logSearch').addEventListener('input', drawLog);
+  $('logEntryOnly').addEventListener('change', drawLog);
+
+  $('csvBtn').addEventListener('click', function () {
+    var rows = logView();
+    var head = ['日時', 'サイト', 'ページ', 'ページ名', '訪問の入口', '流入元', '前にいたサイト', '前のページのURL', '印(from)', '端末', 'OS', 'ブラウザ', '地域', '国'];
+    var lines = [head].concat(rows.map(function (r) {
+      return [r.ts, SITE_NAME[r.site] || r.site, r.page, r.title, r.new_session ? '入口' : '', r.source, r.ref_host, r.ref_url, r.from_tag,
+              r.device, r.os, r.browser, r.country === 'JP' ? (PREF[r.region] || r.region) : r.region, r.country];
+    })).map(function (cols) {
+      return cols.map(function (c) {
+        var s = String(c == null ? '' : c);
+        return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      }).join(',');
+    });
+    var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    var r = data.range;
+    a.href = URL.createObjectURL(blob);
+    a.download = 'アクセス一覧_' + (r.from === '2000-01-01' ? '全期間' : r.from.replace(/-/g, '')) + '-' + r.to.replace(/-/g, '') + '.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  // ---- 並べ替えできる表 ----
+  var sortState = {};
+  function table(cols, rows, opt) {
+    opt = opt || {};
+    if (!rows.length) return '<tr><td class="empty">' + esc(opt.empty || 'データがありません') + '</td></tr>';
+    var tid = opt.id;
+    var st = sortState[tid];
+    if (st) {
+      rows = rows.slice().sort(function (a, b) {
+        var x = a[st.k], y = b[st.k];
+        if (typeof x === 'number' && typeof y === 'number') return st.dir * (x - y);
+        return st.dir * String(x).localeCompare(String(y), 'ja');
+      });
+    }
+    var h = '<thead><tr>' + cols.map(function (c) {
+      var mark = st && st.k === (c.sortKey || c.k) ? (st.dir > 0 ? ' ▲' : ' ▼') : '';
+      return '<th class="' + (c.num ? 'num ' : '') + (c.nosort ? 'nosort' : '') + '"' + (c.nosort ? '' : ' data-sort="' + (c.sortKey || c.k) + '" data-tid="' + tid + '"') + '>' + esc(c.t) + mark + '</th>';
+    }).join('') + '</tr></thead>';
+    var b = '<tbody>' + rows.map(function (r) {
+      return '<tr>' + cols.map(function (c) {
+        var v = r[c.k];
+        var s = c.html ? v : esc(typeof v === 'number' ? fmt(v) : v);
+        return '<td class="' + (c.num ? 'num' : '') + '">' + s + '</td>';
+      }).join('') + '</tr>';
+    }).join('') + '</tbody>';
+    return h + b;
+  }
+  var tableRedraw = {};
+  // 表を描いて、並べ替えのときに描き直せるようにしておく
+  function setTable(elId, cols, rows, opt) {
+    opt = opt || {};
+    opt.id = elId;
+    tableRedraw[elId] = opt.redraw || function () { $(elId).innerHTML = table(cols, rows, opt); };
+    $(elId).innerHTML = table(cols, rows, opt);
+  }
+  document.addEventListener('click', function (e) {
+    var th = e.target.closest && e.target.closest('th[data-sort]');
+    if (!th) return;
+    var tid = th.getAttribute('data-tid'), k = th.getAttribute('data-sort');
+    var cur = sortState[tid];
+    sortState[tid] = { k: k, dir: cur && cur.k === k ? -cur.dir : (/views|visits|entries/.test(k) ? -1 : 1) };
+    if (tableRedraw[tid]) tableRedraw[tid]();
+  });
+
+  // ---- パスワードの変更 ----
+  $('pwForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var a = $('pwNew').value, b = $('pwNew2').value, m = $('pwMsg');
+    m.className = 'msg';
+    if (a.length < 8) { m.textContent = '新しいパスワードは8文字以上にしてください。'; return; }
+    if (a !== b) { m.textContent = '確認のために入れたパスワードが一致しません。'; return; }
+    if (!confirm('パスワードを変更します。よろしいですか？')) return;
+    fetch(API + '/analytics-password', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ current: password, next: a }) })
+      .then(function (r) { return r.json().then(function (j) { j._status = r.status; return j; }); })
+      .then(function (j) {
+        if (j.ok) {
+          password = a; $('pwNew').value = ''; $('pwNew2').value = '';
+          m.className = 'msg ok'; m.textContent = '変更しました。次からは新しいパスワードで開いてください。';
+        } else {
+          m.textContent = j.error === 'length' ? '新しいパスワードは8〜100文字にしてください。' : failText(j);
+        }
+      }).catch(function () { m.textContent = '変更に失敗しました。もう一度お試しください。'; });
+  });
+
+  $('pw').focus();
+})();
+</script>
+</body>
+</html>
