@@ -138,6 +138,23 @@ code{background:#F2ECE0;padding:1px 6px;border-radius:5px;font-size:13px;}
       <button class="btn" id="loginBtn" type="submit">開く</button>
     </form>
     <p class="msg" id="loginMsg"></p>
+    <div style="border-top:1px solid var(--line2);margin-top:16px;padding-top:14px;">
+      <p class="note" style="margin:0 0 10px;">パスワードを忘れたとき・まだ決めていないときは、下のボタンを押してください。登録しているGmailに、新しいパスワードを決めるためのリンクが届きます（30分間・1回だけ有効）。</p>
+      <button class="btn sub" id="resetReqBtn" type="button">パスワードを忘れた・まだ決めていない</button>
+      <p class="msg" id="resetReqMsg"></p>
+    </div>
+  </div>
+
+  <!-- ===== メールのリンクから来たとき：新しいパスワードを決める ===== -->
+  <div id="resetBox" class="card" style="display:none;max-width:460px;margin:40px auto;">
+    <h1>新しいパスワードを決める</h1>
+    <p class="note" style="margin:0 0 12px;">8文字以上で決めてください。決めたら、次からはそのパスワードで管理画面を開きます。</p>
+    <form id="resetForm" autocomplete="off" style="display:grid;gap:10px;">
+      <input type="password" id="rsNew" placeholder="新しいパスワード（8文字以上）" autocomplete="new-password" style="padding:12px 14px;border-radius:10px;border:1.5px solid #DDD0B8;font-size:16px;">
+      <input type="password" id="rsNew2" placeholder="もう一度（確認）" autocomplete="new-password" style="padding:12px 14px;border-radius:10px;border:1.5px solid #DDD0B8;font-size:16px;">
+      <div><button class="btn" id="rsBtn" type="submit">このパスワードに決める</button></div>
+    </form>
+    <p class="msg" id="rsMsg"></p>
   </div>
 
   <!-- ===== 管理画面 ===== -->
@@ -830,7 +847,64 @@ code{background:#F2ECE0;padding:1px 6px;border-radius:5px;font-size:13px;}
       }).catch(function () { m.textContent = '変更に失敗しました。もう一度お試しください。'; });
   });
 
-  $('pw').focus();
+  // ---- パスワードを忘れたとき（メールで再設定） ----
+  function postJson(path, obj) {
+    return fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { j._status = r.status; return j; }); });
+  }
+  $('resetReqBtn').addEventListener('click', function () {
+    var m = $('resetReqMsg');
+    if (!confirm('登録しているGmailに、パスワード再設定のリンクを送ります。よろしいですか？')) return;
+    $('resetReqBtn').disabled = true;
+    m.className = 'msg'; m.textContent = '送っています…';
+    postJson('/analytics-reset-request', {}).then(function (j) {
+      $('resetReqBtn').disabled = false;
+      if (j.ok) {
+        m.className = 'msg ok';
+        m.textContent = 'メールを送りました。Gmailに届いた「【アクセス解析】パスワードの再設定」のリンクを開いてください（届くまで1〜2分かかることがあります。続けて押しても、3分に1通しか送りません）。';
+      } else {
+        m.textContent = 'メールを送れませんでした。少し時間をおいてから、もう一度お試しください。';
+      }
+    }).catch(function () { $('resetReqBtn').disabled = false; m.textContent = '送れませんでした。通信状態を確かめてください。'; });
+  });
+
+  var resetToken = '';
+  try { resetToken = (new URLSearchParams(location.search).get('reset') || '').replace(/[^0-9a-f]/g, ''); } catch (e) {}
+  if (resetToken) {
+    // リンクの印が画面の住所欄やブラウザの履歴に残らないよう、すぐ消しておく
+    try { history.replaceState(null, '', location.pathname + location.search.replace(/[?&]reset=[^&]*/, '').replace(/^&/, '?')); } catch (e) {}
+    $('login').style.display = 'none';
+    $('resetBox').style.display = 'block';
+    $('rsNew').focus();
+  }
+  $('resetForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var a = $('rsNew').value, b = $('rsNew2').value, m = $('rsMsg');
+    m.className = 'msg';
+    if (a.length < 8) { m.textContent = 'パスワードは8文字以上にしてください。'; return; }
+    if (a !== b) { m.textContent = '確認のために入れたパスワードが一致しません。'; return; }
+    $('rsBtn').disabled = true;
+    postJson('/analytics-reset', { token: resetToken, next: a }).then(function (j) {
+      $('rsBtn').disabled = false;
+      if (j.ok) {
+        resetToken = '';
+        $('rsNew').value = ''; $('rsNew2').value = '';
+        $('resetBox').style.display = 'none';
+        $('login').style.display = 'block';
+        $('loginMsg').className = 'msg ok';
+        $('loginMsg').textContent = '新しいパスワードを決めました。そのパスワードを入れて「開く」を押してください。';
+        $('pw').focus();
+      } else if (j.error === 'invalid_token') {
+        m.textContent = 'このリンクは使えません（30分を過ぎたか、もう使ったリンクです）。管理画面を開き直して、もう一度「パスワードを忘れた」を押してください。';
+      } else if (j.error === 'length') {
+        m.textContent = 'パスワードは8〜100文字にしてください。';
+      } else {
+        m.textContent = 'うまくいきませんでした。もう一度お試しください。';
+      }
+    }).catch(function () { $('rsBtn').disabled = false; m.textContent = '通信に失敗しました。もう一度お試しください。'; });
+  });
+
+  if (!resetToken) $('pw').focus();
 })();
 </script>
 </body>
