@@ -5,6 +5,24 @@
 
 ---
 
+## 2026-10-18（日）その6 — 講座ページの「トップに戻る」を「前のページに戻る」に（未デプロイ）
+
+### やったこと
+- `kouza/claude-nyumon.html`・`kouza/inaka-hitori-kasegu.html`：上の「トップに戻る」と下の「トップページに戻る」を「← 前のページに戻る」「前のページに戻る」に。来たページへ戻る script を `</body>` の前に追加。戻れないときの行き先は `https://royschannel.com/kyozai`（教材一覧）に変えた。
+- シニアサイトの `material/hajimete-no-sumaho-kyoshitsu.html` も同じにした（教材一覧から行けるため。記録は senior-site の DEVLOG）。
+- 変更前は `_backup/claude-nyumon_2026-10-18.html`・`_backup/inaka-hitori-kasegu_2026-10-18.html`。
+
+### わかったこと・つまずいたこと
+- 戻る先は「来たページ」。前のページが royschannel.com か it.royschannel.com（ローカル試験では localhost）のときだけ `history.back()`。ブックマーク等で直接開いた・よそから来たときは href の場所へ行く。
+- ボタンは `data-back` 属性を付けた a。同じ仕組みを足すときは、a に `data-back` を付けて同じ script を置く。
+
+### 次にやること
+- ロイさんの合図で push（roys-channel と senior-site の2つ）→ ライブで確認。
+
+### 動作確認
+- ローカル：kyozai.html → claude-nyumon.html →「前のページに戻る」で kyozai.html に戻ることを確認。直接開いたときは戻らず href（/kyozai）へ行く判定になることを確認。
+- ライブ：未デプロイのため未確認。
+
 ## 2026-10-18（日）その5 — トップの「講座・教材」欄を一旦非表示に（公開ずみ）
 
 ### やったこと

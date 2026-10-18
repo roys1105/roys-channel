@@ -492,7 +492,7 @@
 
 <!-- この講座は Roy's Channel（メインサイト）の入り口から見てもらうものなので、
      「戻る」先と問い合わせ先は、シニア相談室ではなく Roy's Channel にしている。 -->
-<a class="top-link" href="https://royschannel.com/">トップに戻る</a>
+<a class="top-link" href="https://royschannel.com/kyozai" data-back>← 前のページに戻る</a>
 
 <header class="hero">
   <span class="badge">動画で学べるミニ講座</span>
@@ -656,7 +656,7 @@
     <a class="btn secondary" href="https://royschannel.com/#contact">個別に相談してみる</a>
   </div>
   <p class="note">※本講座は現在無料で公開中です。正式版（教材）は今後の販売を予定しています。</p>
-  <a class="back" href="https://royschannel.com/">トップページに戻る</a>
+  <a class="back" href="https://royschannel.com/kyozai" data-back>前のページに戻る</a>
 </footer>
 
 <script>
@@ -673,6 +673,23 @@
     var nodes = document.querySelectorAll(".roy-age");
     for (var i = 0; i < nodes.length; i++) { nodes[i].textContent = age; }
   }catch(e){}
+})();
+</script>
+
+<script>
+/* 「前のページに戻る」（2026-10-18）：来たページ（Roy's Channel か シニア相談室）があれば、そこへ戻る。
+   ブックマークなどで直接開いたとき・よそのサイトから来たときは、href の場所へ行く。 */
+(function(){
+  var links = document.querySelectorAll('a[data-back]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function (e) {
+      try {
+        var host = document.referrer ? new URL(document.referrer).hostname : '';
+        var ours = /(^|\.)royschannel\.com$/.test(host) || host === 'localhost' || host === '127.0.0.1';
+        if (ours && history.length > 1) { e.preventDefault(); history.back(); }
+      } catch (err) {}
+    });
+  }
 })();
 </script>
 
