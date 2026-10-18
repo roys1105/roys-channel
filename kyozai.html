@@ -192,10 +192,10 @@ footer .cp .en{font-family:'Baloo 2',cursive;font-weight:700;font-size:14px;}
         <img src="image/cover-sumaho.jpg" alt="">
         <span class="tx"><small>シニア向け教材</small><b>はじめてのスマホ教室</b></span>
       </a></li>
-      <li><div class="soon">
-        <span class="ph">準備中</span>
-        <span class="tx"><small>近日公開</small><b>新しい教材を準備しています</b></span>
-      </div></li>
+      <li><a href="#kouza-cloud">
+        <img src="image/cover-cloud.jpg" alt="">
+        <span class="tx"><small>動画講座・全5回</small><b>クラウドで動く Claude Code 入門</b></span>
+      </a></li>
       <li><div class="soon">
         <span class="ph">準備中</span>
         <span class="tx"><small>近日公開</small><b>新しい教材を準備しています</b></span>
@@ -319,6 +319,47 @@ footer .cp .en{font-family:'Baloo 2',cursive;font-weight:700;font-size:14px;}
   </div>
 </section>
 
+<!-- ============ 講座「クラウドで動く Claude Code 入門」 ============ -->
+<section class="kouza alt" id="kouza-cloud">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">NEW COURSE</span>
+      <h2>クラウドで動く Claude Code 入門</h2>
+      <p>パソコンを閉じても、AIが作業を続ける。スマホからも指示や確認ができる。1本およそ3分・全5回の動画講座です。</p>
+    </div>
+
+    <div class="kz-grid">
+      <div class="kz-cover">
+        <img src="image/cover-cloud.jpg" alt="講座「クラウドで動く Claude Code 入門」の表紙">
+        <span class="kz-badge">全5回・無料</span>
+        <p class="kz-count" id="kz-count-cloud">この講座が見られた回数　今日 <b>—</b>回／のべ <b>—</b>回</p>
+      </div>
+
+      <div class="kz-body">
+        <p class="kz-lead">
+          Claude Code を、自分のパソコンではなく<strong>クラウド（Anthropic社が用意したパソコン）</strong>で動かす方法と、
+          スマホから指示や確認をする方法を、専門用語をできるだけ使わずに解説しました。
+          プログラミングの経験は要りません。全編テロップの字幕つきです。
+        </p>
+
+        <p class="kz-sub">目次（全5回・合計およそ13分）</p>
+        <ul class="kz-list">
+          <li><b>第1回</b>「クラウドで動く」とは</li>
+          <li><b>第2回</b>しくみと、3つの動かし方</li>
+          <li><b>第3回</b>はじめ方と、頼み方</li>
+          <li><b>第4回</b>スマホから操作する</li>
+          <li><b>第5回</b>注意点と、まとめ</li>
+        </ul>
+
+        <div class="kz-cta">
+          <a class="btn btn-primary" href="kouza/claude-code-cloud">講座のページを見る →</a>
+          <p class="note">スライド教材（PDF）と実践手順書（PDF・HTML）も、講座のページからダウンロードできます</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 準備中 ============ -->
 <section class="kz-soon alt" id="soon" style="background:#F5EFE2;border-top:1px solid var(--line);">
   <div class="wrap">
@@ -359,7 +400,8 @@ footer .cp .en{font-family:'Baloo 2',cursive;font-weight:700;font-size:14px;}
      page の字は、講座ページ側が送っているものと必ず同じにすること。 */
   var KOUZA_COUNTERS = [
     { id: 'kz-count',        page: '/materials/inaka-hitori-kasegu.html' },
-    { id: 'kz-count-claude', page: '/materials/claude-nyumon.html' }
+    { id: 'kz-count-claude', page: '/materials/claude-nyumon.html' },
+    { id: 'kz-count-cloud',  page: '/materials/claude-code-cloud.html' }
   ];
   var counters = KOUZA_COUNTERS.filter(function (c) {
     c.el = document.getElementById(c.id);

@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-10-18（日）その7 — 動画講座「クラウドで動く Claude Code 入門」（全5回）を公開
+
+### やったこと
+- `kouza/claude-code-cloud.html` を新規作成（URL：/kouza/claude-code-cloud）。head と共通CSSは `claude-nyumon.html` の1〜489行目をそのまま使い、目次・動画5本・学べること・**ダウンロード欄**・著者・FAQ を新しく書いた。計測は `data-page="/materials/claude-code-cloud.html"`。
+- 動画：`videos/cloud_ep1〜5.mp4`（元は `dev/tool/cloud-code-slides/完成/`、合計約58MB）、poster `cloud_ep1〜5.jpg`（各回の表紙が出そろった瞬間＝場面1の最後の文の1秒後）。
+- 表紙：`image/cover-cloud.jpg`（700×410。第1回1.9秒の表紙の板を切り出し、上を背景色で埋めた）。
+- ダウンロード：`downloads/` を新設。`cloud-code-slides.pdf`（20ページ横長）・`cloud-code-tejunsho.pdf`（19ページA4）・`cloud-code-tejunsho.html`（コピーボタンとチェック欄が使える版）・見本画像2枚。`download` 属性で日本語のファイル名にして保存させる。
+- `kyozai.html`：早見表の「準備中」1枠を新講座に差し替え、詳しい欄 `#kouza-cloud` を追加、閲覧数の対応表に `kz-count-cloud` を追加。
+- `index.html`：いまは隠してある `#kyozai` 欄の「準備中」カードを新講座のカードに差し替え（再表示したときに合うように）。
+
+### わかったこと・つまずいたこと
+- PDFは `dev/tool/cloud-code-slides/make_pdfs.js` で、元教材（`dev/tool/claude-code-cloud-guide/閲覧用/`）から作る。**元教材を直したら、build_local.py → make_pdfs.js → downloads/ に上書き**の順。
+- `site-preview`（8765）は別のチャットが使っていて、自動で別番号になるとサーバーが起動しない（引数に8765が書いてあるため）。そのときは `site-preview-2`（8892）を使う。
+
+### 次にやること
+- ロイさんの視聴・目視
+
+### 動作確認
+- ローカル（8892）：動画5本・poster5枚・配布ファイル3本・画像が全部200。目次6本の飛び先が全部ある。PC幅1000px・スマホ375pxで横はみ出しなし。一覧ページの新しい欄と早見表のカード、閲覧数の表示（0回）を確認。
+- ライブ：未確認（このあと push して確認する）
+
 ## 2026-10-18（日）その6 — 講座ページの「トップに戻る」を「前のページに戻る」に（公開ずみ）
 
 ### やったこと

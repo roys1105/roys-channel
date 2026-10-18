@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>クラウドClaude Code 実践手順書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap">
+<style>
+/* Layout: 作業台の手順書。左に章の目次（狭い画面では上に横並び）、右に「1手ずつのカード」。カードは毎回同じ4項目（押す場所・打つ文字・こう出たらOK・違ったら）。 */
+:root{
+  --paper:#F3F6F5; --surface:#FFFFFF; --ink:#16222A; --muted:#4F5E68; --line:#D5DEE1;
+  --accent:#0E6B66; --accent-soft:#E0F0EE; --mark:#FFE07A; --mark-ink:#16222A;
+  --warn:#8E4210; --warn-soft:#FBEBDD; --ok:#1B6E40; --ok-soft:#E2F3E8;
+  --code-bg:#EEF2F3;
+  --ui-bg:#1E1E1D; --ui-panel:#2A2A28; --ui-line:#3B3B38; --ui-text:#E9E7E1; --ui-dim:#A3A099; --ui-blue:#2B7BD6;
+  --f-head:"Zen Kaku Gothic New","BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+  --f-mono:"BIZ UDGothic","Consolas","Menlo",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11171B; --surface:#192227; --ink:#E5ECEF; --muted:#9DABB4; --line:#2C3940;
+  --accent:#55C2B9; --accent-soft:#16312F; --mark:#6B5815; --mark-ink:#FFF4CC;
+  --warn:#F2A46C; --warn-soft:#2F2118; --ok:#74D29C; --ok-soft:#15291D; --code-bg:#0F1519; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11171B; --surface:#192227; --ink:#E5ECEF; --muted:#9DABB4; --line:#2C3940;
+  --accent:#55C2B9; --accent-soft:#16312F; --mark:#6B5815; --mark-ink:#FFF4CC;
+  --warn:#F2A46C; --warn-soft:#2F2118; --ok:#74D29C; --ok-soft:#15291D; --code-bg:#0F1519; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.85;padding-inline:16px;padding-block:0 64px}
+h1,h2,h3{font-family:var(--f-head);text-wrap:balance;line-height:1.35;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+.wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:32px}
+@media (min-width:960px){.wrap{grid-template-columns:230px minmax(0,1fr)}}
+
+/* ヘッダー */
+.top{max-width:1120px;margin:0 auto;padding-block:40px 24px;display:grid;gap:16px}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.12em;color:var(--accent)}
+.top h1{font-size:clamp(28px,5vw,44px);font-weight:900}
+.lead{max-width:60ch;color:var(--muted);font-size:18px}
+.facts{display:flex;flex-wrap:wrap;gap:10px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:15px}
+.fact b{color:var(--accent)}
+
+/* 目次 */
+nav.toc{position:relative;min-width:0}
+.wrap>*{min-width:0}
+@media (min-width:960px){nav.toc .inner{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}}
+.toc ol{list-style:none;margin:0;padding:0;display:flex;gap:6px;overflow-x:auto}
+@media (min-width:960px){.toc ol{flex-direction:column;overflow:visible}}
+.toc a{display:block;white-space:nowrap;text-decoration:none;color:var(--ink);padding:6px 12px;border-radius:10px;font-size:15px;border:1px solid var(--line);background:var(--surface)}
+@media (min-width:960px){.toc a{border-color:transparent;background:none;white-space:normal}}
+.toc a:hover,.toc a:focus-visible{background:var(--accent-soft);outline:none}
+.progress{margin-top:16px;display:grid;gap:6px;font-size:14px;color:var(--muted)}
+.bar{height:10px;background:var(--line);border-radius:999px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.reset{font:inherit;font-size:13px;color:var(--muted);background:none;border:1px solid var(--line);border-radius:8px;padding:2px 10px;cursor:pointer;justify-self:start}
+
+main{display:grid;gap:56px;min-width:0}
+section.ch{display:grid;gap:20px;scroll-margin-top:16px}
+.ch-head{display:grid;gap:6px;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.ch-no{font-family:var(--f-head);font-size:15px;color:var(--accent);letter-spacing:.08em}
+.ch-head h2{font-size:clamp(24px,3.6vw,32px)}
+.ch-head p{color:var(--muted)}
+
+/* 地図 */
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;counter-reset:m}
+.map li{list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:4px;counter-increment:m}
+.map li::before{content:counter(m);font-family:var(--f-head);font-size:28px;color:var(--accent);line-height:1}
+.map b{font-size:16px}
+.map span{font-size:14px;color:var(--muted);line-height:1.6}
+.map{padding:0;margin:0}
+
+/* ステップ */
+.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;display:grid;gap:14px;scroll-margin-top:16px}
+.step.done{border-color:var(--ok)}
+.step-h{display:flex;gap:14px;align-items:flex-start}
+.chk{display:flex;align-items:center;gap:8px;flex:none;cursor:pointer}
+.chk input{width:22px;height:22px;accent-color:var(--ok);cursor:pointer}
+.num{font-family:var(--f-head);font-size:15px;background:var(--ink);color:var(--paper);border-radius:8px;padding:2px 8px;font-variant-numeric:tabular-nums}
+.step.done .num{background:var(--ok)}
+.step h3{font-size:20px}
+.skip{font-size:14px;color:var(--muted);margin-top:2px}
+.rows{display:grid;gap:10px;margin:0}
+.row{display:grid;grid-template-columns:1fr;gap:4px}
+@media (min-width:640px){.row{grid-template-columns:130px minmax(0,1fr);gap:14px}}
+.row dt{font-size:14px;font-weight:700;letter-spacing:.04em;padding-top:3px}
+.row dd{margin:0;min-width:0}
+.row.press dt{color:var(--accent)}
+.row.type dt{color:var(--ink)}
+.row.see dt{color:var(--ok)}
+.row ol,.row ul{margin:0;padding-left:1.3em}
+.row li+li{margin-top:4px}
+
+/* 押す場所の目印＝蛍光ペン */
+.btn{background:var(--mark);color:var(--mark-ink);font-weight:700;padding:1px 8px;border-radius:6px;overflow-wrap:anywhere;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.k{font-family:var(--f-mono);background:var(--code-bg);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:15px;word-break:break-all}
+
+/* コピー欄 */
+.copy{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;padding-right:96px;font-family:var(--f-mono);font-size:15px;line-height:1.8;white-space:pre-wrap;word-break:break-word;margin:0}
+.copy button{position:absolute;top:10px;right:10px;font:inherit;font-family:var(--f-body);font-size:14px;font-weight:700;background:var(--accent);color:var(--surface);border:0;border-radius:8px;padding:4px 12px;cursor:pointer}
+.copy button:focus-visible,.reset:focus-visible,summary:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+
+details.ng{background:var(--warn-soft);border-radius:10px;padding:10px 16px}
+details.ng summary{cursor:pointer;font-weight:700;color:var(--warn);font-size:15px}
+details.ng[open] summary{margin-bottom:6px}
+details.ng ul{margin:0;padding-left:1.3em;font-size:16px}
+
+.note{background:var(--accent-soft);border-radius:12px;padding:14px 18px;font-size:16px}
+.warnbox{background:var(--warn-soft);border-radius:12px;padding:14px 18px;font-size:16px}
+.warnbox b{color:var(--warn)}
+
+/* 実画面のミニ再現（claude.ai/code はダーク表示のため固定色） */
+.ui{background:var(--ui-bg);color:var(--ui-text);border-radius:12px;padding:16px;font-family:var(--f-body);font-size:14px;line-height:1.6;display:grid;gap:10px;max-width:560px;border:1px solid var(--ui-line)}
+.ui .cap{font-size:12px;color:var(--ui-dim)}
+.ui .chips{display:flex;gap:8px;flex-wrap:wrap}
+.ui .chip{border:1px solid var(--ui-line);background:var(--ui-panel);border-radius:8px;padding:2px 10px}
+.ui .chip.hl{outline:2px solid var(--mark);outline-offset:2px}
+.ui .input{border:1px solid var(--ui-line);border-radius:10px;padding:10px 12px;color:var(--ui-dim)}
+.ui .foot{display:flex;justify-content:space-between;color:var(--ui-dim);font-size:13px}
+.ui .foot .hl{color:var(--ui-text);outline:2px solid var(--mark);outline-offset:2px;border-radius:4px;padding:0 4px}
+.ui .menu{background:var(--ui-panel);border:1px solid var(--ui-line);border-radius:10px;padding:8px 10px;display:grid;gap:6px}
+.ui .menu div{display:grid}
+.ui .menu small{color:var(--ui-dim);font-size:12px}
+.ui .menu .sel{outline:2px solid var(--mark);outline-offset:2px;border-radius:6px;padding:2px 6px}
+.ui .pop{background:var(--ui-blue);color:#FFFFFF;border-radius:10px;padding:12px 14px;display:grid;gap:6px}
+.ui .pop small{opacity:.85;font-size:12px}
+.ui .pop .b{justify-self:end;background:#FFFFFF;color:#1E1E1D;border-radius:6px;padding:1px 10px;font-size:13px;outline:2px solid var(--mark);outline-offset:2px}
+
+table{border-collapse:collapse;width:100%;font-size:16px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:14px;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;min-width:12em}
+
+footer{max-width:1120px;margin:56px auto 0;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<header class="top">
+  <p class="eyebrow">CLAUDE CODE ／ クラウドで作業させる</p>
+  <h1>はじめてのクラウド作業：<br>準備から「できた！」まで</h1>
+  <p class="lead">例題「体験教室のお知らせページを作る」を1つ通して、準備・依頼・確認・反映・スマホからの手直しまで、押す場所と打つ文字を1手ずつ書いています。上から順にやれば、そのまま使えるようになります。</p>
+  <div class="facts">
+    <span class="fact">所要時間 <b>約30〜40分</b></span>
+    <span class="fact">使うもの <b>パソコンのブラウザ ＋ スマホ</b></span>
+    <span class="fact">費用 <b>有料プラン内（追加なし）</b></span>
+    <span class="fact">画面の名前は <b>2026年10月の日本語表示</b></span>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="章の目次">
+  <div class="inner">
+    <ol>
+      <li><a href="#ch0">0. 全体の地図</a></li>
+      <li><a href="#ch1">1. GitHubに練習用の棚を作る</a></li>
+      <li><a href="#ch2">2. ClaudeとGitHubをつなぐ</a></li>
+      <li><a href="#ch3">3. 例題を頼む</a></li>
+      <li><a href="#ch4">4. 結果を確かめる</a></li>
+      <li><a href="#ch5">5. 本物に反映して見る</a></li>
+      <li><a href="#ch6">6. スマホから手直しする</a></li>
+      <li><a href="#ch7">7. 困ったとき</a></li>
+      <li><a href="#ch8">8. 自分の仕事で使う</a></li>
+    </ol>
+    <div class="progress" aria-live="polite">
+      <span id="ptext">0 / 0 手 完了</span>
+      <div class="bar"><span id="pbar"></span></div>
+      <button class="reset" id="reset" type="button">チェックをすべて外す</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- 0 -->
+<section class="ch" id="ch0">
+  <div class="ch-head"><span class="ch-no">CHAPTER 0</span><h2>全体の地図</h2><p>これから通る道を先に見ておきます。各手順にはチェック欄があり、この端末に進み具合が残ります。</p></div>
+  <ol class="map">
+    <li><b>棚を作る</b><span>GitHubに練習用の「cloud-renshu」</span></li>
+    <li><b>Claudeとつなぐ</b><span>GitHub Appを入れる（最初の1回だけ）</span></li>
+    <li><b>頼む</b><span>棚を選び、依頼文を貼って送信</span></li>
+    <li><b>確かめる</b><span>変更点（差分）を見て、申請書（PR）を作る</span></li>
+    <li><b>反映する</b><span>GitHubで「合流」させ、Webで見る</span></li>
+    <li><b>スマホで直す</b><span>Claudeアプリから日付を変更</span></li>
+  </ol>
+  <div class="note"><b>例題の完成形：</b>スマホで開ける1枚のWebページ「バウンドテニス体験教室のお知らせ」。日時・場所・持ち物・申込み方法が大きな文字で並びます。第6章で、スマホから日付を変更します。</div>
+  <div class="tbl"><table>
+    <tr><th>この手順書の言葉</th><th>画面での名前</th><th>ひとことで</th></tr>
+    <tr><td>棚</td><td>リポジトリ（repository）</td><td>GitHub（ネット上の倉庫）の中の、1つのプロジェクト専用のファイル置き場</td></tr>
+    <tr><td>下書きコピー</td><td>ブランチ（branch）</td><td>本物（main）を汚さずに直すための写し</td></tr>
+    <tr><td>赤ペン</td><td>差分（diff）／ +10 −2 の表示</td><td>どこを足し、どこを消したか</td></tr>
+    <tr><td>申請書</td><td>プルリクエスト（PR）</td><td>「下書きを本物に合流させてよいか」の確認</td></tr>
+    <tr><td>合流</td><td>マージ（Merge）</td><td>下書きの変更を本物に取り込むこと</td></tr>
+  </table></div>
+</section>
+
+<!-- 1 -->
+<section class="ch" id="ch1">
+  <div class="ch-head"><span class="ch-no">CHAPTER 1</span><h2>GitHubに練習用の棚を作る</h2><p>この手順では、クラウドのClaudeがGitHubから練習用の棚を取ってきて作業します。自分のパソコンの中のファイルが自動で見えるわけではありません。まず、壊しても困らない練習用の棚を作ります。</p></div>
+
+  <article class="step" id="s1-1">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c1-1" data-step><span class="num">1-1</span></label><div><h3>GitHubのアカウントを用意する</h3><p class="skip">すでに持っている人は飛ばしてOK。</p></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd><a href="https://github.com/signup">github.com/signup</a> を開き、右上の <span class="btn">Sign up</span></dd></div>
+      <div class="row type"><dt>打つ文字</dt><dd>メールアドレス → パスワード → ユーザー名（英数字。例：<span class="k">roys1105</span>）。最後に届いたメールの確認コード（数字）を入れる</dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>GitHubのホーム画面が開き、右上に自分のアイコンが出る</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>確認コードのメールが来ない → 迷惑メールフォルダを見る。数分待って画面の「Resend」</li><li>ユーザー名が赤字 → もう使われている名前。数字を足すなど変える</li></ul></details>
+  </article>
+
+  <article class="step" id="s1-2">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c1-2" data-step><span class="num">1-2</span></label><div><h3>新しい棚を作る画面を開く</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>GitHubにログインした状態で、画面右上の <span class="btn">＋</span> → <span class="btn">New repository</span></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>「Create a new repository」という見出しの入力画面</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>「＋」が見当たらない → アドレス欄に <span class="k">github.com/new</span> と打って開く</li></ul></details>
+  </article>
+
+  <article class="step" id="s1-3">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c1-3" data-step><span class="num">1-3</span></label><div><h3>名前と公開範囲を決めて作る</h3></div></div>
+    <dl class="rows">
+      <div class="row type"><dt>打つ文字</dt><dd><b>Repository name</b> の欄に：
+        <pre class="copy">cloud-renshu<button type="button">コピー</button></pre></dd></div>
+      <div class="row press"><dt>押す場所</dt><dd><ol>
+        <li>公開範囲は <span class="btn">Public</span>（第5章でWebに出して見るため。無料のGitHubでWeb公開するにはPublicが必要。<b>秘密の情報は入れない</b>）</li>
+        <li><span class="btn">Add README</span>（または「Add a README file」）をオンにする</li>
+        <li>いちばん下の緑のボタン <span class="btn">Create repository</span></li>
+      </ol></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>上部に <span class="k">ユーザー名 / cloud-renshu</span> と出て、ファイル一覧に <span class="k">README.md</span> が1つある</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>「already exists」と赤字 → 同じ名前がある。<span class="k">cloud-renshu-2</span> にする（以後この手順書の名前も読み替え）</li><li>Privateで作ってしまった → そのままでも第4章までは同じ。第5章のWeb公開だけ、無料のGitHubではできない（有料プランなら非公開の棚からも公開できるが、公開したページ自体は誰でも見られる）</li></ul></details>
+  </article>
+</section>
+
+<!-- 2 -->
+<section class="ch" id="ch2">
+  <div class="ch-head"><span class="ch-no">CHAPTER 2</span><h2>ClaudeとGitHubをつなぐ</h2><p>最初の1回だけの作業です。「GitHubアカウントの接続」と「Claude GitHub Appのインストール」の2段階あります。</p></div>
+
+  <article class="step" id="s2-1">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c2-1" data-step><span class="num">2-1</span></label><div><h3>パソコンのブラウザで claude.ai/code を開く</h3></div></div>
+    <dl class="rows">
+      <div class="row type"><dt>打つ文字</dt><dd>アドレス欄に：<pre class="copy">claude.ai/code<button type="button">コピー</button></pre></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>左上に「Claude Code」、左の列に <span class="k">＋ 新規</span>・<span class="k">ルーティン</span>・<span class="k">ディスパッチ</span>。中央に「〇〇さん、次は何をしましょうか？」</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>ログイン画面が出る → ふだんClaudeで使っているアカウントでログイン</li><li>「Claude Code isn't available on your account」 → 無料プランでは使えない。Pro以上が必要。会社や団体のアカウントなら、自分の席でClaude Codeが使えるか、組織で許可されているかも確認</li></ul></details>
+  </article>
+
+  <article class="step" id="s2-2">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c2-2" data-step><span class="num">2-2</span></label><div><h3>GitHubアカウントを接続する</h3><p class="skip">青い案内の1つ目に ✓ が付いていれば、済んでいます。次へ。</p></div></div>
+    <div class="ui" aria-label="claude.ai/code の画面の再現">
+      <span class="cap">画面の再現（入力欄の上に出る青い案内）。表示例です。プランや更新状況によって異なります</span>
+      <div class="pop"><b>リポジトリで作業するための2つのステップ</b>
+        <div>✓ GitHubアカウントを接続<br><small>GitHub上でのあなたの情報をClaudeに伝えます。</small></div>
+        <div>◌ Claude GitHub App をインストール<br><small>選択したリポジトリでClaudeが作業できるようになります。</small></div>
+        <span class="b">GitHubにインストール</span></div>
+    </div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>案内の <span class="btn">GitHubアカウントを接続</span> → GitHubの画面で緑の <span class="btn">Authorize</span>（許可）</dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>claude.ai/code に戻り、1つ目に ✓ が付く</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>青い案内が出ていない → 左の <span class="k">＋ 新規</span> を押すと出る</li><li>GitHubのパスワードや確認コードを聞かれた → 自分で入力する（Claudeには教えない）</li></ul></details>
+  </article>
+
+  <article class="step" id="s2-3">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c2-3" data-step><span class="num">2-3</span></label><div><h3>Claude GitHub App を「練習用の棚だけ」に入れる</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd><ol>
+        <li>青い案内の <span class="btn">GitHubにインストール</span></li>
+        <li>GitHubの画面で、入れる先に自分のユーザー名を選ぶ</li>
+        <li><span class="btn">Only select repositories</span>（選んだ棚だけ）を選ぶ</li>
+        <li><span class="btn">Select repositories</span> を押し、<span class="k">cloud-renshu</span> を選ぶ</li>
+        <li>緑の <span class="btn">Install</span>（「Install &amp; Authorize」の場合も同じ）</li>
+      </ol></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>claude.ai/code に戻り、青い案内が消える（または2つとも ✓）</dd></div>
+    </dl>
+    <div class="note"><b>なぜ「選んだ棚だけ」？</b> Claudeが触れる範囲を最小にするためです。あとで本番の棚を足すのは簡単です（第8章）。</div>
+    <details class="ng"><summary>違ったときは</summary><ul><li>「All repositories」を選んでしまった → 動作は同じ。気になるなら GitHub の Settings → Applications → Claude → Configure で絞り直せる</li><li>Installのあと白い画面のまま → タブを閉じて claude.ai/code を開き直す</li></ul></details>
+  </article>
+
+  <article class="step" id="s2-4">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c2-4" data-step><span class="num">2-4</span></label><div><h3>作業場が「クラウド ＞ Default」になっているか見る</h3><p class="skip">見るだけ。何も変えなくてOK。</p></div></div>
+    <div class="ui">
+      <span class="cap">入力欄まわりの再現。表示例です（モデル名などはプランや更新状況によって異なります）</span>
+      <div class="chips"><span class="chip hl">☁ Default</span><span class="chip">＋ リポジトリを選択…</span></div>
+      <div class="input">タスクを説明するか、質問を入力してください</div>
+      <div class="foot"><span>＋　🎤　自動</span><span>Opus 5.5　中</span></div>
+      <div class="menu"><div>ローカル <small>デスクトップアプリのみ</small></div><div class="sel">クラウド ＞ Default ✓</div><div>リモートコントロール ＞</div></div>
+    </div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>入力欄の左上の <span class="btn">☁ Default</span> → <span class="btn">クラウド</span> にマウスを乗せる</dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>「Default」に ✓ が付いている。確認できたら <span class="k">Esc</span> キーで閉じる</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>Defaultが無い → 同じメニューの <span class="k">クラウド環境を追加…</span> を押し、名前とネットワーク設定は初期値のまま作る</li></ul></details>
+  </article>
+</section>
+
+<!-- 3 -->
+<section class="ch" id="ch3">
+  <div class="ch-head"><span class="ch-no">CHAPTER 3</span><h2>例題を頼む：お知らせページを作ってもらう</h2><p>ここからが本番です。棚を選び、「プラン」モードで依頼文を送ります。</p></div>
+
+  <article class="step" id="s3-1">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c3-1" data-step><span class="num">3-1</span></label><div><h3>新しい作業を始め、棚を選ぶ</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd><ol>
+        <li>左の列の <span class="btn">＋ 新規</span></li>
+        <li>入力欄の上の <span class="btn">＋ リポジトリを選択…</span></li>
+        <li>一覧から <span class="k">ユーザー名/cloud-renshu</span> を押す（下の検索欄に <span class="k">cloud</span> と打つと早い）</li>
+      </ol></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>入力欄の上に <span class="k">cloud-renshu</span> と、下書き元の <span class="k">main</span> が表示される。main のままでOK</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>一覧に cloud-renshu が無い → 一覧の下の <span class="k">リストを更新</span>。それでも無ければ 2-3 をやり直す（Appを入れる棚に選び忘れ）</li></ul></details>
+  </article>
+
+  <article class="step" id="s3-2">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c3-2" data-step><span class="num">3-2</span></label><div><h3>おまかせ度を「プラン」にする</h3></div></div>
+    <div class="ui">
+      <span class="cap">入力欄の下の「自動」を押したところ。表示例です</span>
+      <div class="menu"><small>モード</small>
+        <div>自動 <small>Claudeが権限の決定を処理します</small></div>
+        <div>編集を受け入れる <small>すべてのファイル編集を自動的に承認</small></div>
+        <div class="sel">プラン <small>変更を加える前に計画を作成</small></div></div>
+    </div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>入力欄の下の <span class="btn">自動</span> → <span class="btn">プラン</span></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>入力欄の下の表示が「プラン」に変わる</dd></div>
+    </dl>
+    <div class="note"><b>プランにする理由：</b>いきなり作業せず、先に「こう作ります」という計画を見せてくれます。初めてのうちは、計画を読んでからOKを出す方が安心です。</div>
+  </article>
+
+  <article class="step" id="s3-3">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c3-3" data-step><span class="num">3-3</span></label><div><h3>依頼文を貼って送る</h3></div></div>
+    <dl class="rows">
+      <div class="row type"><dt>打つ文字</dt><dd>下の <span class="btn">コピー</span> を押し、入力欄に貼り付け（<span class="k">Ctrl</span>＋<span class="k">V</span>）。<b>これは練習用です。〔 〕の中の会場・電話番号・担当者は仮のままにし、実在の個人情報は入れないでください。</b>実際の案内に使うときは、公開してよい連絡先と正式な内容に置き換え、公開前に確認します：
+<pre class="copy">このリポジトリに、体験教室のお知らせページを index.html として1枚作ってください。
+
+【載せる内容】
+・タイトル：バウンドテニス体験教室のお知らせ
+・日時：2026年11月15日（日）10:00〜12:00
+・場所：〔〇〇市民体育館 サブアリーナ〕
+・対象：どなたでも（初めての方歓迎・ラケット貸出あり）
+・持ち物：動きやすい服装、室内シューズ、飲み物
+・参加費：無料
+・申込み：〔電話 000-0000-0000（担当：〇〇）〕
+
+【作り方の希望】
+・スマホで見やすく、文字は大きめにしてください
+・画像や外部のファイルは使わず、index.html 1つで完結させてください
+・できたら、スマホ幅で表示が崩れないか自分で確かめてください<button type="button">コピー</button></pre></dd></div>
+      <div class="row press"><dt>押す場所</dt><dd>キーボードの <span class="btn">Enter</span>（または入力欄右の送信マーク）</dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>左の列に新しい作業名が増え、右側で「リポジトリを準備しています」のような進み具合が流れ始める。準備に1〜2分かかることがある</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>Enterで改行されるだけ → 入力欄の右下の送信マーク（↵）を押す</li><li>「Session creation failed」 → 1分待って、もう一度送る。続くときは status.claude.com で障害が出ていないか、GitHubとのつながり（第2章）と作業場の設定（2-4）も見る</li></ul></details>
+  </article>
+
+  <article class="step" id="s3-4">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c3-4" data-step><span class="num">3-4</span></label><div><h3>計画を読んで、OKを出す</h3></div></div>
+    <dl class="rows">
+      <div class="row see"><dt>出てくるもの</dt><dd>「index.html を作成し、見出し・日時…の順に並べ、スマホ向けに…」のような計画が箇条書きで出る</dd></div>
+      <div class="row press"><dt>押す場所</dt><dd>計画の下に承認のボタンが出たら押す。ボタンが無ければ、入力欄に次を打って送る：
+        <pre class="copy">この計画で進めてください。<button type="button">コピー</button></pre></dd></div>
+      <div class="row type"><dt>直したいとき</dt><dd>OKの代わりに希望を書いて送る。例：<span class="k">申込み欄は一番目立つように、色付きの枠で囲んでください</span></dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>「この計画で進めてください」と送っても、プランのままで作業が始まらない → 入力欄の下のモードを <span class="k">編集を受け入れる</span> などの実行用のモードに切り替え、もう一度「この計画で進めてください」と送る</li></ul></details>
+  </article>
+
+  <article class="step" id="s3-5">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c3-5" data-step><span class="num">3-5</span></label><div><h3>終わるまで待つ（離れてもOK）</h3></div></div>
+    <dl class="rows">
+      <div class="row see"><dt>画面の様子</dt><dd>「ファイルを作成」「確認」などの作業の記録が流れ、最後にまとめの報告が出る。例題なら数分で終わる</dd></div>
+      <div class="row press"><dt>してよいこと</dt><dd>タブを閉じる・パソコンを閉じる。<b>作業はクラウドで続きます。</b>あとで claude.ai/code の左の列か、スマホのClaudeアプリの「Code」から開けば結果が見られる</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>途中で止まっている → まずClaudeからの質問や承認待ちが出ていないか見る（答えを送れば続きから再開）。無ければ、エラーの表示や使用量の上限に達していないかも確かめる</li><li>長時間放っておいて開いたら作業場が片づいていた → 会話は残っている。開き直せば新しい作業場で続けられる</li></ul></details>
+  </article>
+</section>
+
+<!-- 4 -->
+<section class="ch" id="ch4">
+  <div class="ch-head"><span class="ch-no">CHAPTER 4</span><h2>結果を確かめ、申請書（PR）を作る</h2><p>Claudeは本物（main）を書き換えず、下書きコピー（ブランチ）に作業結果を入れてGitHubへ送っています。それを確かめます。</p></div>
+
+  <article class="step" id="s4-1">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c4-1" data-step><span class="num">4-1</span></label><div><h3>差分（赤ペン）を開く</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>作業画面に出ている <span class="btn">+120 −0</span> のような数字（足した行数・消した行数）</dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>左にファイル一覧（<span class="k">index.html</span>）、右に中身。新しく足した行は緑で表示される</dd></div>
+      <div class="row type"><dt>見るところ</dt><dd>コードを全部理解する必要はありません。次の2つを見ます。<ol><li><b>日時・場所・連絡先など、文字の部分が正しいか</b></li><li><b>変わったファイルが、意図したもの（今回は index.html）だけか</b></li></ol></dd></div>
+    </dl>
+    <div class="note"><b>見た目の確認について：</b>プレビュー（表示の確認）が使える場合は、パソコンとスマホ幅で、表示・文字の読みやすさ・リンクを確かめます。今回の練習では個人情報を入れないので、第5章で公開してから見た目を確認します。<b>本番のサイトでは、PRを合流させる前に表示を確認してください</b>（例：変更後のHTMLをダウンロードして、パソコンのブラウザで開く）。</div>
+  </article>
+
+  <article class="step" id="s4-2">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c4-2" data-step><span class="num">4-2</span></label><div><h3>直してほしい所があれば伝える（無ければ飛ばす）</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>やり方A</dt><dd>差分の中で気になる行を選び、コメントを書いて <span class="k">Enter</span>。コメントは次に送るメッセージと一緒にClaudeへ届く</dd></div>
+      <div class="row type"><dt>やり方B</dt><dd>入力欄にふつうに書いて送る。例：
+        <pre class="copy">タイトルの文字をもう一回り大きくして、日時の行は太字にしてください。<button type="button">コピー</button></pre></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>Claudeが直し、差分の数字が変わる</dd></div>
+    </dl>
+  </article>
+
+  <article class="step" id="s4-3">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c4-3" data-step><span class="num">4-3</span></label><div><h3>申請書（プルリクエスト）を作る</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>差分画面の上の <span class="btn">PRを作成</span>（英語表示なら Create PR）→ 種類を聞かれたら、ふつうのPRを選ぶ</dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>GitHubのプルリクエストへのリンクが出る</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>ボタンが見つからない → 入力欄に「プルリクエストを作ってください」と送れば作ってくれる</li></ul></details>
+  </article>
+</section>
+
+<!-- 5 -->
+<section class="ch" id="ch5">
+  <div class="ch-head"><span class="ch-no">CHAPTER 5</span><h2>本物に反映して、Webで見る</h2><p>申請書をOKすると、下書きの変更が本物（main）に入ります。おまけで、できたページをWebで開いてスマホで見てみます。</p></div>
+
+  <article class="step" id="s5-1">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c5-1" data-step><span class="num">5-1</span></label><div><h3>GitHubで「合流（マージ）」する</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd><ol>
+        <li>4-3で出たリンクを開く（GitHubのプルリクエスト画面）</li>
+        <li>緑の <span class="btn">Merge pull request</span></li>
+        <li>続けて出る <span class="btn">Confirm merge</span></li>
+      </ol></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>紫色の「Merged」マーク。棚の最初のページに <span class="k">index.html</span> が増えている</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>ボタンが灰色で押せない → 画面を下へ。「This branch has conflicts」なら、Claudeに「main と競合しているので直してください」と送る</li></ul></details>
+  </article>
+
+  <article class="step" id="s5-2">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c5-2" data-step><span class="num">5-2</span></label><div><h3>（おまけ）Webで公開してスマホで見る</h3><p class="skip">この手順は、無料のGitHubアカウントとPublicの練習用の棚が前提です（有料プランでは条件が異なります）。公開されるので、個人の電話番号などは入れない。</p></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd><ol>
+        <li>棚のページ上部の <span class="btn">Settings</span></li>
+        <li>左の列の <span class="btn">Pages</span></li>
+        <li>Source は <span class="btn">Deploy from a branch</span>、Branch は <span class="btn">main</span> と <span class="btn">/ (root)</span></li>
+        <li><span class="btn">Save</span></li>
+      </ol></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>数分後（長いと10分ほど）にページを読み込み直すと、上部に「Your site is live at <span class="k">https://ユーザー名.github.io/cloud-renshu/</span>」。このアドレスをスマホで開くと、お知らせページが表示される</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>404と出る → 10分ほど待つ。main に index.html があるか（5-1が済んでいるか）を見る</li><li>待っても出ない → 棚の上の <span class="k">Actions</span> タブで、公開の処理が成功（緑のチェック）しているか見る</li></ul></details>
+  </article>
+</section>
+
+<!-- 6 -->
+<section class="ch" id="ch6">
+  <div class="ch-head"><span class="ch-no">CHAPTER 6</span><h2>スマホから手直しする（例題その2）</h2><p>「日付が変わった」という想定で、外出先からスマホだけで直します。パソコンは閉じたままで大丈夫です。</p></div>
+
+  <article class="step" id="s6-1">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c6-1" data-step><span class="num">6-1</span></label><div><h3>スマホの準備</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd><ol>
+        <li>iPhoneは App Store、Androidは Google Play で「Claude」を入れる（すでにあれば更新）</li>
+        <li>パソコンと<b>同じアカウント</b>でログイン</li>
+        <li>メニューの <span class="btn">Code</span></li>
+      </ol></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>第3章で頼んだ作業が一覧に出ている</dd></div>
+    </dl>
+    <details class="ng"><summary>違ったときは</summary><ul><li>「Code」が無い → アプリを最新にする。パソコンと同じアカウント・同じ組織か、プランや組織の設定で使えるかを確かめる</li><li>一覧が空 → 別のアカウントや組織でログインしている可能性。ログインし直す</li></ul></details>
+  </article>
+
+  <article class="step" id="s6-2">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c6-2" data-step><span class="num">6-2</span></label><div><h3>スマホから新しく頼む</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd><ol>
+        <li>Codeの画面で新規作成（＋）</li>
+        <li>棚に <span class="k">cloud-renshu</span>、下書き元は <span class="k">main</span> を選ぶ</li>
+        <li>モードは <span class="btn">編集を受け入れる</span>（練習用ページの日付だけを直すため。本番の変更では、最初に「プラン」で内容を確かめてから進める）</li>
+      </ol></dd></div>
+      <div class="row type"><dt>打つ文字</dt><dd><pre class="copy">index.html の開催日を「2026年11月22日（日）10:00〜12:00」に変更してください。ほかの部分は変えないでください。<button type="button">コピー</button></pre></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>しばらくすると完了の報告。差分を開き、<b>開催日が正しく変わっていて、ほかの部分に意図しない変更がない</b>ことを確かめる（差分の行数はHTMLの書き方で変わり、複数行になることもあるので、行数だけでは判断しない）</dd></div>
+    </dl>
+    <div class="note"><b>なぜ新しく頼むの？</b> 第4章の申請書はもう合流済みなので、別の手直しは新しい作業として頼むのが分かりやすいからです。合流前なら、同じ会話で「日付も変えて」と続けて構いません。</div>
+  </article>
+
+  <article class="step" id="s6-3">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c6-3" data-step><span class="num">6-3</span></label><div><h3>スマホで申請書を作り、合流する</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>4-3と同じく <span class="btn">PRを作成</span>（またはチャットで「プルリクエストを作ってください」）→ 出たリンクをスマホのブラウザで開き、<span class="btn">Merge pull request</span> → <span class="btn">Confirm merge</span></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd>数分後、5-2のアドレスを開き直すと日付が11月22日に変わっている</dd></div>
+    </dl>
+  </article>
+
+  <div class="warnbox"><b>リモートコントロールとの違い：</b>この章の方法は「クラウドに頼む」なので、パソコンの電源は不要です。自宅パソコンの中のファイルを使う作業は、パソコンで <span class="k">/remote-control</span> を実行してからスマホで続ける「リモートコントロール」を使います（パソコンはつけたまま）。</div>
+</section>
+
+<!-- 7 -->
+<section class="ch" id="ch7">
+  <div class="ch-head"><span class="ch-no">CHAPTER 7</span><h2>困ったとき</h2><p>よくあるつまずきと、戻り方です。</p></div>
+  <div class="tbl"><table>
+    <tr><th>こうなった</th><th>考えられる原因</th><th>こうする</th></tr>
+    <tr><td>棚の一覧に出てこない</td><td>Claude GitHub Appをその棚に入れていない／GitHubとのつながりが切れている／その棚を見る権限がない</td><td>「リポジトリを選択…」の <span class="k">管理</span> でAppの対象を確認 → GitHubの接続（2-2）と棚の権限を確認 → <span class="k">リストを更新</span></td></tr>
+    <tr><td>GitHubのログインボタンしか出ない</td><td>GitHubとまだつないでいない</td><td>2-2をやる</td></tr>
+    <tr><td>Claude Codeが使えないと出る</td><td>プランが対象外／自分の席や組織で許可されていない</td><td>有料プランか確認。会社・団体のアカウントなら、席と組織の利用許可を管理者に確認</td></tr>
+    <tr><td>Session creation failed</td><td>クラウドの準備の混み合い／GitHubの接続や作業場の設定の問題</td><td>status.claude.com で稼働状況を見て、1分後に送り直す。続くならGitHubの接続と作業場の設定（2-4）も確認</td></tr>
+    <tr><td>作業が途中で止まっている</td><td>Claudeの質問・承認待ち／エラー／使用量の上限</td><td>画面を下までスクロールし、質問や承認があれば答える。無ければエラー表示と使用量を確認</td></tr>
+    <tr><td>スマホに「Code」が無い・一覧が空</td><td>アプリが古い／別のアカウントや組織／プラン・組織の設定</td><td>アプリを更新し、パソコンと同じアカウント・組織でログインし直す</td></tr>
+    <tr><td>パソコンのファイルを使ってと頼んだら「見つからない」</td><td>この手順のクラウド作業では、パソコンの中は自動では見えない</td><td>ファイルを棚に入れるか、ローカル作業やリモートコントロールを使う（慣れた人向けには、パソコンの黒い画面から手元の棚をクラウドへ送る方法もある）</td></tr>
+    <tr><td>思ったのと違う物ができた</td><td>依頼文があいまい</td><td>同じ会話で「〇〇を△△に」と具体的に直してもらう。本物はまだ変わっていないので安心</td></tr>
+    <tr><td>使用量が早く減る</td><td>いくつも同時に頼んでいる</td><td>同時に走らせる数を減らす。使用量はふだんのClaudeと共通</td></tr>
+  </table></div>
+</section>
+
+<!-- 8 -->
+<section class="ch" id="ch8">
+  <div class="ch-head"><span class="ch-no">CHAPTER 8</span><h2>自分の仕事で使う</h2><p>練習が終わったら、本物の棚で使えます。</p></div>
+  <article class="step" id="s8-1">
+    <div class="step-h"><label class="chk"><input type="checkbox" id="c8-1" data-step><span class="num">8-1</span></label><div><h3>本番の棚をAppに追加する</h3></div></div>
+    <dl class="rows">
+      <div class="row press"><dt>押す場所</dt><dd>claude.ai/code の <span class="btn">＋ リポジトリを選択…</span> → 一覧の下の <span class="btn">管理</span> → GitHubの画面で使いたい棚を追加 → <span class="btn">Save</span></dd></div>
+      <div class="row see"><dt>こう出たらOK</dt><dd><span class="k">リストを更新</span> を押すと、その棚が選べる</dd></div>
+    </dl>
+  </article>
+  <div class="note"><b>依頼文の型（コピーして使えます）</b>
+<pre class="copy">【やってほしいこと】〔例：トップページの営業時間を変更〕
+【場所】〔例：index.html の「営業時間」の欄〕
+【変更後の内容】〔例：9:00〜17:00（土日休み）〕
+【変えてはいけないもの】〔例：ほかのページ・色やデザイン〕
+【終わったら】スマホ幅で表示が崩れないか確かめて、変更点を短く報告してください<button type="button">コピー</button></pre></div>
+  <div class="warnbox"><b>本番で使うときの約束：</b>①最初は「プラン」で頼む（第6章の「編集を受け入れる」は練習用の小さな手直しだから）　②差分の文字部分と、変わったファイルの範囲を自分の目で見る　③PRを合流させる前に表示を確認する　④パスワードや個人情報は依頼文にも棚にも入れない　⑤終わった作業は左の列でアーカイブして一覧を片づける（アーカイブは作業を止める操作ではない）</div>
+</section>
+
+</main>
+</div>
+
+<footer>出典：Claude Code 公式ドキュメント（code.claude.com：cloud sessions／web quickstart／mobile／remote control）、claude.ai/code の実画面（2026年10月12日に確認）、GitHub Docs（Pages）。2026年10月17日に記述を一部見直し。GitHub側のボタン名は英語表示のものです。画面の名前は今後変わることがあります。</footer>
+
+<script>
+(function(){
+  var KEY='cc-cloud-handson-v1';
+  var boxes=[].slice.call(document.querySelectorAll('input[data-step]'));
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
+  function update(){
+    var n=0;
+    boxes.forEach(function(b){var art=b.closest('.step');if(b.checked){n++;art.classList.add('done')}else{art.classList.remove('done')}});
+    document.getElementById('ptext').textContent=n+' / '+boxes.length+' 手 完了';
+    document.getElementById('pbar').style.width=(boxes.length?n/boxes.length*100:0)+'%';
+  }
+  boxes.forEach(function(b){
+    b.checked=!!saved[b.id];
+    b.addEventListener('change',function(){
+      saved[b.id]=b.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
+      update();
+    });
+  });
+  update();
+  var reset=document.getElementById('reset'),armed=false,timer;
+  reset.addEventListener('click',function(){
+    if(!armed){armed=true;reset.textContent='もう一度押すと外します';clearTimeout(timer);timer=setTimeout(function(){armed=false;reset.textContent='チェックをすべて外す'},3000);return}
+    armed=false;reset.textContent='チェックをすべて外す';saved={};
+    try{localStorage.removeItem(KEY)}catch(e){}
+    boxes.forEach(function(b){b.checked=false});update();
+  });
+  [].slice.call(document.querySelectorAll('.copy button')).forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var pre=btn.parentNode,text='';
+      pre.childNodes.forEach(function(n){if(n!==btn)text+=n.textContent});
+      text=text.replace(/\s+$/,'');
+      function done(){btn.textContent='コピーしました';setTimeout(function(){btn.textContent='コピー'},1800)}
+      function fallback(){var r=document.createRange();r.selectNodeContents(pre.firstChild||pre);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='選択しました。Ctrl+C';setTimeout(function(){btn.textContent='コピー'},2500)}
+      try{navigator.clipboard.writeText(text).then(done,fallback)}catch(e){fallback()}
+    });
+  });
+})();
+</script>
+</body>
+</html>
