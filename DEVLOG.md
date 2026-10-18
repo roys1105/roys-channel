@@ -5,7 +5,7 @@
 
 ---
 
-## 2026-10-18（日）その6 — 講座ページの「トップに戻る」を「前のページに戻る」に（未デプロイ）
+## 2026-10-18（日）その6 — 講座ページの「トップに戻る」を「前のページに戻る」に（公開ずみ）
 
 ### やったこと
 - `kouza/claude-nyumon.html`・`kouza/inaka-hitori-kasegu.html`：上の「トップに戻る」と下の「トップページに戻る」を「← 前のページに戻る」「前のページに戻る」に。来たページへ戻る script を `</body>` の前に追加。戻れないときの行き先は `https://royschannel.com/kyozai`（教材一覧）に変えた。
@@ -17,11 +17,11 @@
 - ボタンは `data-back` 属性を付けた a。同じ仕組みを足すときは、a に `data-back` を付けて同じ script を置く。
 
 ### 次にやること
-- ロイさんの合図で push（roys-channel と senior-site の2つ）→ ライブで確認。
+- 特になし
 
 ### 動作確認
 - ローカル：kyozai.html → claude-nyumon.html →「前のページに戻る」で kyozai.html に戻ることを確認。直接開いたときは戻らず href（/kyozai）へ行く判定になることを確認。
-- ライブ：未デプロイのため未確認。
+- ライブ：roys-channel 2b92eec・senior-site 45ae9d5 を push → 3ページとも生のHTMLに data-back を確認。royschannel.com/kyozai →「独りで稼ぐ教科書」→「← 前のページに戻る」で /kyozai に戻ることを確認。/kyozai → スマホ教室（it.royschannel.com・別ドメイン）→ 戻るでも /kyozai に戻ることを確認（別ドメインの referrer は「https://royschannel.com/」だけになるが、判定はホスト名なので問題なし）。
 
 ## 2026-10-18（日）その5 — トップの「講座・教材」欄を一旦非表示に（公開ずみ）
 
