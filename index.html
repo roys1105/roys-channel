@@ -1094,6 +1094,8 @@ footer .cp .en{font-size:14px;}
       if (history.replaceState) { history.replaceState(null, '', '#kyozai'); }
       /* 光らせるのはスクロールが止まってから（スマホは距離が長く2秒ほどかかる）。
          scrollend が使えないブラウザ用に、2.5秒たったら必ず光らせる。 */
+      /* 続けて押されたときに、前回の「消す」タイマーで光が消されないよう止めておく */
+      clearTimeout(card._kyOff);
       card.classList.remove('flash');
       var done = false;
       function flash() {
@@ -1101,7 +1103,7 @@ footer .cp .en{font-size:14px;}
         done = true;
         window.removeEventListener('scrollend', flash);
         card.classList.add('flash');
-        setTimeout(function () { card.classList.remove('flash'); }, 3700);
+        card._kyOff = setTimeout(function () { card.classList.remove('flash'); }, 3700);
       }
       window.addEventListener('scrollend', flash);
       setTimeout(flash, 2500);
