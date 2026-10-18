@@ -295,6 +295,9 @@ a.ky-card:hover{transform:translateY(-4px);border-color:var(--navy);box-shadow:0
   background:repeating-linear-gradient(135deg,#F2E9D9 0 12px,#FAF5EC 12px 24px);
 }
 .ky-card.soon b{color:var(--ink-soft);}
+/* トップの「講座・教材をさがす」から飛んできたとき、そのカードを少し光らせる */
+@keyframes kyFlash{0%,100%{box-shadow:0 4px 14px rgba(53,43,30,.07);border-color:var(--line);}25%,65%{box-shadow:0 0 0 4px rgba(192,57,43,.35),0 12px 24px rgba(31,90,114,.16);border-color:var(--red);}}
+.ky-grid li.flash .ky-card{animation:kyFlash 1.8s ease 2;}
 .ky-cta{text-align:center;}
 .ky-cta .btn{padding:17px 40px;font-size:17px;}
 .ky-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
@@ -587,17 +590,17 @@ footer .cp .en{font-size:14px;}
   <div class="hero-learn" aria-label="講座・教材へ移動">
     <p class="hl-head"><span>📚</span>講座・教材をさがす</p>
     <div class="hl-list">
-      <a class="hl-item" href="kyozai#sumaho">
+      <a class="hl-item" href="#kyozai" data-ky="ky-sumaho">
         <img src="image/cover-sumaho.jpg" alt="" width="56" height="56">
         <span class="hl-txt"><small>教材</small><b>はじめてのスマホ教室</b></span>
         <span class="hl-go">→</span>
       </a>
-      <a class="hl-item" href="kyozai#kouza">
+      <a class="hl-item" href="#kyozai" data-ky="ky-inaka">
         <img src="image/cover-inaka.jpg" alt="" width="56" height="56">
         <span class="hl-txt"><small>動画講座</small><b>独りで稼ぐ教科書</b></span>
         <span class="hl-go">→</span>
       </a>
-      <a class="hl-item" href="kyozai#kouza-claude">
+      <a class="hl-item" href="#kyozai" data-ky="ky-claude">
         <img src="image/cover-claude.jpg" alt="" width="56" height="56">
         <span class="hl-txt"><small>動画講座</small><b>Claude 入門</b></span>
         <span class="hl-go">→</span>
@@ -782,7 +785,7 @@ footer .cp .en{font-size:14px;}
     </div>
 
     <ul class="ky-grid">
-      <li><a class="ky-card" href="kyozai#kouza-claude">
+      <li id="ky-claude"><a class="ky-card" href="kyozai#kouza-claude">
         <span class="ky-thumb"><img src="image/cover-claude.jpg" alt="" loading="lazy"><span class="ky-badge">全18回・無料</span></span>
         <span class="ky-tx">
           <small>動画講座<span class="ky-new">NEW</span></small>
@@ -790,7 +793,7 @@ footer .cp .en{font-size:14px;}
           <span class="ky-desc">AI「Claude」を、Windowsのパソコンで使えるようになるまで。Macの説明ではつまずく「下ごしらえ」から順番に。</span>
         </span>
       </a></li>
-      <li><a class="ky-card" href="kyozai#kouza">
+      <li id="ky-inaka"><a class="ky-card" href="kyozai#kouza">
         <span class="ky-thumb"><img src="image/cover-inaka.jpg" alt="" loading="lazy"><span class="ky-badge">全7回・無料</span></span>
         <span class="ky-tx">
           <small>動画講座</small>
@@ -798,7 +801,7 @@ footer .cp .en{font-size:14px;}
           <span class="ky-desc">いまあるものを使って、小さく始めて、長く続ける。自分の得意を売り物に変えるまでの道のり。</span>
         </span>
       </a></li>
-      <li><a class="ky-card" href="kyozai#sumaho">
+      <li id="ky-sumaho"><a class="ky-card" href="kyozai#sumaho">
         <span class="ky-thumb"><img src="image/cover-sumaho.jpg" alt="" loading="lazy"><span class="ky-badge green">シニア向け・無料</span></span>
         <span class="ky-tx">
           <small>教材</small>
@@ -1073,6 +1076,37 @@ footer .cp .en{font-size:14px;}
   }
   var sub = document.getElementById('agesub');
   if (sub) { sub.textContent = age() + '歳／香川県三豊市在住'; }
+
+  /* --- 「講座・教材をさがす」→ 同じページの「講座・教材」一覧へ。押したカードを光らせる（2026-10-18） ---
+     JSが動かないときも href="#kyozai" で一覧には飛ぶ。 */
+  Array.prototype.forEach.call(document.querySelectorAll('.hl-item[data-ky]'), function (a) {
+    a.addEventListener('click', function (e) {
+      var sec = document.getElementById('kyozai');
+      var card = document.getElementById(a.getAttribute('data-ky'));
+      if (!sec || !card) { return; }
+      e.preventDefault();
+      /* PCは一覧の頭へ。スマホ（カードが縦1列）は、押したカードが画面のまん中に来るように */
+      if (window.matchMedia('(max-width:900px)').matches) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      if (history.replaceState) { history.replaceState(null, '', '#kyozai'); }
+      /* 光らせるのはスクロールが止まってから（スマホは距離が長く2秒ほどかかる）。
+         scrollend が使えないブラウザ用に、2.5秒たったら必ず光らせる。 */
+      card.classList.remove('flash');
+      var done = false;
+      function flash() {
+        if (done) { return; }
+        done = true;
+        window.removeEventListener('scrollend', flash);
+        card.classList.add('flash');
+        setTimeout(function () { card.classList.remove('flash'); }, 3700);
+      }
+      window.addEventListener('scrollend', flash);
+      setTimeout(flash, 2500);
+    });
+  });
 
   /* --- 講座ページが見られた回数の表示は、教材一覧ページ（kyozai.html）へ移した（2026-10-18） --- */
 
