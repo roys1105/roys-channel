@@ -267,45 +267,37 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
 .senior-cta{text-align:center;}
 .senior-cta .note{margin:14px 0 0;font-size:13px;color:#55747C;}
 
-/* ============ 講座「田舎暮らしのまま、独りで稼ぐ教科書」 ============ */
-.kouza{padding:74px 0 78px;}
-.kz-grid{display:grid;grid-template-columns:320px 1fr;gap:42px;align-items:start;margin-top:34px;}
-.kz-cover{position:relative;}
-.kz-cover img{
-  width:100%;border-radius:18px;border:1px solid var(--line);
-  box-shadow:0 10px 28px rgba(53,43,30,.16);
+/* ============ 講座・教材（一覧ページへの入口） ============ */
+.kyozai{padding:74px 0 78px;background:#F5EFE2;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.ky-grid{list-style:none;margin:0 0 40px;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.ky-card{
+  display:flex;gap:18px;align-items:flex-start;height:100%;padding:16px;text-decoration:none;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 4px 14px rgba(53,43,30,.07);
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
 }
-.kz-badge{
-  position:absolute;left:-10px;top:-13px;transform:rotate(-4deg);
-  background:var(--red);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.02em;
-  padding:6px 15px;border-radius:999px;box-shadow:0 4px 0 #8f2a1f;
+a.ky-card:hover{transform:translateY(-4px);border-color:var(--navy);box-shadow:0 12px 24px rgba(31,90,114,.16);}
+.ky-thumb{position:relative;flex:0 0 190px;}
+.ky-thumb img{width:190px;aspect-ratio:16/10;object-fit:cover;border-radius:12px;border:1px solid var(--line);}
+.ky-badge{
+  position:absolute;left:-6px;bottom:-8px;transform:rotate(-3deg);white-space:nowrap;
+  background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;box-shadow:0 3px 0 #8f2a1f;
 }
-.kz-count{
-  margin:13px 0 0;text-align:center;font-size:12.5px;color:var(--ink-soft);letter-spacing:.01em;
+.ky-badge.green{background:var(--green);box-shadow:0 3px 0 #4b6640;}
+.ky-tx{display:flex;flex-direction:column;gap:3px;min-width:0;line-height:1.55;}
+.ky-tx small{font-size:11.5px;font-weight:700;color:var(--red);letter-spacing:.05em;}
+.ky-new{margin-left:7px;font-size:10px;background:var(--red);color:#fff;border-radius:999px;padding:1px 7px;letter-spacing:.06em;}
+.ky-tx b{font-size:16.5px;font-weight:900;color:var(--navy);}
+.ky-desc{font-size:13.5px;color:#55747C;line-height:1.75;}
+.ky-card.soon{border-style:dashed;background:rgba(255,255,255,.55);box-shadow:none;}
+.ky-ph{
+  display:flex;align-items:center;justify-content:center;width:190px;aspect-ratio:16/10;border-radius:12px;
+  font-size:13px;font-weight:700;color:var(--ink-soft);
+  background:repeating-linear-gradient(135deg,#F2E9D9 0 12px,#FAF5EC 12px 24px);
 }
-.kz-count b{font-size:15px;font-weight:800;color:var(--navy);margin:0 1px;}
-.kz-lead{margin:0 0 22px;font-size:16px;color:#3C525C;}
-.kz-lead strong{color:var(--navy);}
-.kz-sub{
-  margin:0 0 11px;font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--navy);
-}
-.kz-list{
-  list-style:none;margin:0 0 28px;padding:0;
-  display:grid;grid-template-columns:repeat(2,1fr);gap:9px 16px;
-}
-.kz-list li{
-  display:flex;align-items:baseline;gap:9px;
-  font-size:14.5px;line-height:1.7;color:#3C525C;
-  background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 13px;
-}
-.kz-list b{
-  flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy);
-  background:#E1F0F3;border-radius:999px;padding:2px 9px;
-}
-.kz-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
-/* 2本目の講座欄（Claude入門）。同じ形が続くので、下地の色と細い線で区切る。 */
-.kouza.alt{background:#F5EFE2;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-.kouza.alt .kz-list{grid-template-columns:1fr;}
+.ky-card.soon b{color:var(--ink-soft);}
+.ky-cta{text-align:center;}
+.ky-cta .btn{padding:17px 40px;font-size:17px;}
+.ky-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
 
 /* ============ お知らせ（バウンドテニス教室） ============ */
 .notice{padding:56px 0 60px;background:#FBEAE4;border-top:1px solid #F0D2C6;border-bottom:1px solid #F0D2C6;}
@@ -480,8 +472,7 @@ footer .cp .en{font-size:14px;}
   .face-grid{grid-template-columns:1fr;}
   .face .ph{height:200px;}
   .s-cards{grid-template-columns:1fr;max-width:520px;}
-  .kz-grid{grid-template-columns:1fr;gap:30px;}
-  .kz-cover{max-width:320px;margin:0 auto;}
+  .ky-grid{grid-template-columns:1fr;max-width:620px;margin-left:auto;margin-right:auto;}
   .nt-grid{grid-template-columns:1fr;gap:24px;}
   .ls-grid{grid-template-columns:1fr;gap:20px;}
   .ls-img{max-width:200px;margin:0 auto;}
@@ -504,8 +495,10 @@ footer .cp .en{font-size:14px;}
   .btn{padding:14px 24px;font-size:15px;width:100%;}
   .hero-cta{flex-direction:column;}
   .senior-cta .btn{max-width:420px;margin:0 auto;}
-  .kz-list{grid-template-columns:1fr;}
-  .kz-cta .btn{max-width:420px;margin:0 auto;}
+  .ky-card{flex-direction:column;gap:14px;}
+  .ky-thumb{flex:none;width:100%;}
+  .ky-thumb img,.ky-ph{width:100%;}
+  .ky-cta .btn{max-width:420px;margin:0 auto;padding:15px 24px;font-size:16px;}
   .pf-facts{grid-template-columns:1fr;}
   .like-tx{padding:24px 22px 28px;}
   .form{padding:24px 20px;}
@@ -537,8 +530,7 @@ footer .cp .en{font-size:14px;}
       <a href="#line-stamp">スタンプ</a>
       <a href="#faces">3つの顔</a>
       <a href="#senior">シニア相談室</a>
-      <a href="#kouza">講座</a>
-      <a href="#kouza-claude">Claude入門</a>
+      <a href="#kyozai">講座・教材</a>
       <a href="#profile">ロイについて</a>
       <a href="#likes">好きなこと</a>
       <a href="#channels">発信</a>
@@ -551,8 +543,7 @@ footer .cp .en{font-size:14px;}
     <a href="#line-stamp">スタンプ</a>
     <a href="#faces">3つの顔</a>
     <a href="#senior">シニア相談室</a>
-    <a href="#kouza">講座</a>
-    <a href="#kouza-claude">Claude入門</a>
+    <a href="#kyozai">講座・教材</a>
     <a href="#profile">ロイについて</a>
     <a href="#likes">好きなこと</a>
     <a href="#channels">発信</a>
@@ -596,17 +587,17 @@ footer .cp .en{font-size:14px;}
   <div class="hero-learn" aria-label="講座・教材へ移動">
     <p class="hl-head"><span>📚</span>講座・教材をさがす</p>
     <div class="hl-list">
-      <a class="hl-item" href="#senior">
+      <a class="hl-item" href="kyozai#sumaho">
         <img src="image/cover-sumaho.jpg" alt="" width="56" height="56">
         <span class="hl-txt"><small>教材</small><b>はじめてのスマホ教室</b></span>
         <span class="hl-go">→</span>
       </a>
-      <a class="hl-item" href="#kouza">
+      <a class="hl-item" href="kyozai#kouza">
         <img src="image/cover-inaka.jpg" alt="" width="56" height="56">
         <span class="hl-txt"><small>動画講座</small><b>独りで稼ぐ教科書</b></span>
         <span class="hl-go">→</span>
       </a>
-      <a class="hl-item" href="#kouza-claude">
+      <a class="hl-item" href="kyozai#kouza-claude">
         <img src="image/cover-claude.jpg" alt="" width="56" height="56">
         <span class="hl-txt"><small>動画講座</small><b>Claude 入門</b></span>
         <span class="hl-go">→</span>
@@ -779,92 +770,55 @@ footer .cp .en{font-size:14px;}
   </div>
 </section>
 
-<!-- ============ 講座「田舎暮らしのまま、独りで稼ぐ教科書」 ============ -->
-<section class="kouza" id="kouza">
+<!-- ============ 講座・教材（一覧ページ kyozai.html への入口） ============
+     詳しい説明・目次・見られた回数は kyozai.html に移した（2026-10-18）。
+     教材を足すときは kyozai.html の3か所と、ここのカードを足す。「準備中」は本物を足したら消す。 -->
+<section class="kyozai" id="kyozai">
   <div class="wrap">
     <div class="sec-head">
-      <span class="kicker">FREE COURSE</span>
-      <h2>田舎暮らしのまま、独りで稼ぐ教科書</h2>
-      <p>いまあるものを使って、小さく始めて、長く続ける。全7回の動画講座です。</p>
+      <span class="kicker">COURSES &amp; TEXTS</span>
+      <h2>講座・教材</h2>
+      <p>ロイが作った動画講座と教材です。いまは全部無料でご覧いただけます。</p>
     </div>
 
-    <div class="kz-grid">
-      <div class="kz-cover">
-        <img src="image/cover-inaka.jpg" alt="講座「田舎暮らしのまま、独りで稼ぐ教科書」の表紙">
-        <span class="kz-badge">全7回・無料</span>
-        <p class="kz-count" id="kz-count">この講座が見られた回数　今日 <b>—</b>回／のべ <b>—</b>回</p>
-      </div>
+    <ul class="ky-grid">
+      <li><a class="ky-card" href="kyozai#kouza-claude">
+        <span class="ky-thumb"><img src="image/cover-claude.jpg" alt="" loading="lazy"><span class="ky-badge">全18回・無料</span></span>
+        <span class="ky-tx">
+          <small>動画講座<span class="ky-new">NEW</span></small>
+          <b>Windowsユーザーのための Claude 入門</b>
+          <span class="ky-desc">AI「Claude」を、Windowsのパソコンで使えるようになるまで。Macの説明ではつまずく「下ごしらえ」から順番に。</span>
+        </span>
+      </a></li>
+      <li><a class="ky-card" href="kyozai#kouza">
+        <span class="ky-thumb"><img src="image/cover-inaka.jpg" alt="" loading="lazy"><span class="ky-badge">全7回・無料</span></span>
+        <span class="ky-tx">
+          <small>動画講座</small>
+          <b>田舎暮らしのまま、独りで稼ぐ教科書</b>
+          <span class="ky-desc">いまあるものを使って、小さく始めて、長く続ける。自分の得意を売り物に変えるまでの道のり。</span>
+        </span>
+      </a></li>
+      <li><a class="ky-card" href="kyozai#sumaho">
+        <span class="ky-thumb"><img src="image/cover-sumaho.jpg" alt="" loading="lazy"><span class="ky-badge green">シニア向け・無料</span></span>
+        <span class="ky-tx">
+          <small>教材</small>
+          <b>はじめてのスマホ教室</b>
+          <span class="ky-desc">電源の入れ方から順番に。やさしい言葉と大きな文字で、迷わず進められます。</span>
+        </span>
+      </a></li>
+      <li><div class="ky-card soon">
+        <span class="ky-thumb"><span class="ky-ph">準備中</span></span>
+        <span class="ky-tx">
+          <small>近日公開</small>
+          <b>新しい教材を準備しています</b>
+          <span class="ky-desc">公開したら、上の「新着情報」でもお知らせします。</span>
+        </span>
+      </div></li>
+    </ul>
 
-      <div class="kz-body">
-        <p class="kz-lead">
-          田舎にいながら、<strong>自分の得意を売り物に変える</strong>までの道のりを解説します。
-          特別な機材やスキルはいりません。フルテロップの字幕つきなので、
-          音を出せない場所でもご覧いただけます。
-        </p>
-
-        <p class="kz-sub">目次（全7回）</p>
-        <ul class="kz-list">
-          <li><b>第0回</b>予告編</li>
-          <li><b>第1回</b>田舎は不利じゃない</li>
-          <li><b>第2回</b>稼ぐ仕組みは3段階</li>
-          <li><b>第3回</b>売り物の見つけ方</li>
-          <li><b>第4回</b>収入の柱を3本立てる</li>
-          <li><b>第5回</b>売るときの基本ルール5つ</li>
-          <li><b>第6回</b>最初の90日でやること</li>
-        </ul>
-
-        <div class="kz-cta">
-          <!-- 2026-09-06：講座ページをシニアサイトの下から royschannel.com/kouza/ へ引っ越した。
-               同じサイトの中なので相対リンクで書く。
-               リンクは .html を付けない形。Cloudflare Pages がその形で配るため。 -->
-          <a class="btn btn-primary" href="kouza/inaka-hitori-kasegu">
-            講座のページを見る →
-          </a>
-          <p class="note">いまは無料で公開中です</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 講座「Windowsユーザーのための Claude 入門」 ============ -->
-<section class="kouza alt" id="kouza-claude">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="kicker">NEW COURSE</span>
-      <h2>Windowsユーザーのための Claude 入門</h2>
-      <p>AI「Claude」を、Windowsのパソコンで使えるようになるまで。1本およそ3分・全18回の動画講座です。</p>
-    </div>
-
-    <div class="kz-grid">
-      <div class="kz-cover">
-        <img src="image/cover-claude.jpg" alt="講座「Windowsユーザーのための Claude 入門」の表紙">
-        <span class="kz-badge">全18回・無料</span>
-        <p class="kz-count" id="kz-count-claude">この講座が見られた回数　今日 <b>—</b>回／のべ <b>—</b>回</p>
-      </div>
-
-      <div class="kz-body">
-        <p class="kz-lead">
-          世の中の説明はMacばかりで、<strong>Windowsだと同じようにいかない</strong>。
-          そこでつまずいた自分の経験から、Windowsだけに必要な「下ごしらえ」まで含めて順番に解説しました。
-          全編フルテロップの字幕つきなので、音を出せない場所でもご覧いただけます。
-        </p>
-
-        <p class="kz-sub">3部構成（全18回・合計およそ57分）</p>
-        <ul class="kz-list">
-          <li><b>第1部</b>チャット編（第0〜5回）まずは相談相手として使う</li>
-          <li><b>第2部</b>Cowork編（第6〜11回）留守番を頼むように、仕事を任せる</li>
-          <li><b>第3部</b>Code編（第12〜17回）ホームページを1枚、世界に出す</li>
-        </ul>
-
-        <div class="kz-cta">
-          <!-- リンクは .html を付けない形。Cloudflare Pages がその形で配るため。 -->
-          <a class="btn btn-primary" href="kouza/claude-nyumon">
-            講座のページを見る →
-          </a>
-          <p class="note">いまは全18回とも無料で公開中です</p>
-        </div>
-      </div>
+    <div class="ky-cta">
+      <a class="btn btn-primary" href="kyozai">講座・教材の一覧ページへ →</a>
+      <p class="note">目次や詳しい説明は、一覧ページでご覧いただけます</p>
     </div>
   </div>
 </section>
@@ -1120,47 +1074,7 @@ footer .cp .en{font-size:14px;}
   var sub = document.getElementById('agesub');
   if (sub) { sub.textContent = age() + '歳／香川県三豊市在住'; }
 
-  /* --- 講座ページが見られた回数を表示する ---
-     数えているのはシニアサイト側の仕組み（講座ページを開いたときに記録される）。
-     ここはその集計を読んで表示するだけなので、この欄を見ても数字は増えない。
-     ・今日ぶん … results（日付つきの生データ）から
-     ・のべ　　 … totals（サーバーが全期間を合計したもの）から。
-       totals をまだ返さない古いWorkerのときは、results を足して代用する。 */
-  /* 講座は2本あるので、「表示する欄」と「集計キー」の対応表を作ってまとめて数える。
-     page の字は、講座ページ側が track-page に送っているものと必ず同じにすること。
-     違う字にすると、そのページぶんが 0 のままになる。 */
-  var KOUZA_COUNTERS = [
-    { id: 'kz-count',        page: '/materials/inaka-hitori-kasegu.html' },
-    { id: 'kz-count-claude', page: '/materials/claude-nyumon.html' }
-  ];
-  var counters = KOUZA_COUNTERS.filter(function (c) {
-    c.el = document.getElementById(c.id);
-    return !!c.el;
-  });
-  if (counters.length) {
-    fetch('https://roy-senior-site-api.roy-s1105.workers.dev/page-stats')
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (!data || !data.ok) { return; }
-        var today = jstToday();
-        counters.forEach(function (c) {
-          var todayCount = 0, totalCount = 0;
-          (data.results || []).forEach(function (row) {
-            if (row.type === 'material' && row.page === c.page && row.date === today) {
-              todayCount += row.count;
-            }
-          });
-          (data.totals || data.results || []).forEach(function (row) {
-            if (row.type === 'material' && row.page === c.page) {
-              totalCount += row.count;
-            }
-          });
-          c.el.innerHTML = 'この講座が見られた回数　今日 <b>' + todayCount +
-            '</b>回／のべ <b>' + totalCount + '</b>回';
-        });
-      })
-      .catch(function () {});
-  }
+  /* --- 講座ページが見られた回数の表示は、教材一覧ページ（kyozai.html）へ移した（2026-10-18） --- */
 
   /* シニア相談室へのリンクは、すべて「同じタブ」で開く（2026-08-15）。
      以前はタブに名前を付けて使い回していたが、ブラウザは「このページから開いたタブ」しか

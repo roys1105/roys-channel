@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>講座・教材の一覧｜Roy's Channel</title>
+<link rel="canonical" href="https://royschannel.com/kyozai">
+<meta name="description" content="ロイの講座・教材をまとめたページです。動画講座「田舎暮らしのまま、独りで稼ぐ教科書」「Windowsユーザーのための Claude 入門」、シニア向け「はじめてのスマホ教室」など。">
+<meta property="og:title" content="講座・教材の一覧｜Roy's Channel">
+<meta property="og:description" content="ロイの講座・教材をまとめたページです。いまは全部無料で公開中。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://royschannel.com/image/cover-claude.jpg">
+<link rel="icon" href="image/roy-avatar.png">
+<link rel="apple-touch-icon" href="image/roy-avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<style>
+/* 色・部品はトップ（index.html）と同じものを使う。トップ側を変えたら、ここも合わせる。 */
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Zen Maru Gothic','Hiragino Maru Gothic ProN','Noto Sans JP',sans-serif;
+  color:#23323C;background:#FAF5EC;line-height:1.95;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+:root{
+  --cream:#FAF5EC;--ink:#23323C;--ink-soft:#5E7079;--navy:#1F5A72;
+  --red:#C0392B;--green:#6E8F5A;--line:#E3D8C4;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px;}
+section[id]{scroll-margin-top:80px;}
+
+.sec-head{text-align:center;margin-bottom:38px;}
+.sec-head .kicker{
+  display:inline-block;font-size:12px;letter-spacing:.22em;font-weight:700;
+  color:var(--red);background:#FBEAE4;padding:5px 16px;border-radius:999px;
+}
+.sec-head h2,.sec-head h1{
+  margin:14px 0 6px;font-size:clamp(23px,4.2vw,32px);font-weight:900;color:var(--navy);
+  line-height:1.5;letter-spacing:.01em;
+}
+.sec-head p{margin:0;font-size:15px;color:var(--ink-soft);}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:15px 30px;border-radius:999px;text-decoration:none;font-weight:700;font-size:16px;
+  transition:transform .18s ease, box-shadow .18s ease;border:none;cursor:pointer;
+  font-family:inherit;line-height:1.4;
+}
+.btn:hover{transform:translateY(-3px);}
+.btn-primary{background:var(--navy);color:#fff;box-shadow:0 6px 0 #14404f;}
+.btn-primary:hover{box-shadow:0 9px 0 #14404f,0 12px 22px rgba(31,90,114,.28);}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 6px 0 #8f2a1f;}
+.btn-red:hover{box-shadow:0 9px 0 #8f2a1f,0 12px 22px rgba(192,57,43,.28);}
+
+/* header */
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(250,245,236,.93);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.hbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 22px;max-width:1060px;margin:0 auto;}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.brand img{width:46px;height:46px;border-radius:50%;background:#F2E9D9;border:2px solid #fff;box-shadow:0 2px 8px rgba(53,43,30,.14);}
+.brand b{display:block;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--navy);line-height:1.1;letter-spacing:.01em;white-space:nowrap;}
+.brand small{display:block;font-size:10.5px;color:var(--ink-soft);letter-spacing:.16em;line-height:1.4;}
+.back-top{
+  white-space:nowrap;text-decoration:none;font-size:14.5px;font-weight:700;color:var(--navy);
+  border:2px solid var(--navy);border-radius:999px;padding:6px 16px;background:#fff;
+}
+.back-top:hover{background:var(--navy);color:#fff;}
+
+/* ページの頭：教材の早見表 */
+.kz-top{padding:46px 0 40px;background:linear-gradient(180deg,#FAF5EC 0%,#F6EEE0 100%);border-bottom:1px solid var(--line);}
+.kz-index{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.kz-index a,.kz-index .soon{
+  display:flex;flex-direction:column;height:100%;text-decoration:none;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  box-shadow:0 4px 12px rgba(31,90,114,.08);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.kz-index a:hover{transform:translateY(-4px);border-color:var(--navy);box-shadow:0 10px 20px rgba(31,90,114,.18);}
+.kz-index img{width:100%;aspect-ratio:16/10;object-fit:cover;}
+.kz-index .tx{padding:12px 15px 15px;line-height:1.5;}
+.kz-index small{display:block;font-size:11.5px;font-weight:700;color:var(--red);letter-spacing:.05em;}
+.kz-index b{display:block;font-size:15.5px;color:var(--navy);margin-top:2px;}
+.kz-index .soon{border-style:dashed;background:rgba(255,255,255,.5);box-shadow:none;}
+.kz-index .soon .ph{
+  aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--ink-soft);background:repeating-linear-gradient(135deg,#F5EFE2 0 12px,#FAF5EC 12px 24px);
+}
+.kz-index .soon b{color:var(--ink-soft);}
+
+/* 講座1本ぶんの欄（トップにあったものをそのまま移した） */
+.kouza{padding:74px 0 78px;}
+.kouza.alt{background:#F5EFE2;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.kz-grid{display:grid;grid-template-columns:320px 1fr;gap:42px;align-items:start;margin-top:34px;}
+.kz-cover{position:relative;}
+.kz-cover img{width:100%;border-radius:18px;border:1px solid var(--line);box-shadow:0 10px 28px rgba(53,43,30,.16);}
+.kz-badge{
+  position:absolute;left:-10px;top:-13px;transform:rotate(-4deg);
+  background:var(--red);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.02em;
+  padding:6px 15px;border-radius:999px;box-shadow:0 4px 0 #8f2a1f;
+}
+.kz-badge.green{background:var(--green);box-shadow:0 4px 0 #4b6640;}
+.kz-count{margin:13px 0 0;text-align:center;font-size:12.5px;color:var(--ink-soft);letter-spacing:.01em;}
+.kz-count b{font-size:15px;font-weight:800;color:var(--navy);margin:0 1px;}
+.kz-lead{margin:0 0 22px;font-size:16px;color:#3C525C;}
+.kz-lead strong{color:var(--navy);}
+.kz-sub{margin:0 0 11px;font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--navy);}
+.kz-list{list-style:none;margin:0 0 28px;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:9px 16px;}
+.kz-list.one{grid-template-columns:1fr;}
+.kz-list li{
+  display:flex;align-items:baseline;gap:9px;font-size:14.5px;line-height:1.7;color:#3C525C;
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 13px;
+}
+.kz-list b{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--navy);background:#E1F0F3;border-radius:999px;padding:2px 9px;}
+.kz-cta .note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);}
+
+/* 準備中 */
+.kz-soon{padding:60px 0 70px;text-align:center;}
+.kz-soon p{margin:0 auto;max-width:560px;font-size:15px;color:var(--ink-soft);}
+.kz-soon .kuro{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px;font-size:14px;font-weight:700;color:var(--navy);}
+.kz-soon .kuro img{width:64px;}
+
+footer{background:#23323C;color:#C8D4DA;padding:44px 0 34px;text-align:center;font-size:13px;}
+footer .flinks{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-bottom:18px;font-size:14px;}
+footer a{color:#EFE4D2;text-decoration:none;}
+footer a:hover{text-decoration:underline;text-underline-offset:3px;}
+footer .cp{opacity:.72;}
+footer .cp .en{font-family:'Baloo 2',cursive;font-weight:700;font-size:14px;}
+
+@media (max-width:900px){
+  .kz-index{grid-template-columns:repeat(2,1fr);}
+  .kz-grid{grid-template-columns:1fr;gap:30px;}
+  .kz-cover{max-width:320px;margin:0 auto;}
+}
+@media (max-width:640px){
+  body{line-height:1.9;}
+  .brand small{display:none;}
+  .kz-index{grid-template-columns:1fr;gap:10px;}
+  .kz-index a,.kz-index .soon{flex-direction:row;align-items:center;}
+  .kz-index img,.kz-index .soon .ph{width:110px;flex:0 0 110px;aspect-ratio:16/11;}
+  .kz-index .soon .ph{font-size:11px;}
+  .kz-list{grid-template-columns:1fr;}
+  .btn{padding:14px 24px;font-size:15px;width:100%;}
+  .kz-cta .btn{max-width:420px;margin:0 auto;}
+}
+</style>
+<!-- アクセス計測（2サイト共通・中身は Worker の /t.js。本番のホストだけ数える／?roy=1 の端末は数えない） -->
+<script src="https://roy-senior-site-api.roy-s1105.workers.dev/t.js" async></script>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <a class="brand" href="./">
+      <img src="image/roy-avatar.png" alt="">
+      <span>
+        <b>Roy's Channel</b>
+        <small>ロイズ チャンネル</small>
+      </span>
+    </a>
+    <a class="back-top" href="./">← トップへ戻る</a>
+  </div>
+</header>
+
+<!-- ============ 早見表 ============
+     教材を足すときは、ここの <li> と、下の詳しい欄（section）と、
+     トップ（index.html の #kyozai）のカードの3か所に足す。
+     「準備中」の枠は、本物を足したら1つずつ消す。 -->
+<section class="kz-top" id="top">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">COURSES &amp; TEXTS</span>
+      <h1>講座・教材の一覧</h1>
+      <p>ロイが作った講座と教材をまとめました。いまは全部無料でご覧いただけます。</p>
+    </div>
+    <ul class="kz-index">
+      <li><a href="#kouza-claude">
+        <img src="image/cover-claude.jpg" alt="">
+        <span class="tx"><small>動画講座・全18回</small><b>Windowsユーザーのための Claude 入門</b></span>
+      </a></li>
+      <li><a href="#kouza">
+        <img src="image/cover-inaka.jpg" alt="">
+        <span class="tx"><small>動画講座・全7回</small><b>田舎暮らしのまま、独りで稼ぐ教科書</b></span>
+      </a></li>
+      <li><a href="#sumaho">
+        <img src="image/cover-sumaho.jpg" alt="">
+        <span class="tx"><small>シニア向け教材</small><b>はじめてのスマホ教室</b></span>
+      </a></li>
+      <li><div class="soon">
+        <span class="ph">準備中</span>
+        <span class="tx"><small>近日公開</small><b>新しい教材を準備しています</b></span>
+      </div></li>
+      <li><div class="soon">
+        <span class="ph">準備中</span>
+        <span class="tx"><small>近日公開</small><b>新しい教材を準備しています</b></span>
+      </div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 講座「Windowsユーザーのための Claude 入門」 ============ -->
+<section class="kouza" id="kouza-claude">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">NEW COURSE</span>
+      <h2>Windowsユーザーのための Claude 入門</h2>
+      <p>AI「Claude」を、Windowsのパソコンで使えるようになるまで。1本およそ3分・全18回の動画講座です。</p>
+    </div>
+
+    <div class="kz-grid">
+      <div class="kz-cover">
+        <img src="image/cover-claude.jpg" alt="講座「Windowsユーザーのための Claude 入門」の表紙">
+        <span class="kz-badge">全18回・無料</span>
+        <p class="kz-count" id="kz-count-claude">この講座が見られた回数　今日 <b>—</b>回／のべ <b>—</b>回</p>
+      </div>
+
+      <div class="kz-body">
+        <p class="kz-lead">
+          世の中の説明はMacばかりで、<strong>Windowsだと同じようにいかない</strong>。
+          そこでつまずいた自分の経験から、Windowsだけに必要な「下ごしらえ」まで含めて順番に解説しました。
+          全編フルテロップの字幕つきなので、音を出せない場所でもご覧いただけます。
+        </p>
+
+        <p class="kz-sub">3部構成（全18回・合計およそ57分）</p>
+        <ul class="kz-list one">
+          <li><b>第1部</b>チャット編（第0〜5回）まずは相談相手として使う</li>
+          <li><b>第2部</b>Cowork編（第6〜11回）留守番を頼むように、仕事を任せる</li>
+          <li><b>第3部</b>Code編（第12〜17回）ホームページを1枚、世界に出す</li>
+        </ul>
+
+        <div class="kz-cta">
+          <!-- リンクは .html を付けない形。Cloudflare Pages がその形で配るため。 -->
+          <a class="btn btn-primary" href="kouza/claude-nyumon">講座のページを見る →</a>
+          <p class="note">いまは全18回とも無料で公開中です</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 講座「田舎暮らしのまま、独りで稼ぐ教科書」 ============ -->
+<section class="kouza alt" id="kouza">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">FREE COURSE</span>
+      <h2>田舎暮らしのまま、独りで稼ぐ教科書</h2>
+      <p>いまあるものを使って、小さく始めて、長く続ける。全7回の動画講座です。</p>
+    </div>
+
+    <div class="kz-grid">
+      <div class="kz-cover">
+        <img src="image/cover-inaka.jpg" alt="講座「田舎暮らしのまま、独りで稼ぐ教科書」の表紙">
+        <span class="kz-badge">全7回・無料</span>
+        <p class="kz-count" id="kz-count">この講座が見られた回数　今日 <b>—</b>回／のべ <b>—</b>回</p>
+      </div>
+
+      <div class="kz-body">
+        <p class="kz-lead">
+          田舎にいながら、<strong>自分の得意を売り物に変える</strong>までの道のりを解説します。
+          特別な機材やスキルはいりません。フルテロップの字幕つきなので、
+          音を出せない場所でもご覧いただけます。
+        </p>
+
+        <p class="kz-sub">目次（全7回）</p>
+        <ul class="kz-list">
+          <li><b>第0回</b>予告編</li>
+          <li><b>第1回</b>田舎は不利じゃない</li>
+          <li><b>第2回</b>稼ぐ仕組みは3段階</li>
+          <li><b>第3回</b>売り物の見つけ方</li>
+          <li><b>第4回</b>収入の柱を3本立てる</li>
+          <li><b>第5回</b>売るときの基本ルール5つ</li>
+          <li><b>第6回</b>最初の90日でやること</li>
+        </ul>
+
+        <div class="kz-cta">
+          <a class="btn btn-primary" href="kouza/inaka-hitori-kasegu">講座のページを見る →</a>
+          <p class="note">いまは無料で公開中です</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 教材「はじめてのスマホ教室」（シニア相談室のページへ） ============ -->
+<section class="kouza" id="sumaho">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">FOR SENIORS</span>
+      <h2>はじめてのスマホ教室</h2>
+      <p>姉妹サイト「うどん県発！ITシニアなんでも相談室」の教材です。</p>
+    </div>
+
+    <div class="kz-grid">
+      <div class="kz-cover">
+        <img src="image/cover-sumaho.jpg" alt="教材「はじめてのスマホ教室」の表紙">
+        <span class="kz-badge green">シニア向け・無料</span>
+      </div>
+
+      <div class="kz-body">
+        <p class="kz-lead">
+          電源の入れ方から順番に。<strong>やさしい言葉と大きな文字</strong>で、
+          写真の送り方やLINEの使い方まで、迷わず進められるようにまとめました。
+          スマホ・タブレット・パソコンのどれでもご覧いただけます。
+        </p>
+
+        <div class="kz-cta">
+          <!-- 別ドメインだが、行き来は同じタブで（2026-08-15の決まり。target を付けない） -->
+          <a class="btn btn-red" href="https://it.royschannel.com/material/hajimete-no-sumaho-kyoshitsu">教材のページを見る →</a>
+          <p class="note">シニア相談室のページが開きます</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 準備中 ============ -->
+<section class="kz-soon alt" id="soon" style="background:#F5EFE2;border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:14px;">
+      <span class="kicker">COMING SOON</span>
+      <h2>新しい教材を準備しています</h2>
+    </div>
+    <p>このページに順番に追加していきます。公開したら、トップページの「新着情報」でもお知らせします。</p>
+    <div class="kuro">
+      <img src="image/kuro-welcome.png" alt="クロ">
+      <span>また見に来てね！</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="flinks">
+      <a href="./">Roy's Channel トップ</a>
+      <a href="https://it.royschannel.com/">ITシニアなんでも相談室</a>
+      <a href="https://www.youtube.com/@royschannel9208" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://note.com/roy_s1105" target="_blank" rel="noopener">note</a>
+      <a href="./#contact">お問い合わせ</a>
+      <a href="https://it.royschannel.com/tokushoho?src=main">特定商取引法に基づく表記</a>
+    </div>
+    <div class="cp">© 2026 <span class="en">Roy's Channel</span> ／ 香川県三豊市</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function jstToday() {
+    var jst = new Date(Date.now() + 9 * 3600 * 1000);
+    return jst.toISOString().slice(0, 10);
+  }
+  /* --- 講座ページが見られた回数を表示する（トップにあった仕組みをそのまま移した） ---
+     数えているのは講座ページ側（t.js の data-page）。ここは集計を読んで表示するだけ。
+     page の字は、講座ページ側が送っているものと必ず同じにすること。 */
+  var KOUZA_COUNTERS = [
+    { id: 'kz-count',        page: '/materials/inaka-hitori-kasegu.html' },
+    { id: 'kz-count-claude', page: '/materials/claude-nyumon.html' }
+  ];
+  var counters = KOUZA_COUNTERS.filter(function (c) {
+    c.el = document.getElementById(c.id);
+    return !!c.el;
+  });
+  if (counters.length) {
+    fetch('https://roy-senior-site-api.roy-s1105.workers.dev/page-stats')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (!data || !data.ok) { return; }
+        var today = jstToday();
+        counters.forEach(function (c) {
+          var todayCount = 0, totalCount = 0;
+          (data.results || []).forEach(function (row) {
+            if (row.type === 'material' && row.page === c.page && row.date === today) {
+              todayCount += row.count;
+            }
+          });
+          (data.totals || data.results || []).forEach(function (row) {
+            if (row.type === 'material' && row.page === c.page) {
+              totalCount += row.count;
+            }
+          });
+          c.el.innerHTML = 'この講座が見られた回数　今日 <b>' + todayCount +
+            '</b>回／のべ <b>' + totalCount + '</b>回';
+        });
+      })
+      .catch(function () {});
+  }
+})();
+</script>
+</body>
+</html>
