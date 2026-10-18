@@ -5,7 +5,7 @@
 
 ---
 
-## 2026-10-18（日）その7 — 動画講座「クラウドで動く Claude Code 入門」（全5回）を公開
+## 2026-10-18（日）その7 — 動画講座「クラウドで動く Claude Code 入門」（全5回）を公開（公開ずみ）
 
 ### やったこと
 - `kouza/claude-code-cloud.html` を新規作成（URL：/kouza/claude-code-cloud）。head と共通CSSは `claude-nyumon.html` の1〜489行目をそのまま使い、目次・動画5本・学べること・**ダウンロード欄**・著者・FAQ を新しく書いた。計測は `data-page="/materials/claude-code-cloud.html"`。
@@ -24,7 +24,7 @@
 
 ### 動作確認
 - ローカル（8892）：動画5本・poster5枚・配布ファイル3本・画像が全部200。目次6本の飛び先が全部ある。PC幅1000px・スマホ375pxで横はみ出しなし。一覧ページの新しい欄と早見表のカード、閲覧数の表示（0回）を確認。
-- ライブ：未確認（このあと push して確認する）
+- ライブ：commit 0d56326 を push → royschannel.com/kouza/claude-code-cloud が200・title正しい。動画5本（video/mp4）・poster5枚・PDF2本（application/pdf）・HTML版・見本画像2枚・表紙がすべて届く。ブラウザで5本とも長さ（151/151/171/152/139秒）が読め、第1回は再生できた。download 属性の日本語ファイル名3つを確認。/kyozai に新しい欄とカードが出ている。
 
 ## 2026-10-18（日）その6 — 講座ページの「トップに戻る」を「前のページに戻る」に（公開ずみ）
 
