@@ -567,7 +567,7 @@ footer .cp .en{font-size:14px;}
       <a href="#line-stamp">スタンプ</a>
       <a href="#faces">3つの顔</a>
       <a href="#senior">シニア相談室</a>
-      <a href="#kyozai">講座・教材</a>
+      <a href="kyozai">講座・教材</a>
       <a href="#profile">ロイについて</a>
       <a href="#likes">好きなこと</a>
       <a href="#channels">発信</a>
@@ -580,7 +580,7 @@ footer .cp .en{font-size:14px;}
     <a href="#line-stamp">スタンプ</a>
     <a href="#faces">3つの顔</a>
     <a href="#senior">シニア相談室</a>
-    <a href="#kyozai">講座・教材</a>
+    <a href="kyozai">講座・教材</a>
     <a href="#profile">ロイについて</a>
     <a href="#likes">好きなこと</a>
     <a href="#channels">発信</a>
@@ -626,7 +626,7 @@ footer .cp .en{font-size:14px;}
     <!-- 2026-10-18：行き先は「講座・教材」一覧1か所なので、3枚のカードをボタン1つにまとめた。
          表紙は重ねて見せるだけ（最新の3冊を、新しいものほど手前＝後ろに書く）。
          文字は本数を書かない汎用の言い方にしてある（教材が増えても直さなくてよい） -->
-    <a class="hl-kyozai" href="#kyozai">
+    <a class="hl-kyozai" href="kyozai">
       <span class="hlk-covers" aria-hidden="true">
         <img src="image/cover-sumaho.jpg" alt="" width="160" height="100">
         <img src="image/cover-inaka.jpg" alt="" width="160" height="100">
@@ -809,7 +809,10 @@ footer .cp .en{font-size:14px;}
 <!-- ============ 講座・教材（一覧ページ kyozai.html への入口） ============
      詳しい説明・目次・見られた回数は kyozai.html に移した（2026-10-18）。
      教材を足すときは kyozai.html の3か所と、ここのカードを足す。「準備中」は本物を足したら消す。 -->
-<section class="kyozai" id="kyozai">
+<!-- 2026-10-18：ロイさんの指示で一旦「非表示」。上の「講座・教材をさがす」ボタンから教材ページへ行けるため。
+     ★もう一度表示するとき：下の行の hidden を消す。あわせて、ボタン（.hl-kyozai）と
+       メニューの「講座・教材」の href を "kyozai" → "#kyozai" に戻すと、この欄へ飛ぶようになる。 -->
+<section class="kyozai" id="kyozai" hidden>
   <div class="wrap">
     <div class="sec-head">
       <span class="kicker">COURSES &amp; TEXTS</span>
