@@ -58,6 +58,9 @@ a{color:inherit;}
   --red-soft:#E8B7AF;
   --green:#6E8F5A;
   --line:#E3D8C4;
+  /* お仕事の入口だけに使うオレンジ（renew/design.md のアクセント色と同じ値）。1区画に1か所まで */
+  --orange:#E89B5D;
+  --orange-deep:#D4844A;
   --shadow:0 10px 30px rgba(53,43,30,.10);
 }
 
@@ -486,6 +489,37 @@ footer a:hover{text-decoration:underline;text-underline-offset:3px;}
 footer .cp{opacity:.72;}
 footer .cp .en{font-size:14px;}
 
+/* ============ ヒーローの二枚扉（お仕事／講座・趣味） 2026-10-23 ============ */
+.hero-doors{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px;}
+.door{display:block;border-radius:16px;padding:16px 18px;text-decoration:none;color:var(--ink);transition:transform .18s ease,box-shadow .18s ease;}
+.door:hover{transform:translateY(-4px);}
+.door small{display:block;font-size:12.5px;font-weight:900;letter-spacing:.04em;}
+.door b{display:block;font-size:18px;font-weight:900;line-height:1.45;margin-top:2px;color:var(--navy);}
+.door p{margin:6px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink-soft);}
+.door .go{display:inline-block;margin-top:8px;font-weight:900;font-size:14.5px;color:var(--navy);}
+.door-work{background:#fff;border:2px solid var(--orange);box-shadow:var(--shadow);}
+.door-work small{color:var(--orange-deep);}
+.door-work:hover{box-shadow:0 12px 26px rgba(212,132,74,.22);}
+.door-play{background:#EDF4F6;border:2px solid transparent;}
+.door-play small{color:var(--sky);}
+.door-play:hover{border-color:rgba(31,90,114,.3);}
+
+/* ============ 頼めること 2026-10-23 ============ */
+/* 上の固定メニュー（約70px）に小見出しが隠れないよう、飛んだときの止まる位置を下げる */
+.work{padding:60px 0 64px;background:#fff;border-top:1px solid var(--line);scroll-margin-top:40px;}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.work-card{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:22px 20px 20px;display:flex;flex-direction:column;}
+.work-card .ic{font-size:30px;line-height:1;}
+.work-card h3{margin:10px 0 4px;font-size:19px;font-weight:900;color:var(--navy);}
+.work-card ul{margin:6px 0 0;padding:0 0 0 1.2em;font-size:14.5px;line-height:1.8;}
+.work-card .ex{margin:auto 0 0;padding-top:14px;font-size:13px;color:var(--ink-soft);}
+.work-card .ex a{color:var(--navy);font-weight:700;}
+.work-card .price{margin:10px 0 0;font-size:14px;font-weight:900;color:var(--red);}
+.work-note{margin:26px auto 0;max-width:680px;text-align:center;font-size:14.5px;color:var(--ink-soft);}
+.work-cta{text-align:center;margin-top:22px;}
+.btn-orange{background:var(--orange);color:#fff;box-shadow:0 6px 0 var(--orange-deep);}
+.btn-orange:hover{box-shadow:0 9px 0 var(--orange-deep),0 12px 22px rgba(212,132,74,.28);}
+
 /* ============ responsive ============ */
 @media (max-width:1100px){
   nav.pc{display:none;}
@@ -521,6 +555,7 @@ footer .cp .en{font-size:14px;}
   .like-art{min-height:250px;}
   .like-art.quad{min-height:320px;}
   .ch-grid{grid-template-columns:1fr;}
+  .work-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto;}
 }
 @media (max-width:640px){
   nav.pc{display:none;}
@@ -531,6 +566,7 @@ footer .cp .en{font-size:14px;}
   .hero-lead{font-size:15.5px;}
   .btn{padding:14px 24px;font-size:15px;width:100%;}
   .hero-cta{flex-direction:column;}
+  .hero-doors{grid-template-columns:1fr;}
   .senior-cta .btn{max-width:420px;margin:0 auto;}
   .ky-card{flex-direction:column;gap:14px;}
   .ky-thumb{flex:none;width:100%;}
@@ -563,6 +599,7 @@ footer .cp .en{font-size:14px;}
       </span>
     </a>
     <nav class="pc">
+      <a href="#work">頼めること</a>
       <a href="#notice">お知らせ</a>
       <a href="#line-stamp">スタンプ</a>
       <a href="#faces">3つの顔</a>
@@ -576,6 +613,7 @@ footer .cp .en{font-size:14px;}
     <button class="burger" id="burger" aria-label="メニュー" aria-expanded="false">☰</button>
   </div>
   <nav class="sp" id="spnav">
+    <a href="#work">頼めること</a>
     <a href="#notice">お知らせ</a>
     <a href="#line-stamp">スタンプ</a>
     <a href="#faces">3つの顔</a>
@@ -592,16 +630,30 @@ footer .cp .en{font-size:14px;}
 <section class="hero" id="top">
   <div class="hero-grid">
     <div class="hero-copy">
+      <!-- 2026-10-23：お仕事を受ける入口に変更（見比べ案 _proposals/hero-freelance.html のE案）。
+           前の「好きなことを、好きなだけ。」版は _backup/index_2026-10-23_before-hero-work.html -->
+      <!-- 2026-10-23 その3：「パソコン仕事、ロイに頼めます。」は売り込みが強すぎるとのことで、見出しは元に戻した。
+           仕事の話は説明文の2行目と、下の扉（お仕事のご依頼）だけに置く -->
       <span class="hero-badge">🍜 香川県三豊市から発信中</span>
       <h1>好きなことを、<br><span class="mk">好きなだけ。</span><br><span class="red">うどん県</span>から。</h1>
       <p class="hero-lead">
         バイクにまたがって瀬戸内をぐるり。コートでバウンドテニス。<br>
-        そして、シニアのみなさんのスマホとパソコンのお手伝い。<br>
+        そして、得意のパソコンで、地域のみなさんのお手伝い。<br>
         <b>ロイ</b>のぜんぶが、ここに集まっています。
       </p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#senior">シニア向けサイトを見る →</a>
-        <a class="btn btn-primary" href="#profile">ロイってどんな人？</a>
+      <div class="hero-doors">
+        <a class="door door-work" href="#work">
+          <small>お仕事のご依頼</small>
+          <b>書類・フォーム・動画を<br>代わりに作ります</b>
+          <p>団体・お店・個人の方、まずはご相談ください（相談は無料）</p>
+          <span class="go">頼めることを見る →</span>
+        </a>
+        <a class="door door-play" href="#faces">
+          <small>講座・趣味のページ</small>
+          <b>無料の講座と、<br>ロイの毎日</b>
+          <p>シニア向け教材、Claude入門、バイクとテニスの話</p>
+          <span class="go">のぞいてみる →</span>
+        </a>
       </div>
     </div>
     <div class="hero-figure">
@@ -660,6 +712,58 @@ footer .cp .en{font-size:14px;}
 </section>
 
 <!-- ============ お知らせ（バウンドテニス教室） ============ -->
+<!-- ============ 頼めること（ヒーローの「お仕事のご依頼」の行き先） 2026-10-23 ============
+     料金はまだ決めていない（協会に予算を聞いてから）。決まったら .price の文字を差し替える。
+     団体の実名は先方の了承をもらってから出す。 -->
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">WORKS</span>
+      <h2>ロイに頼めること</h2>
+      <p>「毎年くる事務」や「作り方がわからないもの」を、代わりに作ります。</p>
+    </div>
+    <div class="work-grid">
+      <div class="work-card">
+        <span class="ic">📄</span>
+        <h3>書類・チラシ作り</h3>
+        <ul>
+          <li>大会・イベントの要項、案内状</li>
+          <li>チラシ・ポスター</li>
+          <li>年間予定・活動実績の報告書</li>
+          <li>補助金の申請書類</li>
+        </ul>
+        <p class="price">料金：ご相談ください</p>
+      </div>
+      <div class="work-card">
+        <span class="ic">📝</span>
+        <h3>申込みフォーム</h3>
+        <ul>
+          <li>スマホから申し込める受付ページ</li>
+          <li>申込者への自動返信メール</li>
+          <li>申込み一覧の管理ページ・名簿のPDF</li>
+        </ul>
+        <p class="ex">実例：<a href="bt-kyoushitsu">バウンドテニス教室の申込み</a></p>
+        <p class="price">料金：ご相談ください</p>
+      </div>
+      <div class="work-card">
+        <span class="ic">🎬</span>
+        <h3>動画の編集</h3>
+        <ul>
+          <li>大会・教室の紹介動画</li>
+          <li>テロップ（字幕）入れ</li>
+          <li>YouTubeへの公開まで</li>
+        </ul>
+        <p class="ex">実例：<a href="https://www.youtube.com/watch?v=BV-1UO8Lhnc" target="_blank" rel="noopener">バウンドテニス教室の動画</a></p>
+        <p class="price">料金：ご相談ください</p>
+      </div>
+    </div>
+    <p class="work-note">ここにないことも、パソコンでできることなら、まずはお気軽に。<br>元システムエンジニア（17年）の経験で、できるかどうかをお答えします。</p>
+    <div class="work-cta">
+      <a class="btn btn-orange" href="#contact">お仕事の相談をする →</a>
+    </div>
+  </div>
+</section>
+
 <section class="notice" id="notice">
   <div class="wrap">
     <span class="nt-badge">📣 お知らせ</span>
