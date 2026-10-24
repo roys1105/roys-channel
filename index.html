@@ -105,11 +105,13 @@ header{
   border-bottom:1px solid var(--line);
 }
 .hbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 22px;max-width:1060px;margin:0 auto;}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+/* サイト名は折り返さない（メニューが増えると「Roy's/Channel」と2行になり、上の帯が高くなっていた 2026-10-24） */
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex:0 0 auto;white-space:nowrap;}
 .brand img{width:46px;height:46px;border-radius:50%;background:#F2E9D9;border:2px solid #fff;box-shadow:0 2px 8px rgba(53,43,30,.14);}
 .brand b{display:block;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--navy);line-height:1.1;letter-spacing:.01em;}
 .brand small{display:block;font-size:10.5px;color:var(--ink-soft);letter-spacing:.16em;line-height:1.4;}
-nav.pc{display:flex;gap:18px;font-size:14.5px;font-weight:500;}
+/* 項目が11個になったので、間隔と文字を少し詰めて1行に収める（2026-10-24） */
+nav.pc{display:flex;gap:13px;font-size:13.5px;font-weight:500;}
 nav.pc a{white-space:nowrap;text-decoration:none;color:var(--ink);padding:4px 0;border-bottom:2px solid transparent;transition:.15s;}
 nav.pc a:hover{color:var(--navy);border-bottom-color:var(--red);}
 .burger{display:none;background:none;border:none;font-size:25px;color:var(--navy);cursor:pointer;padding:4px 6px;line-height:1;}
@@ -449,10 +451,11 @@ a.ky-card:hover{transform:translateY(-4px);border-color:var(--navy);box-shadow:0
 
 /* ============ 発信 ============ */
 .channels{padding:70px 0;}
-.ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+/* 2026-10-24：Instagram を足して3枚に */
+.ch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 .ch{
-  display:flex;gap:18px;align-items:center;text-decoration:none;
-  background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 26px;
+  display:flex;gap:14px;align-items:center;text-decoration:none;
+  background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px 20px;
   box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease;
 }
 .ch:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(53,43,30,.14);}
@@ -462,9 +465,15 @@ a.ky-card:hover{transform:translateY(-4px);border-color:var(--navy);box-shadow:0
 }
 .ch.yt .ic{background:#FDEAE7;}
 .ch.nt .ic{background:#E1F0F3;}
+.ch.ig .ic{background:#FBE7F1;}
 .ch h3{margin:0 0 3px;font-size:17px;font-weight:900;color:var(--navy);}
 .ch p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.75;}
 .ch .go{margin-left:auto;font-size:20px;color:var(--red);flex:0 0 auto;}
+/* PCで3枚横並びのときは、アイコンを上に置いた縦長のカードにする（横並びだと題名が窮屈に折れる） */
+@media (min-width:1101px){
+  .ch{position:relative;flex-direction:column;align-items:flex-start;padding:22px 24px 24px;}
+  .ch .go{position:absolute;right:22px;top:36px;}
+}
 
 /* ============ contact ============ */
 .contact{padding:66px 0 76px;background:linear-gradient(180deg,#F6EEE0 0%,#F1E6D3 100%);border-top:1px solid var(--line);}
@@ -513,6 +522,30 @@ footer .cp .en{font-size:14px;}
 .hero-profile{margin-left:.5em;font-size:.9em;white-space:nowrap;color:var(--navy);font-weight:700;text-decoration:underline;text-decoration-color:rgba(31,90,114,.35);text-underline-offset:4px;}
 .hero-profile:hover{text-decoration-color:var(--navy);}
 
+/* ============ うどん県のこと 2026-10-24 ============ */
+.kagawa{padding:64px 0 70px;background:linear-gradient(180deg,#EDF4F6 0%,#F7F3EA 100%);border-bottom:1px solid var(--line);}
+.kagawa .sec-head .kicker{color:var(--green);background:#E6EEDD;}
+.kg-seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.kg-seasons figure{position:relative;margin:0;border-radius:18px;overflow:hidden;aspect-ratio:3/4;background:#F6EFE2;box-shadow:var(--shadow);}
+.kg-seasons img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.kg-seasons figure:hover img{transform:scale(1.05);}
+.kg-seasons figcaption{
+  position:absolute;left:0;right:0;bottom:0;padding:34px 14px 12px;color:#fff;font-size:13px;font-weight:700;letter-spacing:.04em;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6));
+}
+.kg-seasons figcaption b{display:block;font-size:26px;font-weight:900;line-height:1.1;margin-bottom:2px;}
+.kg-lead{margin:26px auto 0;max-width:640px;text-align:center;font-size:15.5px;color:#3F535D;line-height:1.95;}
+.kg-sub{margin:34px 0 12px;text-align:center;font-size:15px;font-weight:900;color:var(--navy);}
+.kg-links{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:0 auto;}
+.kg-link{position:relative;display:flex;flex-direction:column;gap:2px;padding:16px 46px 16px 20px;background:#fff;border:1px solid var(--line);border-radius:18px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease;}
+.kg-link:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(53,43,30,.14);}
+.kg-badge{align-self:flex-start;font-size:12px;font-weight:900;letter-spacing:.04em;color:#fff;border-radius:999px;padding:3px 11px;margin-bottom:4px;}
+.kg-link.yt .kg-badge{background:#E62117;}
+.kg-link.ig .kg-badge{background:linear-gradient(90deg,#F58529,#DD2A7B,#8134AF);}
+.kg-link b{font-size:17px;font-weight:900;color:var(--navy);}
+.kg-more{font-size:13px;color:var(--ink-soft);}
+.kg-link .go{position:absolute;right:18px;top:50%;margin-top:-13px;font-size:20px;font-weight:900;color:var(--red);}
+
 /* ============ 頼めること 2026-10-23 ============ */
 .work{padding:60px 0 64px;background:#fff;border-top:1px solid var(--line);}
 .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
@@ -530,6 +563,8 @@ footer .cp .en{font-size:14px;}
 
 /* ============ responsive ============ */
 @media (max-width:1100px){
+  /* 発信の3枚は、この幅だと文字が窮屈になるので縦に並べる */
+  .ch-grid{grid-template-columns:1fr;max-width:620px;margin:0 auto;}
   nav.pc{display:none;}
   .burger{display:block;}
   nav.sp.open{display:flex;}
@@ -564,6 +599,8 @@ footer .cp .en{font-size:14px;}
   .like-art.quad{min-height:320px;}
   .ch-grid{grid-template-columns:1fr;}
   .work-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto;}
+  .kg-seasons{grid-template-columns:1fr 1fr;gap:10px;}
+  .kg-links{grid-template-columns:1fr;max-width:520px;}
 }
 @media (max-width:640px){
   nav.pc{display:none;}
@@ -615,6 +652,7 @@ footer .cp .en{font-size:14px;}
       <a href="kyozai">講座・教材</a>
       <a href="#profile">ロイについて</a>
       <a href="#likes">好きなこと</a>
+      <a href="#kagawa">香川</a>
       <a href="#channels">発信</a>
       <a href="#contact">お問い合わせ</a>
     </nav>
@@ -629,6 +667,7 @@ footer .cp .en{font-size:14px;}
     <a href="kyozai">講座・教材</a>
     <a href="#profile">ロイについて</a>
     <a href="#likes">好きなこと</a>
+    <a href="#kagawa">香川</a>
     <a href="#channels">発信</a>
     <a href="#contact">お問い合わせ</a>
   </nav>
@@ -1077,25 +1116,48 @@ footer .cp .en{font-size:14px;}
         </div>
       </article>
 
-      <article class="like" id="kagawa">
-        <div class="like-art quad">
-          <figure><img src="image/season-spring.jpg" alt="提灯がならぶ春の桜並木" style="object-position:center 45%;"><figcaption>春・桜並木</figcaption></figure>
-          <figure><img src="image/season-summer.jpg" alt="松林ごしに見える夏の瀬戸内海" style="object-position:center 50%;"><figcaption>夏・瀬戸内の海</figcaption></figure>
-          <figure><img src="image/season-autumn.jpg" alt="うろこ雲の秋の夕焼け" style="object-position:center 38%;"><figcaption>秋・うろこ雲</figcaption></figure>
-          <figure><img src="image/season-winter.jpg" alt="波の荒い冬の海岸" style="object-position:center 55%;"><figcaption>冬・荒れた海</figcaption></figure>
-        </div>
-        <div class="like-tx">
-          <span class="kicker">KAGAWA</span>
-          <h3>うどん県は、いいところです</h3>
-          <p>
-            春は提灯のならぶ桜並木、夏は松林ごしの瀬戸内海。
-            秋はうろこ雲の夕焼け、冬は波の荒い海岸。
-            派手さはないけれど、季節がていねいに巡っていく町です。
-          </p>
-          <p class="small">「田舎にいながら発信する」——それができる時代になったことを、いちばん実感しています。</p>
-        </div>
-      </article>
+    </div>
+  </div>
+</section>
 
+<!-- ============ うどん県のこと（香川の紹介） 2026-10-24 ============
+     もとは「好きなもの」の4枚目（article#kagawa）だった。ロイさんの指示で独立した欄にし、
+     メニューから飛べるようにして、YouTubeショート・Instagramリールへの入口を足した。
+     変更前は _backup/index_2026-10-24_before-kagawa.html -->
+<section class="kagawa" id="kagawa">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">UDON PREFECTURE</span>
+      <h2>うどん県は、いいところです</h2>
+      <p>香川県三豊市に暮らすロイが、季節ごとの香川を切り取っています。</p>
+    </div>
+
+    <div class="kg-seasons">
+      <figure><img src="image/season-spring.jpg" alt="提灯がならぶ春の桜並木" style="object-position:center 45%;" loading="lazy"><figcaption><b>春</b>提灯のならぶ桜並木</figcaption></figure>
+      <figure><img src="image/season-summer.jpg" alt="松林ごしに見える夏の瀬戸内海" style="object-position:center 50%;" loading="lazy"><figcaption><b>夏</b>松林ごしの瀬戸内海</figcaption></figure>
+      <figure><img src="image/season-autumn.jpg" alt="うろこ雲の秋の夕焼け" style="object-position:center 38%;" loading="lazy"><figcaption><b>秋</b>うろこ雲の夕焼け</figcaption></figure>
+      <figure><img src="image/season-winter.jpg" alt="波の荒い冬の海岸" style="object-position:center 55%;" loading="lazy"><figcaption><b>冬</b>波の荒い海岸</figcaption></figure>
+    </div>
+
+    <p class="kg-lead">
+      派手さはないけれど、季節がていねいに巡っていく町です。<br>
+      「田舎にいながら発信する」——それができる時代になったことを、いちばん実感しています。
+    </p>
+
+    <p class="kg-sub">動画でも、香川を紹介しています</p>
+    <div class="kg-links">
+      <a class="kg-link yt" href="https://www.youtube.com/@royschannel9208/shorts" target="_blank" rel="noopener">
+        <span class="kg-badge">▶ YouTube</span>
+        <b>ショート動画で見る</b>
+        <span class="kg-more">Roy's Channel のショート一覧へ</span>
+        <span class="go">→</span>
+      </a>
+      <a class="kg-link ig" href="https://www.instagram.com/roy_s1105/reels/" target="_blank" rel="noopener">
+        <span class="kg-badge">◎ Instagram</span>
+        <b>リール動画で見る</b>
+        <span class="kg-more">@roy_s1105 のリール一覧へ</span>
+        <span class="go">→</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1122,6 +1184,14 @@ footer .cp .en{font-size:14px;}
         <span>
           <h3>note ／ 読みもの</h3>
           <p>スマホ・パソコンの困りごと解決から、田舎で発信して暮らす話まで。</p>
+        </span>
+        <span class="go">→</span>
+      </a>
+      <a class="ch ig" href="https://www.instagram.com/roy_s1105/" target="_blank" rel="noopener">
+        <span class="ic">📷</span>
+        <span>
+          <h3>Instagram ／ 写真とリール</h3>
+          <p>香川の季節の風景や日常を、写真とリール動画で。</p>
         </span>
         <span class="go">→</span>
       </a>
