@@ -125,7 +125,9 @@ nav.sp a{text-decoration:none;color:var(--ink);font-size:16px;font-weight:500;pa
   position:relative;z-index:2;max-width:1060px;margin:0 auto;padding:0 22px;
   display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center;
 }
-.hero-copy{padding-bottom:8px;}
+/* PC：左の扉の下端と右の新着情報の下端を面一にする（どちらの列が高くても下でそろう）。
+   スマホ（900px以下）は下の @media で padding-bottom:8px に戻している */
+.hero-copy{padding-bottom:0;align-self:end;}
 .hero-cta .btn-primary{background:#4A8AA3;box-shadow:0 6px 0 #356E85;}
 .hero-cta .btn-primary:hover{box-shadow:0 9px 0 #356E85,0 12px 22px rgba(53,110,133,.24);}
 .hero-badge{
