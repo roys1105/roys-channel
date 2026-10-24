@@ -33,7 +33,10 @@
 <style>
 /* ============ base ============ */
 *,*::before,*::after{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+/* ページ内リンクで飛んだとき、上の固定メニュー（PC約82px／1100px以下約69px）の下で止める。
+   これが無いと各欄の小見出しがメニューの裏に隠れる（2026-10-24 ロイさんの指摘） */
+html{scroll-behavior:smooth;scroll-padding-top:86px;}
+@media (max-width:1100px){html{scroll-padding-top:72px;}}
 body{
   margin:0;
   font-family:'Zen Maru Gothic','Hiragino Maru Gothic ProN','Noto Sans JP',sans-serif;
@@ -511,8 +514,7 @@ footer .cp .en{font-size:14px;}
 .hero-profile:hover{text-decoration-color:var(--navy);}
 
 /* ============ 頼めること 2026-10-23 ============ */
-/* 上の固定メニュー（約70px）に小見出しが隠れないよう、飛んだときの止まる位置を下げる */
-.work{padding:60px 0 64px;background:#fff;border-top:1px solid var(--line);scroll-margin-top:40px;}
+.work{padding:60px 0 64px;background:#fff;border-top:1px solid var(--line);}
 .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 .work-card{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:22px 20px 20px;display:flex;flex-direction:column;}
 .work-card .ic{font-size:30px;line-height:1;}
