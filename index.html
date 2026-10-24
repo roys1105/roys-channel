@@ -503,6 +503,11 @@ footer .cp .en{font-size:14px;}
 .door-play{background:#EDF4F6;border:2px solid transparent;}
 .door-play small{color:var(--sky);}
 .door-play:hover{border-color:rgba(31,90,114,.3);}
+/* 扉の下のプロフィールへのボタン（扉より目立たせない白地＋青の枠線） */
+.hero-profile{margin:16px 0 0;}
+.hero-profile a{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:999px;background:#fff;border:2px solid #4A8AA3;color:var(--navy);font-weight:700;font-size:15px;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease;}
+.hero-profile a:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(31,90,114,.16);}
+.hero-profile i{font-style:normal;}
 
 /* ============ 頼めること 2026-10-23 ============ */
 /* 上の固定メニュー（約70px）に小見出しが隠れないよう、飛んだときの止まる位置を下げる */
@@ -655,6 +660,8 @@ footer .cp .en{font-size:14px;}
           <span class="go">のぞいてみる →</span>
         </a>
       </div>
+      <!-- 2026-10-24：二枚扉に差し替えたときに消えていたプロフィールへのボタンを戻した -->
+      <p class="hero-profile"><a href="#profile">ロイってどんな人？<i>→</i></a></p>
     </div>
     <div class="hero-figure">
       <span class="hero-bubble"><svg viewBox="0 0 200 132" aria-hidden="true"><path d="M161.7 83.7 A96 44 0 1 0 129.7 91.8 Q140 114 187 128 Q166 112 161.7 83.7 Z" fill="#fff" stroke="#23323c" stroke-width="3" stroke-linejoin="round"/></svg><span class="bb-text">やあ、<em>ようこそ</em><b>！</b></span></span>
